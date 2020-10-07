@@ -29,8 +29,7 @@ RUN git clone https://github.com/memgraph/pymgclient /pymgclient && \
 WORKDIR /app
 COPY poetry.lock pyproject.toml /app/
 
-RUN poetry config virtualenvs.create false && \
-    poetry install --no-interaction --no-ansi
+RUN poetry config virtualenvs.create false && poetry install --no-interaction --no-ansi
 
 COPY . /app
 EXPOSE 5000
