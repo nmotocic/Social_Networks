@@ -3,6 +3,10 @@
  
 ## Task
  A SERVICE FOR RANKING AND RECOMMENDING CONTENT BASED ON SOCIAL DATA
+ Collect as many different types of social data as possible from as many
+sources as possible to develop _a list of popular movies and music, as
+well as personalized content recommendations for users_
+
 
 ## How to start the application
 Position yourself wherever your project is located.
