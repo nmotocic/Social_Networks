@@ -21,15 +21,12 @@ RUN apt-get install -y git cmake make gcc g++ libssl-dev && \
     make install
 
 # Install pymgclient
-RUN git clone https://github.com/memgraph/pymgclient /pymgclient && \
-    cd pymgclient && \
-    python3 setup.py build && \
-    python3 setup.py install
+RUN git clone https://github.com/memgraph/pymgclient /pymgclient && cd pymgclient && python3 setup.py build && python3 setup.py install
 
 WORKDIR /app
 COPY poetry.lock pyproject.toml /app/
 
-RUN poetry config virtualenvs.create false && poetry install --no-interaction --no-ansi
+RUN poetry config virtualenvs.create true && poetry install --no-interaction --no-ansi
 
 COPY . /app
 EXPOSE 5000

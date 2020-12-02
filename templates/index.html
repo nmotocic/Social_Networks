@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h4>Hello {{ data['name'] }}!</h4>
+<p>Welcome to the beginning of the Social Network project!</p>
+{% endblock %}
+
+{% block user %}
+<div style="float: right;">
+    <address>
+        <strong>Profile data</strong><br>
+        Name: {{data['name']}}<br>
+        Screen name: {{data['screen_name'] }}<br>
+    </address>
+  
+    <address>
+        <strong>Contact</strong><br>
+        <a href="mailto:#">{{data['email']}}</a>
+    </address>
+</div>
+
+{% endblock %}
