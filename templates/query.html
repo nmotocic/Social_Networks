@@ -1,0 +1,24 @@
+{% extends 'base.html' %} {% block content %}
+
+
+<div class="container">
+    <div class="btn-group mt-3 mb-3" role="group" aria-label="Basic example">
+        <form action="{{ url_for('add_review') }}" method="post">
+            Show ID: <input type="text" name="show_id">
+            Score: <input type="number" name="score">
+            <input type="submit">
+        </form>
+    </div>
+</div>
+
+<div class="container">
+    <div class="btn-group mt-3 mb-3" role="group" aria-label="Basic example">
+        <button type="button" class="btn btn-secondary" onclick="runQuery('get-users')">Get all users</button>
+        <button type="button" class="btn btn-secondary" onclick="runQuery('get-relationships')">Get all realtionships</button>
+        <button type="button" class="btn btn-secondary" onclick="runQuery('get-shows')">Get all shows</button>
+    </div>
+    <div id="JSON" style="background-color:white"></div>
+</div>
+
+<script src="/static/js/query.js" charset="utf-8"></script>
+{% endblock %}

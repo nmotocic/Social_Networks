@@ -20,6 +20,11 @@ RUN apt-get install -y git cmake make gcc g++ libssl-dev && \
     make && \
     make install
 
+# Install flask_dance
+RUN pip install flask_dance[sqla]
+RUN pip install flask_login
+RUN pip install flask_security
+
 # Install pymgclient
 RUN git clone https://github.com/memgraph/pymgclient /pymgclient && \
     cd pymgclient && \
