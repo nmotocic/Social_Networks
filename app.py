@@ -6,6 +6,7 @@ from social_network.database.memgraph import Memgraph
 from social_network import dbComms
 from social_network import warnings
 from social_network.dbModels import User,Movie,Genre
+from flask_scss import Scss
 import os
 import mgclient
 import requests
@@ -14,6 +15,7 @@ import base64
 
 #App settings 
 app = Flask(__name__)
+Scss(app)
 app.config['SECRET_KEY'] = 'maxseCretPliz18882'
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 

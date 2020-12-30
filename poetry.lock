@@ -91,6 +91,18 @@ signals = ["blinker"]
 sqla = ["sqlalchemy", "sqlalchemy-utils"]
 
 [[package]]
+name = "flask-scss"
+version = "0.5"
+description = "Adds support for scss files to Flask applications"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+Flask = "*"
+pyScss = "*"
+
+[[package]]
 name = "idna"
 version = "2.10"
 description = "Internationalized Domain Names in Applications (IDNA)"
@@ -215,6 +227,17 @@ optional = false
 python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
 
 [[package]]
+name = "pyscss"
+version = "1.3.7"
+description = "pyScss, a Scss compiler for Python"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+six = "*"
+
+[[package]]
 name = "pytest"
 version = "5.4.3"
 description = "pytest: simple powerful testing with Python"
@@ -334,7 +357,7 @@ testing = ["jaraco.itertools", "func-timeout"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "7f4ca60e43c7fc3e73e5d7a42fee97085b8000512f54c4b76797ed82d7d7217d"
+content-hash = "057f46d4a2c7ab2d3235930cf4ff574578f6e6ddfb94da050b2ff89b480ed93f"
 
 [metadata.files]
 atomicwrites = [
@@ -369,6 +392,10 @@ flask-dance = [
     {file = "Flask-Dance-3.0.0.tar.gz", hash = "sha256:5ec8fae543ef93aab96d6a4c6d34ed835c793e2f6a211212a89a4e9c31c42bed"},
     {file = "Flask_Dance-3.0.0-py2.py3-none-any.whl", hash = "sha256:1b30ea6765ca2a9c5c15eb00a18e18f8c347a4bf2f9947b68ff0024c4c7d1dfa"},
     {file = "Flask_Dance-3.0.0-py3.7.egg", hash = "sha256:8f567087e8308bdeb225638d581b93e3b1d671871f8de394beb6c45923497e89"},
+]
+flask-scss = [
+    {file = "Flask-Scss-0.5.tar.gz", hash = "sha256:21e28c3b03fd5905c909085578a4a3c0b250ddb061214eb3775037fd78f74782"},
+    {file = "Flask_Scss-0.5-py3-none-any.whl", hash = "sha256:6155657a6b48630585a00666b69d7f443b4432ab9e4fe87f27e1583abe047125"},
 ]
 idna = [
     {file = "idna-2.10-py2.py3-none-any.whl", hash = "sha256:b97d804b1e9b523befed77c48dacec60e6dcb0b5391d57af6a65a312a90648c0"},
@@ -447,6 +474,9 @@ pymgclient = [
 pyparsing = [
     {file = "pyparsing-2.4.7-py2.py3-none-any.whl", hash = "sha256:ef9d7589ef3c200abe66653d3f1ab1033c3c419ae9b9bdb1240a85b024efc88b"},
     {file = "pyparsing-2.4.7.tar.gz", hash = "sha256:c203ec8783bf771a155b207279b9bccb8dea02d8f0c9e5f8ead507bc3246ecc1"},
+]
+pyscss = [
+    {file = "pyScss-1.3.7.tar.gz", hash = "sha256:f1df571569021a23941a538eb154405dde80bed35dc1ea7c5f3e18e0144746bf"},
 ]
 pytest = [
     {file = "pytest-5.4.3-py3-none-any.whl", hash = "sha256:5c0db86b698e8f170ba4582a492248919255fcd4c79b1ee64ace34301fb589a1"},

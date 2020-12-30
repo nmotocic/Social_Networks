@@ -11,6 +11,7 @@ flask = "^1.1.2"
 pymgclient = "^0.1.0"
 flask_dance = "^3.0.0"
 requests = "^2.24.0"
+Flask-Scss = "^0.5"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
