@@ -1,0 +1,78 @@
+<!-- Base HTML template that is inherited by all other templates. -->
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>
+            {% block title %}{% endblock %}
+        </title>
+
+        <!-- Fonts -->
+        <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+
+        <!-- Favicon -->
+        <link rel="icon" href="/static/images/MovieRouletteFaviconl.png" tyoe="image/gif" sizes="16x16">
+
+        <!-- CSRF Token -->
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+
+        <!-- Scripts -->
+        <script src="/static/js/index.js" defer></script>
+
+        <!-- Styles -->
+        <link title="base-styling" rel="stylesheet" href="/static/css/app.css">
+        <link title="timeline-styles" rel="stylesheet" href="https://cdn.knightlab.com/libs/timeline3/latest/css/timeline.css">
+
+
+    </head>
+
+    <body>
+        {% block header %}
+            <header>
+                <button id="toggle-nav" class="toggle-nav-btn" type="button"></button>
+                <div class="logo">
+                    <img src="{{ asset('images/CLupLogoFinal.png') }}" alt="CLup">
+                </div>
+                <div class="user-info">
+                    <div class="user-image"></div>
+                    <h2 class="user-name">
+                        Username
+                    </h2>
+                </div>
+            </header>
+        {% endblock %}
+
+        {% block navbar %}
+            <nav id="nav">
+                <ul class="nav-container">
+                    <li class="nav-option">
+                        <a id="discover-movies" href="">Discover Movies</a>
+                    </li>
+                    <li class="nav-option">
+                        <a id="find-movies" href="">Find Movies</a>
+                    </li>
+                    <li class="nav-option">
+                        <a id="user-profile" href="">Your Profile</a>
+                    </li>
+                    <li class="nav-option">
+                        <a id="log-out" href="">Logout</a>
+                    </li>
+                </ul>
+            </nav>
+        {% endblock %}
+
+        <main>
+        {% block maincontent %}{% endblock %}
+        </main>
+
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script src="https://cdn.knightlab.com/libs/timeline3/latest/js/timeline.js"></script>
+    </body>
+</html>
