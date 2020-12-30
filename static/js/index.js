@@ -10,23 +10,36 @@
 
 /* console.log('Hello Webpack Encore! Edit me in assets/js/app.js'); */
 
-require('./bootstrap');
-
-window.Vue = require('vue');
-
 function getMovieData () {
-    var userMovieInput = document.getElementById('movie-title').value;
-    window.location = "http://localhost:5000/movie_api/" + userMovieInput;
+    var userMovieInput = document.getElementById('movie-title').value
+    window.location = "http://localhost:5000/movie_api/" + userMovieInput
 }
 
 function getBookData () {
-    var userBookInput = document.getElementById('book-title').value;
-    window.location = "http://localhost:5000/book_api/" + userBookInput;
+    var userBookInput = document.getElementById('book-title').value
+    window.location = "http://localhost:5000/book_api/" + userBookInput
 }
 
 ;(() => {
     const menu = document.querySelector('#nav')
     const body = document.querySelector('body')
+    const logoElement = document.querySelector('#logo-image')
+    const logoImageLargeSrc = "/static/images/MovieRouletteLogo.png"
+    const logoImagesmallSrc = "/static/images/MovieRouletteLogoSmall.png"
+
+    // window.onresize = logoSwitch(logoElement, logoImageLargeSrc, logoImagesmallSrc)
+
+    // window.addEventListener('resize', logoSwitch(logoElement, logoImageLargeSrc, logoImagesmallSrc))
+
+    window.addEventListener('resize', function(event) {
+        var width = window.innerWidth
+    
+        if (width <= 980) {
+            logoElement.setAttribute("src", logoImagesmallSrc)
+        } else {
+            logoElement.setAttribute("src", logoImageLargeSrc)
+        }
+    })
 
     const menuToggleButton = document.querySelector('#toggle-nav')
     if (menuToggleButton) {
@@ -50,7 +63,7 @@ function getBookData () {
     if (uploadFileButton) {
         uploadFileButton.addEventListener('click', (event) => uploadImage())
         const uploadImage = () => {
-            document.getElementById("file-input").click();
+            document.getElementById("file-input").click()
         }
     }
 })()

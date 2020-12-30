@@ -114,7 +114,7 @@
         outline: none;
     }
     
-    @include media('<=desktop') {
+    @media (max-width: 1040px) {
         position: fixed;
         box-shadow: 0 2px 4px 0 rgba(11, 48, 59, 0.12);
         top: $header-height;

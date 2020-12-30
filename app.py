@@ -11,10 +11,10 @@ app = Flask(__name__)
 app.debug = True
 app.secret_key = os.environ.get("FLASK_SECRET_KEY", "supersekrit")
 
-Scss(app, static_dir='app/static', asset_dir='app/assets')
+Scss(app, static_dir='static', asset_dir='assets')
 
-app.config['FACEBOOK_OAUTH_CLIENT_ID'] = '3468111173224517'
-app.config['FACEBOOK_OAUTH_CLIENT_SECRET'] = '7ea8279bf9d5de409cdf843e58ba0409'
+app.config['FACEBOOK_OAUTH_CLIENT_ID'] = ''
+app.config['FACEBOOK_OAUTH_CLIENT_SECRET'] = ''
 facebook_bp = make_facebook_blueprint(rerequest_declined_permissions=True)
 facebook_bp.rerequest_declined_permissions = True
 app.register_blueprint(facebook_bp, url_prefix="/login")

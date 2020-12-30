@@ -1,7 +1,7 @@
 // Styling for header
 
 header {
-    background: $white;
+    background: $main-black;
     height: $header-height;
     position: fixed;
     top: 0;
@@ -11,7 +11,7 @@ header {
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding-left: $base-spacing*1.5;
+    padding-left: $base-spacing;
     z-index: 9;
 
     #toggle-nav {
@@ -19,22 +19,22 @@ header {
         display: none;
         pointer-events: none;
         border-radius: 4px;
-        height: $base-spacing*2.5;
-        width: $base-spacing*2.5;
+        height: $base-spacing*3;
+        width: $base-spacing*3;
         overflow: hidden;
         border: 0;
         opacity: 0;
         margin-bottom: $base-spacing*.5;
         transition: opacity .25s ease-in-out;
         cursor: pointer;
-        background-color: $white;
-        background-image: url('/images/bars-solid.svg');
-        background-size: $base-spacing*2 $base-spacing*2;
+        background-color: $main-black;
+        background-image: url('../images/bars-solid.svg');
+        background-size: $base-spacing*2.5 $base-spacing*2.5;
         background-repeat: no-repeat;
         background-position: center;
 
         &:hover {
-            background-color: rgba($text-color, .2);
+            background-color: rgba($highlight-blue, .35);
         }
     }
 
@@ -48,6 +48,7 @@ header {
         margin-left: auto;
         margin-right: $base-spacing;
         border-radius: 8px;
+        color: $text-white;
         .user-image {
             flex-shrink: 0;
             position: relative;
@@ -57,9 +58,9 @@ header {
             width: $base-spacing*3;
             display: inline-block;
             border-radius: 100%;
-            background-color: $grey;
+            background-color: $text-white;
             overflow: hidden;
-            background-image: url('/images/user-solid.svg');
+            background-image: url('../images/user-solid.svg');
             background-size: $base-spacing*1.5;
             background-repeat: no-repeat;
             background-position: center;
@@ -73,15 +74,20 @@ header {
     }
 
     .logo {
+        background-color: $main-black;
         overflow: hidden;
         align-self: flex-start;
-        margin-top: $base-spacing*.75;
+        margin-top: $base-spacing*.5;
+        max-height: $base-spacing*4;
+
+        img {
+            max-height: $base-spacing*4;
+        }
     }
 
-    @include media('<=desktop') {
+    @media (max-width: 1040px) {
         .logo {
-            padding-left: $base-spacing*3.5;
-            background-color: $white;
+            padding-left: $base-spacing*4;
         }
 
         #toggle-nav {
@@ -89,17 +95,16 @@ header {
             pointer-events: all;
             opacity: 1;
             transition: opacity .25s ease-in-out;
+            margin-top: $base-spacing*.5;
         }
         .user-info{
             .user-name {
                 display: none;
             }
         }
-    }
-
-    @include media('<=phone') {
-        .logo {
-            max-width: $base-spacing*10;
+        .header-divider {
+            height: $base-spacing*3;
+            width: $base-spacing;
         }
     }
 }
