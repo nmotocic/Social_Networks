@@ -2,7 +2,7 @@
 
 .btn {
     width: 100%;
-    background-color: $blue;
+    background-color: $highlight-blue;
     border-radius: 4px;
     color: $white;
     border: none;
@@ -22,15 +22,15 @@
         text-align: center;
     }
     &:hover {
-        background-color: darken($blue, 10%);
+        background-color: $blue;
     }
 
     &.small {
         width: $base-spacing*7;
-        height: $base-spacing*2.5;
+        height: $base-spacing*2;
         padding: $base-spacing*.5;
-        line-height: 1.6rem;
-        font-size: 1.2rem;
+        line-height: 1.5rem;
+        font-size: 1.1rem;
     }
     &.medium {
         width: $base-spacing*7;
@@ -56,7 +56,7 @@
 }
 
 .widget {
-    background-color: $white;
+    background-color: $main-black;
     border-radius: 8px;
     box-shadow: 2px 3px 3px rgba(0, 0, 0, 0.22);
     display: flex;
@@ -67,9 +67,9 @@
     min-width: $base-spacing*10;
 
     .widget-header {
-        border-bottom: 1px solid $grey;
+        border-bottom: 1px solid $highlight-blue;
         width: 100%;
-        height: $base-spacing*4;
+        min-height: $base-spacing*4;
         display: flex;
 
         h2 {
@@ -92,7 +92,7 @@
     &.widget-medium {
         width: $base-spacing*30;
 
-        @include media('<=phablet') {
+        @media (max-width: $phablet-width) {
             max-width: $base-spacing*22;
             min-width: $base-spacing*11;
         }
@@ -100,7 +100,7 @@
     &.widget-large {
         width: 70%;
 
-        @include media('<=tablet') {
+        @media (max-width: $phablet-width) {
             width: 90%;
         }
     }
@@ -111,12 +111,4 @@
     &.form {
         flex-direction: column;
     }
-}
-
-.pager {
-
-}
-
-.notification {
-    
 }

@@ -1,5 +1,5 @@
 #nav {
-    background: $white;
+    background: $main-black;
     width: $nav-width;
     height: 100%;
     position: fixed;
@@ -13,19 +13,19 @@
         li {
             display: flex;
             flex-direction: row;
-            border-bottom: 1px solid $grey;
+            border-bottom: 1px solid $highlight-blue;
 
             &:last-of-type {
                 border-bottom: none;
             }
 
             a {
-                font-size: 1.5rem;
+                font-size: 1.6rem;
                 font-weight: bold;
                 z-index: 10;
                 width: 100%;
                 border-radius: 5px;
-                color: $text-color;
+                color: $text-white;
                 padding-left: $base-spacing*3;
                 margin-bottom: $base-spacing*.5;
                 margin-top: $base-spacing*.5;
@@ -33,66 +33,41 @@
 
                 &:hover {
                     cursor: pointer;
-                    background-color: rgba($text-color, .2);
+                    background-color: rgba($highlight-blue, .35);
                     color: $blue;
                 }
 
                 &::before {
                     content: '';
-                    width: $base-spacing*2;
-                    height: $base-spacing*2;
+                    width: $base-spacing*2.5;
+                    height: $base-spacing*2.5;
                     position: absolute;
                     display: block;
-                    background-size: $base-spacing*1.5 $base-spacing*1.5;
+                    background-size: $base-spacing*2 $base-spacing*2;
                     background-repeat: no-repeat;
                     background-position: center;
-                    transform: translateX(-$base-spacing*2.5);
+                    transform: translate(-$base-spacing*3, -3px);
                     opacity: .5;
                 }
     
-                &#find-store {
+                &#discover-movies {
                     &::before {
-                        background-image: url('/images/store-solid.svg');
+                        background-image: url('../images/film-solid.svg');
                     }
                 }
-                &#placaments {
+                &#find-movies {
                     &::before {
-                        background-image: url('/images/bookmark-solid.svg');
+                        background-image: url('../images/search-solid.svg');
                     }
                 }
-                &#store-parameters {
+                &#user-profile {
                     &::before {
-                        background-image: url('/images/sliders-h-solid.svg');
+                        background-image: url('../images/user-circle-solid.svg');
                     }
                 }
-                &#print-tickets {
+                &#log-out {
                     &::before {
-                        background-image: url('/images/ticket-alt-solid.svg');
-                    }
-                }
-                &#store-statistics {
-                    &::before {
-                        background-image: url('/images/chart-pie-solid.svg');
-                    }
-                }
-                &#add-store {
-                    &::before {
-                        background-image: url('/images/plus-square-solid.svg');
-                    }
-                }
-                &#add-managers {
-                    &::before {
-                        background-image: url('/images/user-plus-solid.svg');
-                    }
-                }
-                &#settings {
-                    &::before {
-                        background-image: url('/images/cog-solid.svg');
-                    }
-                }
-                &#logout {
-                    &::before {
-                        background-image: url('/images/power-off-solid.svg');
+                        background-image: url('../images/power-off-solid.svg');
                     }
                 }
             }
@@ -114,7 +89,7 @@
         outline: none;
     }
     
-    @media (max-width: 1040px) {
+    @media (max-width: $desktop-width) {
         position: fixed;
         box-shadow: 0 2px 4px 0 rgba(11, 48, 59, 0.12);
         top: $header-height;

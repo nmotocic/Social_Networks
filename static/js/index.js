@@ -5,11 +5,6 @@
  * (and its CSS file) in your base layout (base.html.twig).
  */
 
-// Need jQuery? Install it with "yarn add jquery", then uncomment to require it.
-// var $ = require('jquery');
-
-/* console.log('Hello Webpack Encore! Edit me in assets/js/app.js'); */
-
 function getMovieData () {
     var userMovieInput = document.getElementById('movie-title').value
     window.location = "http://localhost:5000/movie_api/" + userMovieInput
@@ -26,10 +21,6 @@ function getBookData () {
     const logoElement = document.querySelector('#logo-image')
     const logoImageLargeSrc = "/static/images/MovieRouletteLogo.png"
     const logoImagesmallSrc = "/static/images/MovieRouletteLogoSmall.png"
-
-    // window.onresize = logoSwitch(logoElement, logoImageLargeSrc, logoImagesmallSrc)
-
-    // window.addEventListener('resize', logoSwitch(logoElement, logoImageLargeSrc, logoImagesmallSrc))
 
     window.addEventListener('resize', function(event) {
         var width = window.innerWidth
@@ -48,12 +39,12 @@ function getBookData () {
             if (menu.classList.contains('active')) {
                 menu.classList.remove('active')
                 menuToggleButton.classList.remove('active')
-                menuToggleButton.style.backgroundImage = 'url("/images/bars-solid.svg")'
+                menuToggleButton.style.backgroundImage = 'url("/static/images/bars-solid.svg")'
                 body.classList.remove('nav-active')
             } else {
                 menu.classList.add('active')
                 menuToggleButton.classList.add('active')
-                menuToggleButton.style.backgroundImage = 'url("/images/arrow-left-solid.svg")'
+                menuToggleButton.style.backgroundImage = 'url("/static/images/arrow-left-solid.svg")'
                 body.classList.add('nav-active')
             }
         }
