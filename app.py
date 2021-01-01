@@ -27,13 +27,6 @@ openLibraryCoverAPI = "http://covers.openlibrary.org/"
 
 db = Memgraph()
 
-sass_map = {"app/assets/scss/app.scss": "app/static/css/style.css"}
-
-def compile_sass_to_css(sass_map):
-   for source, dest in sass_map.items():
-      with open(dest, "w") as outfile:
-         outfile.write(sass.compile(filename=source))
-
 @app.route('/')
 @app.route('/index')
 def index():
@@ -54,8 +47,12 @@ def index():
    return render_template("index.html", user_data=user_data_json, movie_data=movie_data_json, book_data=book_data_json)
 
 @app.route('/find')
-def find():
+def movie():
     return render_template("findMovies.html")
+
+@app.route('/movie')
+def find():
+    return render_template("movieDisplay.html")
 
 @app.route('/fb_login')
 def fb_login():

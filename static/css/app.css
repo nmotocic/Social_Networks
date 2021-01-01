@@ -144,48 +144,46 @@ form {
     form .form-single-checkbox .checkbox-label {
       line-height: 2rem;
       padding-left: 8px; }
-  form .required-fields {
-    color: #ff0f0f; }
-    form.placament-form {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      justify-content: flex-start;
-      margin: 0 16px; }
-      form.placament-form h3 {
-        margin-bottom: 0;
-        margin-top: 0;
-        margin-right: 16px; }
-        form.placament-form .store-interactions-div {
-          display: flex;
-          flex-direction: row;
-          align-items: flex-start;
-          padding: 0;
-          font-weight: bold;
-          margin-bottom: 8px;
-          line-height: 2.5rem;
-          font-size: 1.2rem; }
-          form.placament-form .store-interactions-div span {
-            font-weight: normal; }
-            form.placament-form .store-interactions-div > input {
+  form.placament-form {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin: 0 16px; }
+    form.placament-form h3 {
+      margin-bottom: 0;
+      margin-top: 0;
+      margin-right: 16px; }
+      form.placament-form .store-interactions-div {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        padding: 0;
+        font-weight: bold;
+        margin-bottom: 8px;
+        line-height: 2.5rem;
+        font-size: 1.2rem; }
+        form.placament-form .store-interactions-div span {
+          font-weight: normal; }
+          form.placament-form .store-interactions-div > input {
+            margin-right: 16px; }
+            form.placament-form .store-interactions-div > label {
               margin-right: 16px; }
-              form.placament-form .store-interactions-div > label {
-                margin-right: 16px; }
-                form.placament-form .store-interactions-div .label-divider {
-                  display: flex;
-                  flex-direction: row; }
-                  form.placament-form .store-interactions-div .label-divider > input {
-                    margin-right: 16px; }
-          @media (max-width: 980px) {
-            form.placament-form .store-interactions-div {
-              flex-direction: column;
-              align-items: none;   }
+              form.placament-form .store-interactions-div .label-divider {
+                display: flex;
+                flex-direction: row; }
+                form.placament-form .store-interactions-div .label-divider > input {
+                  margin-right: 16px; }
+        @media (max-width: 980px) {
+          form.placament-form .store-interactions-div {
+            flex-direction: column;
+            align-items: none;   }
 }
-      @media (max-width: 980px) {
-        form.placament-form {
-          flex-direction: column;   }
-          form.placament-form button {
-            margin-top: 16px;   }
+    @media (max-width: 980px) {
+      form.placament-form {
+        flex-direction: column;   }
+        form.placament-form button {
+          margin-top: 16px;   }
 }
 
 header {
@@ -241,7 +239,7 @@ header {
       width: 48px;
       display: inline-block;
       border-radius: 100%;
-      background-color: #e5e5e5;
+      background-color: #7d7d7d;
       overflow: hidden;
       background-image: url('../images/user-solid.svg');
       background-size: 24px;
@@ -297,11 +295,32 @@ body {
 
 main {
   width: calc(100% - 280px);
+  min-height: 100%;
   margin-left: 280px;
   padding: 32px 32px 32px 32px;
   position: relative;
   display: flex;
   flex-direction: column; }
+  main #background {
+    background-image: url("../images/MovieRouletteBackground.png");
+    background-repeat: repeat-y;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    opacity: 16%; }
+    main #background.blured-background {
+      opacity: 40%;
+      background-size: cover;
+      background-repeat: no-repeat;
+      -webkit-filter: blur(15px);
+      -moz-filter: blur(15px);
+      -o-filter: blur(15px);
+      -ms-filter: blur(15px);
+      filter: blur(15px); }
   main.no-nav {
     width: 100%;
     margin-left: 0; }
@@ -313,327 +332,146 @@ main {
         main.active-nav {
           width: calc(100% - 280px);
           margin-left: 280px; }
-          main .movie-display {
+          main .movie-main {
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin: 16px;
-            max-width: 100%; }
-            main .movie-display .movie-display-title {
-              display: flex;
-              flex-direction: row;
-              justify-content: center;
-              border-bottom: 1px solid rgba(3, 104, 255, 0.6);
-              width: 100%; }
-              main .movie-display .movie-display-title h1 {
-                color: #e5e5e5;
-                text-justify: center;
-                word-wrap: break-word; }
-            main .movie-display .movie-display-grid {
-              display: flex;
-              flex-direction: row;
-              justify-content: space-between;
-              flex-wrap: wrap;
-              margin-top: 16px;
-              margin-right: -16px; }
-              @media (max-width: 560px) {
-                main .movie-display .movie-display-grid {
-                  justify-content: center;   }
+            flex-direction: row;
+            margin: 16px; }
+            @media (max-width: 680px) {
+              main .movie-main {
+                flex-direction: column;   }
 }
-                main .movie-display .movie-display-grid .movie-card {
+              main .movie-main .movie-poster {
+                border-radius: 6px; }
+                main .movie-main .movie-poster img {
+                  border-radius: 6px;
+                  box-shadow: 3px 4px 4px rgba(3, 104, 255, 0.9); }
+            main .movie-main .movie-details {
+              display: flex;
+              flex-direction: column;
+              color: #e5e5e5; }
+              @media (max-width: 680px) {
+                main .movie-main .movie-details {
+                  margin-top: 16px;   }
+}
+                main .movie-main .movie-details .movie-detail-container {
                   display: flex;
                   flex-direction: column;
-                  justify-content: center;
-                  width: 240px;
-                  height: 416px;
-                  margin-right: 28px; }
-                  main .movie-display .movie-display-grid .movie-card:last-of-type {
-                    margin-right: auto; }
-                    main .movie-display .movie-display-grid .movie-card:hover .movie-poster {
-                      box-shadow: 0px 0px 4px 5px rgba(3, 104, 255, 0.9); }
-                      main .movie-display .movie-display-grid .movie-card:hover .movie-title h3 {
-                        text-shadow: 2px 2px 2px rgba(3, 104, 255, 0.9), -2px -2px 2px rgba(12, 167, 255, 0.9),
-                                                -2px 2px 2px rgba(3, 104, 255, 0.9), 2px -2px 2px rgba(3, 104, 255, 0.9); }
-                  main .movie-display .movie-display-grid .movie-card .movie-poster {
-                    width: 240px;
-                    height: 360px;
-                    border-radius: 6px;
-                    box-shadow: 3px 4px 4px rgba(3, 104, 255, 0.9); }
-                    main .movie-display .movie-display-grid .movie-card .movie-poster img {
-                      width: 240px;
-                      height: 360px;
-                      border-radius: 6px; }
-                  main .movie-display .movie-display-grid .movie-card .movie-title {
-                    height: 56px;
-                    display: flex;
-                    flex-direction: row;
-                    justify-content: center; }
-                    main .movie-display .movie-display-grid .movie-card .movie-title h3 {
-                      color: #e5e5e5;
-                      text-justify: center;
-                      text-shadow: 2px 2px 2px rgba(3, 104, 255, 0.9); }
-  main .information-widget .success-title {
-    color: #20f000;
-    font-size: 1.5rem; }
-    main .information-widget .warning-title {
-      color: #ffd505;
-      font-size: 1.5rem; }
-      main .information-widget .error-title {
-        color: #ff0f0f;
-        font-size: 1.5rem; }
-        main .information-widget .widget-content .information-img {
-          padding: 48px 80px; }
-          main .information-widget .widget-content .information-msg {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            font-size: 1.4rem;
-            font-weight: bold;
-            padding-bottom: 24px; }
-  main .placement-container {
+                  font-size: 1.1rem;
+                  margin-left: 24px;
+                  margin-bottom: 16px; }
+                  @media (max-width: 680px) {
+                    main .movie-main .movie-details .movie-detail-container {
+                      margin-left: 0;   }
+}
+                    main .movie-main .movie-details .movie-detail-container .detail-name {
+                      font-weight: bold;
+                      text-shadow: 2px 2px 2px rgba(3, 104, 255, 0.9);
+                      font-size: 1.2rem;
+                      flex-shrink: 0;
+                      margin-right: 8px; }
+  main .movie-interactions {
+    display: flex;
+    flex-direction: row;
+    margin-left: auto;
+    margin-right: 8px;
+    margin-top: 8px; }
+    @media (max-width: 680px) {
+      main .movie-interactions {
+        margin-bottom: 16px;
+        margin-top: 0;
+        margin-left: 32px;   }
+}
+      main .movie-interactions .movie-interaction-button {
+        width: 56px;
+        height: 56px;
+        margin-right: 12px;
+        flex-shrink: 0;
+        background-color: #2b2b2b;
+        border-radius: 100%;
+        border: 2px solid #7d7d7d;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: 32px; }
+        main .movie-interactions .movie-interaction-button#movie-like {
+          background-image: url("../images/thumbs-up-solid.svg"); }
+          main .movie-interactions .movie-interaction-button#movie-dislike {
+            background-image: url("../images/thumbs-down-solid.svg"); }
+            main .movie-interactions .movie-interaction-button#movie-bookmark {
+              background-image: url("../images/bookmark-solid.svg");
+              background-size: 24px; }
+              main .movie-interactions .movie-interaction-button:hover {
+                background-color: rgba(3, 104, 255, 0.1);
+                box-shadow: 0px 0px 3px 3px #0368ff; }
+                main .movie-interactions .movie-interaction-button img {
+                  display: none;
+                  width: 32px;
+                  height: 32px; }
+                  main .movie-interactions .movie-interaction-button.active img {
+                    display: block; }
+  main .movie-display {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    width: 100%; }
-    main .placement-container .divider {
-      width: 100%;
-      border-bottom: 1px solid #a0a0a0; }
-      main .placement-container .divider:last-of-type {
-        opacity: 0; }
-    main .placement-container .placement {
+    align-items: center;
+    margin: 16px;
+    max-width: 100%; }
+    main .movie-display .movie-display-title {
       display: flex;
-      border-radius: 8px;
+      flex-direction: row;
+      justify-content: center;
+      border-bottom: 1px solid rgba(3, 104, 255, 0.6);
+      width: 100%; }
+      main .movie-display .movie-display-title h1 {
+        color: #e5e5e5;
+        text-justify: center;
+        word-wrap: break-word; }
+    main .movie-display .movie-display-grid {
+      display: flex;
       flex-direction: row;
       justify-content: space-between;
-      padding: 8px 0;
       flex-wrap: wrap;
-      margin: 8px; }
-      main .placement-container .placement.new-placament {
-        animation: blinker 1s linear infinite;
-        animation-iteration-count: 5; }
-        main .placement-container .placement {
-          @keyframes blinker {
-            50% {
-              background-color: rgba(18, 212, 255, 0.7);     }
-  }
+      margin-top: 16px;
+      margin-right: -16px; }
+      @media (max-width: 680px) {
+        main .movie-display .movie-display-grid {
+          justify-content: center;   }
 }
-      main .placement-container .placement .placement-details {
-        display: flex;
-        flex-direction: row;
-        justify-content: flex-start;
-        font-size: 1.2rem;
-        line-height: 3.4rem;
-        font-weight: bold;
-        flex-wrap: wrap; }
-        main .placement-container .placement .placement-details section {
+        main .movie-display .movie-display-grid .movie-card {
           display: flex;
-          flex-direction: row; }
-          main .placement-container .placement .placement-details section span {
-            font-weight: normal; }
-        main .placement-container .placement .placement-details > * {
-          margin: 0 8px; }
-      main .placement-container .placement .placement-actions {
-        display: flex;
-        flex-direction: row;
-        justify-content: flex-start;
-        flex-wrap: wrap;
-        padding-top: 8px; }
-        main .placement-container .placement .placement-actions form {
-          flex-direction: row;
-          align-items: flex-start;
-          width: 112px; }
-          main .placement-container .placement .placement-actions > * {
-            margin: 0 8px; }
-  main .ticket-widget {
-    display: flex;
-    flex-direction: column;
-    width: 100%; }
-    main .ticket-widget .ticket-information {
-      display: flex;
-      flex-direction: column;
-      width: 100%;
-      border-bottom: 1px solid #a0a0a0; }
-      main .ticket-widget .ticket-information .qr-code-container {
-        margin-top: 16px;
-        margin-bottom: 16px;
-        margin-left: auto;
-        margin-right: auto;
-        border-radius: 9px; }
-        main .ticket-widget .ticket-information .qr-code-container .qr-code {
-          max-width: 320px;
-          max-height: 320px; }
-      main .ticket-widget .ticket-information .eta {
-        margin-left: auto;
-        margin-right: auto;
-        font-size: 1.8rem;
-        font-weight: bold;
-        margin-bottom: 32px; }
-    main .ticket-widget .store-home {
-      display: flex;
-      flex-direction: row;
-      margin: 16px;
-      justify-content: flex-start;
-      width: 96%; }
-      main .ticket-widget .store-home .store-details-text-area {
-        margin: 16px;
-        flex-grow: 10; }
-        main .ticket-widget .store-home .store-details-text-area ul {
-          margin-top: 0;
-          margin-bottom: 0;
-          padding-left: 0; }
-          main .ticket-widget .store-home .store-details-text-area ul li {
+          flex-direction: column;
+          justify-content: center;
+          width: 240px;
+          height: 416px;
+          margin-right: 28px; }
+          main .movie-display .movie-display-grid .movie-card:last-of-type {
+            margin-right: auto; }
+            main .movie-display .movie-display-grid .movie-card:hover .movie-poster {
+              box-shadow: 0px 0px 4px 5px rgba(3, 104, 255, 0.9); }
+              main .movie-display .movie-display-grid .movie-card:hover .movie-title h3 {
+                text-shadow: 2px 2px 2px rgba(3, 104, 255, 0.9), -2px -2px 2px rgba(12, 167, 255, 0.9),
+                                -2px 2px 2px rgba(3, 104, 255, 0.9), 2px -2px 2px rgba(3, 104, 255, 0.9); }
+          main .movie-display .movie-display-grid .movie-card .movie-poster {
+            width: 240px;
+            height: 360px;
+            border-radius: 6px;
+            box-shadow: 3px 4px 4px rgba(3, 104, 255, 0.9); }
+            main .movie-display .movie-display-grid .movie-card .movie-poster img {
+              width: 240px;
+              height: 360px;
+              border-radius: 6px; }
+          main .movie-display .movie-display-grid .movie-card .movie-title {
+            height: 56px;
             display: flex;
             flex-direction: row;
-            flex-flow: row wrap;
-            font-size: 1.4rem;
-            line-height: 2.8rem;
-            font-weight: bold;
-            overflow-wrap: wrap;
-            word-wrap: break-word; }
-            main .ticket-widget .store-home .store-details-text-area ul li section {
-              font-weight: normal;
-              overflow-wrap: break-word;
-              word-wrap: break-word;
-              word-break: break-all;
-              word-break: break-word;
-              hyphens: auto; }
-      main .ticket-widget .store-home .store-image-area {
-        display: flex;
-        flex-direction: row; }
-        main .ticket-widget .store-home .store-image-area .store-image-container {
-          width: 256px;
-          overflow: hidden;
-          height: 256px;
-          border-radius: 8px;
-          background-color: #a0a0a0;
-          background-image: url('/images/shopping-basket-solid.svg');
-          background-repeat: no-repeat;
-          background-size: 288px;
-          background-position: center;
-          border: 1px solid #a0a0a0;
-          flex-shrink: 0; }
-          main .ticket-widget .store-home .store-image-area .store-image-container .store-image {
-            margin-top: -1%;
-            margin-left: -1%;
-            width: 102%;
-            height: 102%; }
-  main .store-details-widget {
-    display: flex;
-    flex-direction: column;
-    justify-content: center; }
-    main .store-details-widget > div {
-      border-bottom: 1px solid #a0a0a0; }
-      main .store-details-widget > div:last-of-type {
-        border-bottom: none; }
-    main .store-details-widget .store-home {
-      display: flex;
-      flex-flow: row wrap;
-      justify-content: flex-start;
-      padding: 16px; }
-      main .store-details-widget .store-home .store-image-area {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        flex-grow: 1; }
-        main .store-details-widget .store-home .store-image-area .store-image-container {
-          width: 336px;
-          overflow: hidden;
-          height: 336px;
-          border-radius: 8px;
-          background-color: #a0a0a0;
-          background-image: url('/images/shopping-basket-solid.svg');
-          background-repeat: no-repeat;
-          background-size: 288px;
-          background-position: center;
-          border: 1px solid #a0a0a0;
-          flex-shrink: 0; }
-          main .store-details-widget .store-home .store-image-area .store-image-container .store-image {
-            margin-top: -1%;
-            margin-left: -1%;
-            width: 102%;
-            height: 102%; }
-      main .store-details-widget .store-home .store-details-text-area {
-        margin: 16px;
-        flex-grow: 10; }
-        main .store-details-widget .store-home .store-details-text-area ul {
-          margin-top: 0;
-          margin-bottom: 0;
-          padding-left: 0; }
-          main .store-details-widget .store-home .store-details-text-area ul li {
-            display: flex;
-            flex-direction: row;
-            flex-flow: row wrap;
-            font-size: 1.4rem;
-            line-height: 2.8rem;
-            font-weight: bold;
-            overflow-wrap: wrap;
-            word-wrap: break-word; }
-            main .store-details-widget .store-home .store-details-text-area ul li section {
-              font-weight: normal;
-              overflow-wrap: break-word;
-              word-wrap: break-word;
-              word-break: break-all;
-              word-break: break-word;
-              hyphens: auto; }
-    main .store-details-widget .store-interactions {
-      padding-top: 16px;
-      padding-left: 16px;
-      padding-right: 16px;
-      display: flex;
-      flex-direction: column; }
-      main .store-details-widget .store-interactions .reservation-display {
-        margin: 16px; }
-        main .store-details-widget .store-interactions .reservation-display #timeline-embed {
-          width: 100%;
-          height: 48px; }
-  main .store-card-area {
-    min-width: 90%;
-    margin-top: 16px;
-    margin-right: 0;
-    margin-bottom: 16px;
-    margin-left: 16px;
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: space-between; }
-    main .store-card-area .store-card {
-      background-color: #fafafa;
-      border-radius: 6px;
-      box-shadow: 2px 3px 3px rgba(0, 0, 0, 0.22);
-      display: flex;
-      flex-direction: column;
-      width: 336px;
-      padding: 16px;
-      margin-bottom: 32px;
-      margin-right: 16px; }
-      main .store-card-area .store-card .store-image-container {
-        width: 100%;
-        overflow: hidden;
-        height: 336px;
-        border-radius: 8px;
-        background-color: #a0a0a0;
-        background-image: url('/images/shopping-basket-solid.svg');
-        background-repeat: no-repeat;
-        background-size: 288px;
-        background-position: center;
-        border: 1px solid #a0a0a0; }
-        main .store-card-area .store-card .store-image-container .store-image {
-          margin-top: -1%;
-          margin-left: -1%;
-          width: 102%;
-          height: 102%; }
-      main .store-card-area .store-card ul {
-        padding-left: 0; }
-        main .store-card-area .store-card ul li {
-          font-size: 1.1rem;
-          line-height: 1.6rem;
-          font-weight: bold;
-          overflow-wrap: wrap; }
-          main .store-card-area .store-card ul li span {
-            font-weight: normal; }
-      main .store-card-area .store-card .store-card-actions {
-        width: 100%; }
+            justify-content: center; }
+            main .movie-display .movie-display-grid .movie-card .movie-title h3 {
+              color: #e5e5e5;
+              text-justify: center;
+              text-shadow: 2px 2px 2px rgba(3, 104, 255, 0.9); }
   main span.invalid-feedback {
-    color: #ff0f0f;
+    color: #c91818;
     margin-top: 16px;
     display: block; }
   main div.form {
@@ -660,7 +498,7 @@ main {
             opacity: 1;
             transform: translateX(0);   }
 }
-  @media (max-width: 560px) {
+  @media (max-width: 680px) {
     main {
       margin: 4px;
       padding: 0;   }
@@ -671,7 +509,8 @@ main {
   width: 280px;
   height: 100%;
   position: fixed;
-  overflow: visible; }
+  overflow: visible;
+  opacity: 90%; }
   #nav ul {
     list-style-type: none;
     padding: 16px;
@@ -692,6 +531,7 @@ main {
           padding-left: 48px;
           margin-bottom: 8px;
           margin-top: 8px;
+          text-shadow: 2px 2px 2px rgba(3, 104, 255, 0.9);
           cursor: pointer; }
           #nav ul li a:hover {
             cursor: pointer;
@@ -706,7 +546,7 @@ main {
               background-size: 32px 32px;
               background-repeat: no-repeat;
               background-position: center;
-              transform: translate(-48px, -3px);
+              transform: translate(-48px, -2px);
               opacity: 0.5; }
               #nav ul li a#discover-movies::before {
                 background-image: url('../images/film-solid.svg'); }
@@ -793,7 +633,7 @@ main {
             line-height: 1.6rem;
             font-size: 1.2rem; }
             .btn.long {
-              width: 95%;
+              width: 96%;
               height: 24px;
               padding: 8px;
               line-height: 1.6rem;
@@ -808,33 +648,38 @@ main {
   overflow: hidden;
   height: auto;
   margin-bottom: 16px;
-  min-width: 160px; }
+  min-width: 160px;
+  opacity: 95%; }
   .widget .widget-header {
     border-bottom: 1px solid #0368ff;
     width: 100%;
     min-height: 64px;
-    display: flex; }
-    .widget .widget-header h2 {
-      margin-left: auto;
-      margin-right: auto;
-      text-align: center; }
-      .widget .widget-header .title-only {
-        align-content: center;
-        align-items: center;
-        text-align: center; }
+    display: flex;
+    flex-direction: row; }
+    @media (max-width: 680px) {
+      .widget .widget-header {
+        flex-direction: column;   }
+}
+      .widget .widget-header .movie-title {
+        margin-left: 32px;
+        color: #e5e5e5;
+        text-shadow: 2px 2px 2px rgba(3, 104, 255, 0.9); }
+        .widget .widget-header .movie-release-year {
+          color: #7d7d7d;
+          text-shadow: none; }
   .widget.widget-small {
     width: 30%;
     min-height: 320px; }
     .widget.widget-medium {
       width: 480px; }
-      @media (max-width: 560px) {
+      @media (max-width: 680px) {
         .widget.widget-medium {
           max-width: 352px;
           min-width: 176px;   }
 }
   .widget.widget-large {
     width: 70%; }
-    @media (max-width: 560px) {
+    @media (max-width: 680px) {
       .widget.widget-large {
         width: 90%;   }
 }

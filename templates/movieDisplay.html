@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Movie Title{% endblock %}
+
+{% block maincontent %}
+    <div class="widget widget-extra-large">
+        <div class="widget-header">
+            <h1 class="movie-title">
+                Blade Runner 2049&nbsp;<span class="movie-release-year">(2017)</span>
+            </h1>
+            <div class="movie-interactions">
+                <div class="movie-interaction-button" id="movie-like">
+                    <img src="../static/images/thumbs-up-active.svg">
+                </div>
+                <div class="movie-interaction-button" id="movie-dislike">
+                    <img src="../static/images/thumbs-down-active.svg">
+                </div>
+                <div class="movie-interaction-button" id="movie-bookmark">
+                    <img src="../static/images/bookmark-active.svg">
+                </div>
+            </div>
+        </div>
+        <div class="movie-main">
+            <div class="movie-poster">
+                <img id="movie-poster-main" src="https://m.media-amazon.com/images/M/MV5BNzA1Njg4NzYxOV5BMl5BanBnXkFtZTgwODk5NjU3MzI@._V1_SX300.jpg"></img>
+            </div>
+            <div class="movie-details">
+                <div class="movie-detail-container">
+                    <section class="detail-name">Genere:</section>
+                    <section class="detail-content">
+                        Action, Drama, Mystery, Sci-Fi, Thriller
+                    </section>
+                </div>
+                <div class="movie-detail-container">
+                    <section class="detail-name">Runtime:</section>
+                    <section class="detail-content">
+                        164 min
+                    </section>
+                </div>
+                <div class="movie-detail-container">
+                    <section class="detail-name">Rating:</section>
+                    <section class="detail-content">
+                        R
+                    </section>
+                </div>
+                <div class="movie-detail-container">
+                    <section class="detail-name">Director:</section>
+                    <section class="detail-content">
+                        Denis Villeneuve
+                    </section>
+                </div>
+                <div class="movie-detail-container">
+                    <section class="detail-name">Actors:</section>
+                    <section class="detail-content">
+                        Ryan Gosling, Dave Bautista, Robin Wright, Mark Arnold
+                    </section>
+                </div>
+                <div class="movie-detail-container">
+                    <section class="detail-name">Plot Synopsis:</section>
+                    <section class="detail-content">
+                        Young Blade Runner K's discovery of a long-buried secret leads him to track down former Blade Runner Rick Deckard, who's been missing for thirty years.
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="background"></div>
+{% endblock %}
