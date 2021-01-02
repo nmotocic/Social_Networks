@@ -88,9 +88,9 @@ def movieCreate(db,movie):
 	#Genre creation and linking
 	for genre in movie.genres:
 		#Add genres
-		genreCreate(db,genre["name"])
+		genreCreate(db,genre)
 		#Link to genre
-		qry= 'MATCH (m:Movie),(g:Genre) WHERE m.id = "{0}" AND g.name = "{1}" CREATE (m)-[r:isGenre]->(g)'.format(str(movie.id),genre["name"])
+		qry= 'MATCH (m:Movie),(g:Genre) WHERE m.id = "{0}" AND g.name = "{1}" CREATE (m)-[r:isGenre]->(g)'.format(str(movie.id),genre)
 		db.execute_query(qry)
 	return
 
