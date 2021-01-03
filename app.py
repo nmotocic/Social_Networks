@@ -54,6 +54,10 @@ def movie():
 def find():
     return render_template("movieDisplay.html")
 
+@app.route('/discover')
+def discover():
+    return render_template("movieDiscover.html")
+
 @app.route('/fb_login')
 def fb_login():
    if not facebook.authorized:

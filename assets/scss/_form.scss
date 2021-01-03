@@ -32,6 +32,10 @@ form {
                 border: none;
             }
 
+            @media (max-width: $phablet-width) {
+                max-width: 90%;
+            }
+
             &::before {
                 content: '';
                 flex-shrink: 0;
