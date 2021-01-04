@@ -37,6 +37,7 @@ def userChangeName(db,email,newName):
 	db.execute_query(qry)
 	return cleanString(newName)
 
+#Favorites
 def userFavoritesMovie(db,email,movieId):
 	if email is None or movieId is None:
 		return
@@ -83,7 +84,7 @@ def movieCreate(db,movie):
 		return
 	if movieCheck(db,movie.id)==True:
 		return
-	qry = 'CREATE (n:Movie {{id: "{0}",name: "{1}", releaseDate: "{2}", overview: "{3}"}})'.format(str(movie.id),cleanString(movie.name),movie.releaseDate,cleanString(movie.overview))
+	qry = 'CREATE (n:Movie {{id: "{0}",name: "{1}", releaseDate: "{2}", overview: "{3}", directorName: "{4}", posterPath: "{5}"}})'.format(str(movie.id),cleanString(movie.name),movie.releaseDate,cleanString(movie.overview),cleanString(movie.directorName),cleanString(movie.posterPath))
 	db.execute_query(qry)
 	#Genre creation and linking
 	for genre in movie.genres:
@@ -143,32 +144,16 @@ def genreGetAll(db):
 	#Finalize
 	retList.sort(key=nameSort)
 	return retList
-
-#Track controls
-
-def trackCreateBulk(db,jsonData):
-	retList=[]
-	if jsonData is None:
+#Rating source
+def ratingSourceCreate(db,sourceName):
+	if sourceName is None:
 		return
-	for row in jsonData:
-		#Create album
-		alb = row["album"]
-		album = Album(alb["id"],alb["name"],alb["release_date"],alb["total_tracks"])
-		#Done album
-		#Create artists
-		artists = []
-		for art in row["artists"]:#Create artist
-			artist = Artist(art["id"],art["name"])
-			artists.append(artist)
-			#Done
-		#Create track
-		track=Track(row["id"],row["name"],album,artists)
-		retList.append(track)
-		trackCreate(db,track)
-	return retList
+	qry = 'CREATE (n:RatingSource {{name: "{0}"}})'.format(cleanString(sourceName))
+	db.execute_query(qry)
+	return
 
-def trackCheck(db,id):
-	qry = 'MATCH (n:Track {{id: "{0}"}} ) RETURN n'.format(str(id))
+def ratingSourceCheck(db,sourceName):
+	qry = 'MATCH (n:RatingSource {{name: "{0}"}} ) RETURN n'.format(sourceName)
 	result = db.execute_and_fetch(qry)
 	ret = False
 	for row in result:
@@ -176,44 +161,8 @@ def trackCheck(db,id):
 		break;
 	return ret
 
-def trackCreate(db,track):
-	if track.id is None:
-		return
-	if trackCheck(db,track.id)==True:
-		return
-	qry = 'CREATE (n:Track {{id: "{0}",name: "{1}"}})'.format(str(track.id),cleanString(track.name))
-	db.execute_query(qry)
-	#Artist creation and linking
-	for artist in track.artists:
-		#Add artist
-		artistCreate(db,artist)
-		#Link with artist
-		qry = 'MATCH (t:Track),(a:Artist) WHERE t.id = "{0}" AND a.id = "{1}" CREATE (a)-[r:created]->(t)'.format(str(track.id),str(artist.id))
-		db.execute_query(qry)
-	#Album creation and linking
-	albumCreate(db,track.album)
-	qry = 'MATCH (t:Track),(a:Album) WHERE t.id = "{0}" AND a.id = "{1}" CREATE (a)-[r:contains]->(t)'.format(str(track.id),str(track.album.id))
-	db.execute_query(qry)
-	return
-
-def trackGetAll(db):
-	#qry = 'MATCH (a:Album)-[r1:contains]->(t:Track)<-[r2:created]-(r:Artist) RETURN a,r1,r2,t,r'
-	qry = 'MATCH (a)-[r1:contains|created]->(t:Track) RETURN a,r1,t'
-	relations = db.execute_and_fetch(qry)
-	return parseTrackRelations(relations)
-
-def trackGetByArtist(db,artist):
-	qry = 'MATCH (r:Artist {{ id: "{0}" }})-[r2:created]->(t)<-[r1:contains|created]-(a) RETURN a,r1,t'.format(artist.id)
-	relations = db.execute_and_fetch(qry)
-	ret = parseTrackRelations(relations)
-	for x in ret:
-		x.artists.append(artist)
-		x.artists.sort(key=nameSort)
-	return ret
-
-#Artist controls
-def artistCheck(db,id):
-	qry = 'MATCH (n:Artist {{id: "{0}"}} ) RETURN n'.format(id)
+def ratingExists(db,sourceName,movieId):
+	qry = 'MATCH (s:RatingSource {{name: "{0}"}})-[r:Rated]->(m:Movie {{id: "{1}"}}) RETURN s,r,m'.format(sourceName,movieId)
 	result = db.execute_and_fetch(qry)
 	ret = False
 	for row in result:
@@ -221,61 +170,36 @@ def artistCheck(db,id):
 		break;
 	return ret
 
-def artistCreate(db,artist):
-	if artist.id is None:
+def movieAddRating(db,sourceName,movieId,rating):
+	if sourceName is None or movieId is None or rating is None:
 		return
-	if artistCheck(db,artist.id)==True:
-		return
-	qry = 'CREATE (n:Artist {{id:"{0}" ,name: "{1}"}})'.format(artist.id,cleanString(artist.name))
+	#Source exist?
+	if not ratingSourceCheck(db,sourceName):
+		ratingSourceCreate(db,sourceName)
+	#Rating exist?
+	if ratingExists(db,sourceName,movieId):
+		qry = 'MATCH (s:RatingSource {{name: "{0}"}})-[r:Rated]->(m:Movie {{id: "{1}"}}) SET r.score= "{2}"'.format(sourceName,movieId,rating)
+	else:
+		qry = 'MATCH (s:RatingSource),(m:Movie) WHERE m.id = "{0}" AND s.name = "{1}" CREATE (s)-[r:Rated {{score: "{2}"}}]->(m)'.format(movieId,sourceName,rating)
 	db.execute_query(qry)
 	return
 
-def artistGetAll(db):
-	qry = 'MATCH (x:Artist) RETURN x'
+def movieGetRating(db,movieId):
+	if movieId is None:
+		return
+	qry = 'MATCH (s:RatingSource)-[r]->(m:Movie {{ id: "{0}" }}) RETURN s,r'.format(movieId)
 	relations = db.execute_and_fetch(qry)
-	retList=[]
+	retDict={}
 	for relation in relations:
-		art = relation['x']
-		artist = Artist(art.properties["id"],art.properties["name"])
-		retList.append(artist)
-	#Finalize
-	retList.sort(key=nameSort)
-	return retList
-
-def artistGetById(db,artistId):
-	qry = 'MATCH (x:Artist {{id : "{0}"}}) RETURN x'.format(artistId)
-	relations = db.execute_and_fetch(qry)
-	for relation in relations:
-		art = relation['x']
-		artist = Artist(art.properties["id"],art.properties["name"])
-		return artist
-
-#Album controls
-
-def albumCreate(db,album):
-	if album.id is None:
-		return
-	if albumCheck(db,album.id)==True:
-		return
-	qry = 'CREATE (n:Album {{id: "{0}",name: "{1}",totalTracks: "{2}", releaseDate: "{3}"}})'.format(str(album.id),cleanString(album.name),str(album.totalTracks),album.releaseDate)
-	db.execute_query(qry)
-	return
-
-def albumCheck(db,id):
-	qry = 'MATCH (n:Album {{id: "{0}"}}) RETURN n'.format(str(id))
-	result = db.execute_and_fetch(qry)
-	ret = False
-	for row in result:
-		ret = True
-		break;
-	return ret
+		retDict[relation["s"].properties["name"]] = relation['r'].properties["score"]
+	return retDict
 
 #Help functions
 def cleanString(st):
 	ret = st
 	ret = ret.replace('"',"'")
-
 	return ret
+
 
 def nameSort(obj):
 	return obj.name

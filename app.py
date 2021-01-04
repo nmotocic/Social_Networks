@@ -48,6 +48,7 @@ def fb_login():
 #base+request+key+params
 tmdbBase = "https://api.themoviedb.org/3/"
 tmdbKey = "?api_key=182afe8c78e3f9451e21950e7b29053e"
+tmdbBasePosterPath="https://image.tmdb.org/t/p/original"
 
 #omdb - API
 omdbAPI = "https://www.omdbapi.com/?apikey=65f7361a&"
@@ -138,20 +139,32 @@ def tmdbGet():
 	reqStart = tmdbBase + "movie/"
 	reqEnd = tmdbKey
 	#Get
-	for i in range(556,650,2):
-		resp = requests.get("{0}{1}{2}{3}".format(reqStart,str(i),'',reqEnd))
+	for i in range(550,650,2):
+		resp = requests.get("{0}{1}{2}{3}&append_to_response=credits".format(reqStart,str(i),'',reqEnd))
 		if resp.ok:
 			resp_json = resp.json()
+			director=""
+			posterPath=tmdbBasePosterPath+resp_json["poster_path"]
+			for member in resp_json["credits"]["crew"]:
+				if(member["job"]=="Director"):
+					director=member["name"]
+					break
+			#return resp_json
 			genres = []
 			for genre in resp_json["genres"]:
 				genres.append(genre["name"])
-			mov=Movie(resp_json["imdb_id"],resp_json["title"],genres,resp_json["release_date"],resp_json["overview"])
+			mov=Movie(resp_json["imdb_id"],resp_json["title"],genres,resp_json["release_date"],resp_json["overview"],director,posterPath)
 			dbComms.movieCreate(db,mov)
+			#Add rating
+			dbComms.movieAddRating(db,"TMDB",mov.id,resp_json["vote_average"])
+		else:
+			continue
 	return redirect(url_for('moviesList'))
 
-@app.route('/movies/add/omdb')
-def omdbGet():
-	movieTitle = "Spider-Man"
+
+@app.route('/movies/add/omdb', defaults={"movieTitle" : "Die Hard"})
+@app.route('/movies/add/omdb/<movieTitle>')
+def omdbGet(movieTitle):
 	omdbAPIcall = omdbAPI + "t=" + movieTitle
 	resp = requests.get(omdbAPIcall)
 	if resp.ok:
@@ -160,22 +173,20 @@ def omdbGet():
 		#return resp_json
 		genres = resp_json["Genre"].replace(" ","")
 		genres = genres.split(",")
-		mov=Movie(resp_json["imdbID"],resp_json["Title"],genres,resp_json["Released"],resp_json["Plot"])
+		mov=Movie(resp_json["imdbID"],resp_json["Title"],genres,resp_json["Released"],resp_json["Plot"],resp_json["Director"],resp_json["Poster"])
 		dbComms.movieCreate(db,mov)
+		#Add ratings
+		for rating in resp_json["Ratings"]:
+			dbComms.movieAddRating(db,rating["Source"],resp_json["imdbID"],rating["Value"])
 		return redirect(url_for('moviesList'))
 	else:
 		return "Bad request"
 
-		""" Dodati i tmdbGet?
-		#movie_director = resp_json["Director"]
-		#movie_poster = resp_json["Poster"]
-		movie_node = db_operations.get_movie_by_imdb_id(db, movie_id)
-		if movie_node is None:
-			db_operations.add_movie(db, movie_id, movie_title, movie_year, movie_director, movie_poster)
-		if 'userid' in session:
-			db_operations.connect_user_to_movie(db, session['userid'], movie_id)
-		return redirect(url_for("index"))
-		"""
+#Default vraca Die Hard
+@app.route('/movies/rating', defaults={"movieId":"tt0095016"})
+@app.route('/movies/rating/<movieId>')
+def getRating(movieId):
+	return dbComms.movieGetRating(db,movieId)
 
 
 @app.route('/movies/favorite/<movieId>')

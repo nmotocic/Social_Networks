@@ -1,5 +1,5 @@
 from social_network.dbModels import *
-
+"""
 def parseTrackRelations(relations):
 	retList=[]
 	trackDict={}
@@ -23,32 +23,6 @@ def parseTrackRelations(relations):
 	for track in trackDict:
 		retList.append(trackDict[track])
 	return retList
-
-"""Backup
-def parseTrackRelations(relations):
-	retList=[]
-	trackDict={}
-	artistList=[]
-	for relation in relations:
-		trk = relation['t']
-		tId = trk.properties["id"]
-		artistList.clear()
-		if(tId not in trackDict):
-			track=Track(tId,trk.properties["name"],None,artistList.copy())
-			trackDict[tId]=track
-		#Relations
-		if('a' in relation): #Other is album
-			other = relation['a']
-			album = Album(other.properties["id"],other.properties["name"],other.properties["releaseDate"],other.properties["totalTracks"])
-			trackDict[tId].album=album;
-		if('r' in relation): #Other is artist
-			other = relation['r']
-			artist = Artist(other.properties["id"],other.properties["name"])
-			trackDict[tId].artists.append(artist)
-	#Finalize
-	for track in trackDict:
-		retList.append(trackDict[track])
-	return retList
 """
 
 def parseMovieRelations(relations):
@@ -64,7 +38,7 @@ def parseMovieRelations(relations):
 		#Set movie
 		genreList.clear()
 		if mId not  in movieDict:
-			movie=Movie(mId,mov.properties["name"],genreList.copy(),mov.properties["releaseDate"],mov.properties["overview"])
+			movie=Movie(mId,mov.properties["name"],genreList.copy(),mov.properties["releaseDate"],mov.properties["overview"],mov.properties["directorName"],mov.properties["posterPath"])
 			movieDict[mId]=movie
 		#Set genres
 		movieDict[mId].genres.append(gen.properties["name"])
