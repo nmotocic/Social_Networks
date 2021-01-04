@@ -82,6 +82,8 @@ def movieCheck(db,id):
 def movieCreate(db,movie):
 	if movie.id is None:
 		return
+	if type(movie.directorName) != str:
+		movie.directorName = "Unkown"
 	if movieCheck(db,movie.id)==True:
 		return
 	qry = 'CREATE (n:Movie {{id: "{0}",name: "{1}", releaseDate: "{2}", overview: "{3}", directorName: "{4}", posterPath: "{5}"}})'.format(str(movie.id),cleanString(movie.name),movie.releaseDate,cleanString(movie.overview),cleanString(movie.directorName),cleanString(movie.posterPath))
@@ -95,8 +97,12 @@ def movieCreate(db,movie):
 		db.execute_query(qry)
 	return
 
-def movieGetAll(db):
-	qry = 'MATCH (m:Movie)-[r:isGenre]->(g:Genre) RETURN m,r,g'
+def movieGetAll(db,limit=10,page=0):
+	#If limit is 0 get all
+	if(limit<=0):
+		qry = 'MATCH (m:Movie)-[r:isGenre]->(g:Genre) RETURN m,r,g'
+	else:
+		qry = 'MATCH (m:Movie)-[r:isGenre]->(g:Genre) RETURN m,r,g SKIP {0} LIMIT {1}'.format(page*limit,limit)
 	relations = db.execute_and_fetch(qry)
 	return parseMovieRelations(relations)
 

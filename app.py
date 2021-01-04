@@ -144,9 +144,12 @@ def tmdbGet():
 		if resp.ok:
 			resp_json = resp.json()
 			director=""
-			posterPath=tmdbBasePosterPath+resp_json["poster_path"]
+			if type(resp_json["poster_path"]) == str:
+				posterPath = tmdbBasePosterPath+resp_json["poster_path"]
+			else:
+				posterPath = ""
 			for member in resp_json["credits"]["crew"]:
-				if(member["job"]=="Director"):
+				if(member["job"] == "Director"):
 					director=member["name"]
 					break
 			#return resp_json
