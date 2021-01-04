@@ -100,9 +100,14 @@
     }
     &.widget-medium {
         width: $base-spacing*30;
+        transform: translateX(-48%);
+
+        @media (max-width: $desktop-width) {
+            transform: translateX(0%);
+        }
 
         @media (max-width: $phablet-width) {
-            max-width: $base-spacing*22;
+            max-width: $base-spacing*19;
             min-width: $base-spacing*11;
         }
     }

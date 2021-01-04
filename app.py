@@ -58,6 +58,26 @@ def find():
 def discover():
     return render_template("movieDiscover.html")
 
+@app.route('/profile')
+def profile():
+    return render_template("userProfile.html")
+
+@app.route('/liked')
+def liked():
+    return render_template("likedList.html")
+
+@app.route('/dislike')
+def dislike():
+    return render_template("dislikedList.html")
+
+@app.route('/bookmarked')
+def booked():
+    return render_template("bookmarkedList.html")
+
+@app.route('/login')
+def login():
+    return render_template("login.html")
+
 @app.route('/fb_login')
 def fb_login():
    if not facebook.authorized:

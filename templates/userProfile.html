@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Profile{% endblock %}
+
+{% block maincontent %}
+    <div class="widget widget-large">
+        <div class="widget-header">
+            <h1 class="widget-title">
+                Your Profile
+            </h1>
+        </div>
+        <div class="profile-container">
+            <div class="profile-main">
+                <div class="user-image">
+                    <img id="user-image-main" src="https://external-preview.redd.it/ERjNu9y3IVe0uWs5mBsX97dWyQ9Js0jL-kUo5XHn4R8.jpg?auto=webp&s=823ebc8c7ae4198886cf6c0d23acde708d8aff03"></img>
+                </div>
+                <div class="user-details">
+                    <div class="user-detail-container">
+                        <section class="detail-name">Username:</section>
+                        <section class="detail-content">
+                            Username
+                        </section>
+                    </div>
+                    <div class="user-detail-container">
+                        <section class="detail-name">Date of Birth:</section>
+                        <section class="detail-content">
+                            10.3.1997.
+                        </section>
+                    </div>
+                    <div class="user-detail-container">
+                        <section class="detail-name">E-Mail:</section>
+                        <section class="detail-content">
+                            user@gmail.com
+                        </section>
+                    </div>
+                </div>
+            </div>
+            <div class="profile-stats">
+                <div class="lists">
+                    <a href="" class="list-info">
+                        <img src="../static/images/thumbs-up-active.svg"/>
+                        <section>Liked Movies:</section>
+                        <span>220</span>
+                    </a>
+                    <a href="" class="list-info">
+                        <img src="../static/images/thumbs-down-active.svg"/>
+                        <section>Disliked Movies:</section>
+                        <span>50</span>
+                    </a>
+                    <a href="" class="list-info">
+                        <img src="../static/images/bookmark-active.svg"/>
+                        <section>Bookmarked Movies:</section>
+                        <span>60</span>
+                    </a>
+                </div>
+                <div class="graph">
+                    <canvas id="myChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="background"></div>
+{% endblock %}

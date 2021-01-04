@@ -38,7 +38,7 @@ header {
         }
     }
 
-    .user-info {
+    #user-info {
         display: flex;
         flex-direction: row;
         height: $base-spacing*4;
@@ -97,7 +97,7 @@ header {
             transition: opacity .25s ease-in-out;
             margin-top: $base-spacing*.5;
         }
-        .user-info{
+        #user-info{
             .user-name {
                 display: none;
             }
