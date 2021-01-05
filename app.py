@@ -36,7 +36,6 @@ app.config['FACEBOOK_OAUTH_CLIENT_SECRET'] = ''
 facebook_bp = make_facebook_blueprint(rerequest_declined_permissions=True)
 facebook_bp.rerequest_declined_permissions = True
 app.register_blueprint(facebook_bp, url_prefix="/login")
-os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 #FB connection
 def fb_login():
 	if not facebook.authorized:
@@ -52,14 +51,15 @@ tmdbBasePosterPath="https://image.tmdb.org/t/p/original"
 
 #omdb - API
 omdbAPI = "https://www.omdbapi.com/?apikey=65f7361a&"
-openLibraryAPI = "http://openlibrary.org/"
-openLibraryCoverAPI = "http://covers.openlibrary.org/"
 
 
 #App
 @app.before_request
 def handleSession():
-	authed = False;
+	if "userEmail" in session:
+		authed = True
+	else:
+		authed = False
 	if twitter.authorized:
 		resp = twitter.get("account/verify_credentials.json", params={"include_email" : "true"})
 		if resp.ok:
@@ -78,6 +78,7 @@ def handleSession():
 		res = dbComms.userCheck(db,userEmail)
 		if  res==False:
 			dbComms.userCreate(db,userName,userEmail)
+		if "userName" not in session or "userEmail" not in session:
 			session["userName"] = dbComms.userGetByEmail(db,userEmail).username
 			session["userEmail"] = userEmail		
 	if("warning" in session):
@@ -133,33 +134,32 @@ def moviesList():
 		retFilt = dbComms.genreGetAll(db)
 		return render_template("movieList.html", list=ret, filter=retFilt)
 
-@app.route('/movies/add/tmdb')
-def tmdbGet():
+@app.route('/movies/add/tmdb/<movieId>')
+def tmdbGet(movieId):
 	#Sastavljanje upita
 	reqStart = tmdbBase + "movie/"
 	reqEnd = tmdbKey
 	#Get
-	for i in range(550,650,2):
-		resp = requests.get("{0}{1}{2}{3}&append_to_response=credits".format(reqStart,str(i),'',reqEnd))
-		if resp.ok:
-			resp_json = resp.json()
-			director=""
-			if type(resp_json["poster_path"]) == str:
-				posterPath = tmdbBasePosterPath+resp_json["poster_path"]
-			else:
-				posterPath = ""
-			for member in resp_json["credits"]["crew"]:
-				if(member["job"] == "Director"):
-					director=member["name"]
-					break
+	resp = requests.get("{0}{1}{2}{3}&append_to_response=credits".format(reqStart,str(movieId),'',reqEnd))
+	if resp.ok:
+		resp_json = resp.json()
+		director=""
+		if type(resp_json["poster_path"]) == str:
+			posterPath = tmdbBasePosterPath+resp_json["poster_path"]
+		else:
+			posterPath = ""
+		for member in resp_json["credits"]["crew"]:
+			if(member["job"] == "Director"):
+				director=member["name"]
+				break
 			#return resp_json
-			genres = []
-			for genre in resp_json["genres"]:
-				genres.append(genre["name"])
-			mov=Movie(resp_json["imdb_id"],resp_json["title"],genres,resp_json["release_date"],resp_json["overview"],director,posterPath)
-			dbComms.movieCreate(db,mov)
-			#Add rating
-			dbComms.movieAddRating(db,"TMDB",mov.id,resp_json["vote_average"])
+		genres = []
+		for genre in resp_json["genres"]:
+			genres.append(genre["name"])
+		mov=Movie(resp_json["imdb_id"],resp_json["title"],genres,resp_json["release_date"],resp_json["overview"],director,posterPath)
+		dbComms.movieCreate(db,mov)
+		#Add rating
+		dbComms.movieAddRating(db,"TMDB",mov.id,resp_json["vote_average"])
 		else:
 			continue
 	return redirect(url_for('moviesList'))
@@ -216,18 +216,38 @@ def favoriteMoviesList():
 	ret = dbComms.movieGetAllFavorited(db,session["userEmail"])
 	return render_template("movieFavs.html", list=ret)
 
+#Test method
+@app.route('/movies/favoritesX')
+def favoriteMoviesListLimited():
+	if(twitter.authorized==False):
+		session["warning"]=warnings.noLogin()
+		return redirect(url_for('index'))
+	ret = dbComms.movieGetFavoritedLimited(db,session["userEmail"])
+	return render_template("movieFavs.html", list=ret)
+
+@app.route('/movies/like')
+def testRate():
+	toLike = ["tt0298203","tt0078788","tt0120586"]
+	for like in toLike:
+		dbComms.userRateMovie(db,session["userEmail"],like,1)
+	ret = dbComms.userGetPositiveRatedMovies(db,session["userEmail"])
+	return render_template("movieFavs.html", list=ret);
 
 #Test DB controls
 @app.route('/db/prg')
 def purge():
-	purge_database()
+	purgeDatabase()
 	session.clear()
 	session["warning"]=warnings.noWarning()
 	return redirect("/")
 
-def purge_database():
+def purgeDatabase():
 	qry = 'MATCH (node) DETACH DELETE node'
 	db.execute_query(qry)
+	return
+
+#TODO
+def initDatabase():
 	return
 
 

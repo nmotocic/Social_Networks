@@ -1,5 +1,7 @@
 import json
 import sys
+import time
+import math
 from social_network.dbModels import *
 from social_network.dbRelationsParser import *
 
@@ -38,14 +40,18 @@ def userChangeName(db,email,newName):
 	return cleanString(newName)
 
 #Favorites
-def userFavoritesMovie(db,email,movieId):
+def userFavoritesMovie(db,email,movieId,timestampOverride=0):
 	if email is None or movieId is None:
 		return
 	if userCheck(db,email)==False or movieCheck(db,movieId) == False:
 		return
 	if(userCheckFavorited(db,email,movieId)):
 		return
-	qry = 'MATCH (u:User),(m:Movie) WHERE m.id = "{0}" AND u.email = "{1}" CREATE (u)-[r:favorited]->(m)'.format(movieId,email)
+	if timestampOverride != 0:
+		timestamp=timestampOverride
+	else:
+		timestamp=math.floor(time.time())
+	qry = 'MATCH (u:User),(m:Movie) WHERE m.id = "{0}" AND u.email = "{1}" CREATE (u)-[r:favorited {{timestamp : {2}}}]->(m)'.format(movieId,email,timestamp)
 	db.execute_query(qry)
 	return
 
@@ -68,6 +74,75 @@ def userCheckFavorited(db,email,movieId):
 		ret = True
 		break;
 	return ret
+
+def movieGetAllFavorited(db,email):
+	qry = 'MATCH (u:User {{ email: "{0}"}})-[r2:favorited]->(m:Movie)-[r:isGenre]->(g:Genre) RETURN m,r,g'.format(email)
+	relations = db.execute_and_fetch(qry)
+	return parseMovieRelations(relations)
+
+def movieGetFavoritedLimited(db,email,lastSeconds=8):
+	timeLimit = math.floor(time.time())-lastSeconds
+	qry = 'MATCH (u:User {{ email: "{0}"}})-[r2:favorited]->(m:Movie)-[r:isGenre]->(g:Genre) WHERE r2.timestamp >= {1} RETURN m,r,g'.format(email,timeLimit)
+	relations = db.execute_and_fetch(qry)
+	return parseMovieRelations(relations)
+
+#User rating 0 negative, 1 positive
+def userRateMovie(db,email,movieId,rating,timestampOverride=0):
+	if rating != 0 AND rating != 1:
+		return
+	if email is None or movieId is None:
+		return
+	if userCheck(db,email)==False or movieCheck(db,movieId) == False:
+		return
+	if timestampOverride != 0:
+		timestamp=timestampOverride
+	else:
+		timestamp=math.floor(time.time())
+	if userCheckRating(db,email,movieId):
+		qry = 'MATCH (u:User {{ email : "{1}" }})-[r:rated]->(m:Movie {{ id : "{0}" }}) SET r.timestamp = {2}, r.rating = {3}'.format(movieId,email,timestamp,rating)
+	else:
+		qry = 'MATCH (u:User),(m:Movie) WHERE m.id = "{0}" AND u.email = "{1}" CREATE (u)-[r:rated {{ timestamp : {2}, rating : {3} }}]->(m)'.format(movieId,email,timestamp,rating)
+	db.execute_query(qry)
+	return
+
+def userUnRateMovie(db,email,movieId):
+	if email is None or movieId is None:
+		return
+	if userCheck(db,email)==False or movieCheck(db,movieId) == False:
+		return
+	if(not userCheckFavorited(db,email,movieId)):
+		return
+	qry = 'MATCH ( u:User {{ email:"{0}"}} )-[r:rated]->( m:Movie {{ id: "{1}" }} ) DELETE r'.format(email,movieId)
+	db.execute_query(qry)
+	return
+
+def userCheckRating(db,email,movieId):
+	qry = 'MATCH (u:User {{ email : "{0}" }})-[:rated]->(m:Movie {{ id : "{1}" }}) RETURN u'.format(email,movieId)
+	result = db.execute_and_fetch(qry)
+	ret = False
+	for row in result:
+		ret = True
+		break;
+	return ret
+
+#If lastSeconds 0 get all, otherwise get movies rated within "lastSeconds"
+def userGetPositiveRatedMovies(db,email,lastSeconds=0):
+	if(lastSeconds!=0):
+		timeLimit = math.floor(time.time())-lastSeconds
+	else:
+		timeLimit = 0
+	qry = 'MATCH (u:User {{ email: "{0}"}})-[r2:rated]->(m:Movie)-[r:isGenre]->(g:Genre) WHERE r2.timestamp >= {1} AND r2.rating = 1 RETURN m,r,g'.format(email,timeLimit)
+	relations = db.execute_and_fetch(qry)
+	return parseMovieRelations(relations)
+
+def userGetNegativeRatedMoviesLimited(db,email,lastSeconds=0):
+	if(lastSeconds!=0):
+		timeLimit = math.floor(time.time())-lastSeconds
+	else:
+		timeLimit = 0
+	qry = 'MATCH (u:User {{ email: "{0}"}})-[r2:rated]->(m:Movie)-[r:isGenre]->(g:Genre) WHERE r2.timestamp >= {1} AND r2.rating = 0 RETURN m,r,g'.format(email,timeLimit)
+	relations = db.execute_and_fetch(qry)
+	return parseMovieRelations(relations)
 
 #Movie controls
 def movieCheck(db,id):
@@ -106,10 +181,6 @@ def movieGetAll(db,limit=10,page=0):
 	relations = db.execute_and_fetch(qry)
 	return parseMovieRelations(relations)
 
-def movieGetAllFavorited(db,email):
-	qry = 'MATCH (u:User {{ email: "{0}"}})-[r2:favorited]->(m:Movie)-[r:isGenre]->(g:Genre) RETURN m,r,g'.format(email)
-	relations = db.execute_and_fetch(qry)
-	return parseMovieRelations(relations)
 
 def movieGetByGenre(db,genre):
 	qry = ('MATCH (:Genre {{name : "{0}"}})<-[:isGenre]-(m:Movie)-[r:isGenre]->(g:Genre) RETURN m,r,g').format(genre)
