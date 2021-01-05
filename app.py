@@ -4,6 +4,8 @@ from flask_dance.contrib.facebook import make_facebook_blueprint, facebook
 from flask_dance.consumer import oauth_authorized
 from social_network.database.memgraph import Memgraph
 from social_network import dbComms
+from social_network import dbTestInfo
+from social_network import movieApiController
 from social_network import warnings
 from social_network.dbModels import User,Movie,Genre
 from flask_scss import Scss
@@ -41,16 +43,6 @@ def fb_login():
 	if not facebook.authorized:
 		return redirect(url_for("facebook.login"))
 	return redirect(url_for('account'))
-
-#TMDB - API
-#https://api.themoviedb.org/3/movie/550?api_key=182afe8c78e3f9451e21950e7b29053e
-#base+request+key+params
-tmdbBase = "https://api.themoviedb.org/3/"
-tmdbKey = "?api_key=182afe8c78e3f9451e21950e7b29053e"
-tmdbBasePosterPath="https://image.tmdb.org/t/p/original"
-
-#omdb - API
-omdbAPI = "https://www.omdbapi.com/?apikey=65f7361a&"
 
 
 #App
@@ -135,55 +127,15 @@ def moviesList():
 		return render_template("movieList.html", list=ret, filter=retFilt)
 
 @app.route('/movies/add/tmdb/<movieId>')
-def tmdbGet(movieId):
-	#Sastavljanje upita
-	reqStart = tmdbBase + "movie/"
-	reqEnd = tmdbKey
-	#Get
-	resp = requests.get("{0}{1}{2}{3}&append_to_response=credits".format(reqStart,str(movieId),'',reqEnd))
-	if resp.ok:
-		resp_json = resp.json()
-		director=""
-		if type(resp_json["poster_path"]) == str:
-			posterPath = tmdbBasePosterPath+resp_json["poster_path"]
-		else:
-			posterPath = ""
-		for member in resp_json["credits"]["crew"]:
-			if(member["job"] == "Director"):
-				director=member["name"]
-				break
-			#return resp_json
-		genres = []
-		for genre in resp_json["genres"]:
-			genres.append(genre["name"])
-		mov=Movie(resp_json["imdb_id"],resp_json["title"],genres,resp_json["release_date"],resp_json["overview"],director,posterPath)
-		dbComms.movieCreate(db,mov)
-		#Add rating
-		dbComms.movieAddRating(db,"TMDB",mov.id,resp_json["vote_average"])
-		else:
-			continue
+def tmdbAdd(movieId):
+	movieApiController.apiTmdbAddById(db,movieId)
 	return redirect(url_for('moviesList'))
-
 
 @app.route('/movies/add/omdb', defaults={"movieTitle" : "Die Hard"})
 @app.route('/movies/add/omdb/<movieTitle>')
-def omdbGet(movieTitle):
-	omdbAPIcall = omdbAPI + "t=" + movieTitle
-	resp = requests.get(omdbAPIcall)
-	if resp.ok:
-		resp_content = resp.content
-		resp_json = json.loads(resp_content.decode("utf-8"))
-		#return resp_json
-		genres = resp_json["Genre"].replace(" ","")
-		genres = genres.split(",")
-		mov=Movie(resp_json["imdbID"],resp_json["Title"],genres,resp_json["Released"],resp_json["Plot"],resp_json["Director"],resp_json["Poster"])
-		dbComms.movieCreate(db,mov)
-		#Add ratings
-		for rating in resp_json["Ratings"]:
-			dbComms.movieAddRating(db,rating["Source"],resp_json["imdbID"],rating["Value"])
-		return redirect(url_for('moviesList'))
-	else:
-		return "Bad request"
+def omdbAdd(movieTitle):
+	movieApiController.apiOmdbAddByTitle(db,movieTitle)
+	return redirect(url_for('moviesList'))
 
 #Default vraca Die Hard
 @app.route('/movies/rating', defaults={"movieId":"tt0095016"})
@@ -227,10 +179,7 @@ def favoriteMoviesListLimited():
 
 @app.route('/movies/like')
 def testRate():
-	toLike = ["tt0298203","tt0078788","tt0120586"]
-	for like in toLike:
-		dbComms.userRateMovie(db,session["userEmail"],like,1)
-	ret = dbComms.userGetPositiveRatedMovies(db,session["userEmail"])
+	ret = dbComms.movieGetRecentlyRated(db)
 	return render_template("movieFavs.html", list=ret);
 
 #Test DB controls
@@ -247,9 +196,13 @@ def purgeDatabase():
 	return
 
 #TODO
+@app.route('/db/init')
 def initDatabase():
-	return
-
+	dbTestInfo.addOmdbMovies(db)
+	dbTestInfo.addTmdbMovies(db)
+	dbTestInfo.addTestUsers(db)
+	dbTestInfo.addTestLikes(db)
+	return redirect("/")
 
 #Main
 if __name__ == '__main__':

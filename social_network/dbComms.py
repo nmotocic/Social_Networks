@@ -88,7 +88,7 @@ def movieGetFavoritedLimited(db,email,lastSeconds=8):
 
 #User rating 0 negative, 1 positive
 def userRateMovie(db,email,movieId,rating,timestampOverride=0):
-	if rating != 0 AND rating != 1:
+	if rating != 0 and rating != 1:
 		return
 	if email is None or movieId is None:
 		return
@@ -125,6 +125,7 @@ def userCheckRating(db,email,movieId):
 		break;
 	return ret
 
+
 #If lastSeconds 0 get all, otherwise get movies rated within "lastSeconds"
 def userGetPositiveRatedMovies(db,email,lastSeconds=0):
 	if(lastSeconds!=0):
@@ -143,6 +144,19 @@ def userGetNegativeRatedMoviesLimited(db,email,lastSeconds=0):
 	qry = 'MATCH (u:User {{ email: "{0}"}})-[r2:rated]->(m:Movie)-[r:isGenre]->(g:Genre) WHERE r2.timestamp >= {1} AND r2.rating = 0 RETURN m,r,g'.format(email,timeLimit)
 	relations = db.execute_and_fetch(qry)
 	return parseMovieRelations(relations)
+
+def movieGetRecentlyRated(db,lastSeconds=0):
+	if(lastSeconds!=0):
+		timeLimit = math.floor(time.time())-lastSeconds
+	else:
+		timeLimit = 0
+	qry = 'MATCH (u:User)-[r:rated]->(m:Movie) WHERE r.timestamp >= {0} RETURN m,r'.format(timeLimit)
+	relations = db.execute_and_fetch(qry)
+	sortedList = parseMovieRatings(relations)
+	retList = []
+	for mov in sortedList:
+		retList.append(movieGetById(db,mov))
+	return retList
 
 #Movie controls
 def movieCheck(db,id):
@@ -177,18 +191,24 @@ def movieGetAll(db,limit=10,page=0):
 	if(limit<=0):
 		qry = 'MATCH (m:Movie)-[r:isGenre]->(g:Genre) RETURN m,r,g'
 	else:
-		qry = 'MATCH (m:Movie)-[r:isGenre]->(g:Genre) RETURN m,r,g SKIP {0} LIMIT {1}'.format(page*limit,limit)
+		qry = 'MATCH (m:Movie) WITH DISTINCT m SKIP {0} LIMIT {1} MATCH (m:Movie)-[r:isGenre]->(g:Genre) RETURN m,r,g'.format(page*limit,limit)
 	relations = db.execute_and_fetch(qry)
 	return parseMovieRelations(relations)
 
 
-def movieGetByGenre(db,genre):
-	qry = ('MATCH (:Genre {{name : "{0}"}})<-[:isGenre]-(m:Movie)-[r:isGenre]->(g:Genre) RETURN m,r,g').format(genre)
+def movieGetByGenre(db,genre,limit=10,page=0):
+	if(limit<=0):
+		qry = ('MATCH (:Genre {{name : "{0}"}})<-[:isGenre]-(m:Movie) WITH DISTINCT m MATCH (m)-[r:isGenre]->(g:Genre) RETURN m,r,g').format(genre)
+	else:
+		qry = ('MATCH (:Genre {{name : "{0}"}})<-[:isGenre]-(m:Movie) WITH DISTINCT m SKIP {1} LIMIT {2} MATCH (m)-[r:isGenre]->(g:Genre) RETURN m,r,g').format(genre,page*limit,limit)
 	relations = db.execute_and_fetch(qry)
 	retList = parseMovieRelations(relations)
-	for x in retList:
-		x.genres.append(genre)
-		x.genres.sort()
+	return retList
+
+def movieGetById(db,movieId):
+	qry = ('MATCH (m:Movie {{id : "{0}"}})-[r:isGenre]->(g:Genre) RETURN m,r,g').format(movieId)
+	relations = db.execute_and_fetch(qry)
+	retList = parseMovieRelationSingle(relations)
 	return retList
 
 #Genre controls

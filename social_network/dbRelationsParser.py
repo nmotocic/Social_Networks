@@ -1,29 +1,6 @@
 from social_network.dbModels import *
-"""
-def parseTrackRelations(relations):
-	retList=[]
-	trackDict={}
-	artistList=[]
-	for relation in relations:
-		trk = relation['t']
-		tId = trk.properties["id"]
-		artistList.clear()
-		if(tId not in trackDict):
-			track=Track(tId,trk.properties["name"],None,artistList.copy())
-			trackDict[tId]=track
-		#Relations
-		other = relation['a']
-		if(relation['r1'].type == "contains"): #Other is album
-			album = Album(other.properties["id"],other.properties["name"],other.properties["releaseDate"],other.properties["totalTracks"])
-			trackDict[tId].album=album;
-		if(relation['r1'].type == "created"): #Other is artist
-			artist = Artist(other.properties["id"],other.properties["name"])
-			trackDict[tId].artists.append(artist)
-	#Finalize
-	for track in trackDict:
-		retList.append(trackDict[track])
-	return retList
-"""
+import operator
+import collections
 
 def parseMovieRelations(relations):
 	retList=[]
@@ -46,3 +23,39 @@ def parseMovieRelations(relations):
 	for movie in movieDict:
 		retList.append(movieDict[movie])
 	return retList
+
+def parseMovieRelationSingle(relations):
+	movieDict={}
+	genreList=[]
+	for relation in relations:
+		#Relations
+		mov = relation['m']
+		gen = relation['g']
+		#Props
+		mId = mov.properties["id"]
+		#Set movie
+		genreList.clear()
+		if mId not  in movieDict:
+			movie=Movie(mId,mov.properties["name"],genreList.copy(),mov.properties["releaseDate"],mov.properties["overview"],mov.properties["directorName"],mov.properties["posterPath"])
+			movieDict[mId]=movie
+		#Set genres
+		movieDict[mId].genres.append(gen.properties["name"])
+	return movie
+
+def parseMovieRatings(relations):
+	movieDict={}
+	calculatedDict = {}
+	for relation in relations:
+		#Relations
+		mov = relation['m']
+		rel = relation['r']
+		#Props
+		mId = mov.properties["id"]
+		if mId not  in movieDict:
+			movieDict[mId]=[0,0]
+		if rel.properties["rating"]==1:
+			movieDict[mId][0]=movieDict[mId][0]+1
+		movieDict[mId][1]=movieDict[mId][1]+1
+	for movie in movieDict:
+		calculatedDict[movie] = movieDict[movie][0]/movieDict[movie][1]+0.05*movieDict[movie][1]
+	return sorted(calculatedDict, key=calculatedDict.get, reverse=True)
