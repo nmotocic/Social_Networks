@@ -202,6 +202,7 @@ def initDatabase():
 	dbTestInfo.addTmdbMovies(db)
 	dbTestInfo.addTestUsers(db)
 	dbTestInfo.addTestLikes(db)
+	dbTestInfo.addRandomVotes(db)
 	return redirect("/")
 
 #Main

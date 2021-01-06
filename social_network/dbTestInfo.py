@@ -1,12 +1,18 @@
 from social_network.dbModels import *
 from social_network import dbComms
 from social_network import movieApiController
+import random
+
+minUserId=1
+maxUserId=30
 
 def addTestUsers(db):
 	dbComms.userCreate(db,"Alice","alice@fakemail.com")
 	dbComms.userCreate(db,"Bob","bob@fakemail.com")
 	dbComms.userCreate(db,"George","george@fakemail.com")
 	dbComms.userCreate(db,"Shrek","shrek@fakemail.com")
+	for i in range (minUserId,maxUserId):
+		dbComms.userCreate(db,"FakeUser"+str(i),"fakeuser{0}@fakemail.com".format(str(i)))
 
 def addTmdbMovies(db):
 	for i in range(550,650):
@@ -59,3 +65,17 @@ def addTestLikes(db):
 		dbComms.userRateMovie(db,user,movie,0)
 	for movie in favorites:
 		dbComms.userFavoritesMovie(db,user,movie)
+
+def addRandomVotes(db,limit=40,page=0):
+	movieList = dbComms.movieGetAll(db,limit=limit,page=page)
+	for movie in movieList:
+		for i in range(minUserId,maxUserId):
+			rand = random.randrange(0,11,1)
+			if (rand >= 10):
+				dbComms.userRateMovie(db,"fakeuser{0}@fakemail.com".format(str(i)),movie.id,1)
+				dbComms.userFavoritesMovie(db,"fakeuser{0}@fakemail.com".format(str(i)),movie.id)
+			elif (rand >= 8):
+				dbComms.userRateMovie(db,"fakeuser{0}@fakemail.com".format(str(i)),movie.id,1)
+			elif (rand == 0):
+				dbComms.userRateMovie(db,"fakeuser{0}@fakemail.com".format(str(i)),movie.id,0)
+
