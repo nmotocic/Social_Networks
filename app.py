@@ -13,6 +13,7 @@ import os
 import requests
 import json
 import sys
+import random
 from social_network.recommendations import get_recommendations
 
 # App settings
@@ -250,16 +251,18 @@ def recommendations():
         # iterate over all predictions
         for key in predictions:
             # take in account only positive predictions
-            if predictions[key] > 0:
+            if predictions[key] >= 0.9:
                 # create Movie object and set its parameters
-                movie = Movie(movies[key].id, movies[key].properties["name"], [], movies[key].properties["releaseDate"], movies[key].properties["overview"], movies[key].properties["directorName"], movies[key].properties["posterPath"])
+                movie = Movie(movies[key].properties["id"], movies[key].properties["name"], [], 
+                movies[key].properties["releaseDate"], movies[key].properties["overview"], 
+                movies[key].properties["directorName"], movies[key].properties["posterPath"])
                 # add created object to list of movie predictions
                 movie_prediction_list.append(movie)
         # return moviePredictions template view with items of movie_prediction_list
-        return render_template("moviePredictions.html", list=movie_prediction_list)
+        return render_template("moviePredictions.html", list=random.sample(movie_prediction_list, 8))
     else:
         # if user is not logged in redirect to login page
-        return redirect("/login")
+        return redirect("/")
 
 
 # Main
