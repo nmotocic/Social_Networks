@@ -14,7 +14,7 @@ import requests
 import json
 import sys
 import random
-from social_network.recommendations import get_recommendations
+from social_network import predict
 
 # App settings
 app = Flask(__name__)
@@ -244,22 +244,26 @@ def recommendations():
         matrix = dbComms.get_user_ratings(db, current_user_id)
         # store all movies from database in list
         movies = dbComms.get_all_movies(db)
-        # call get_recommendations method that will return a sorted list of movies and their predictions of likeability for the current user
-        predictions = get_recommendations(matrix)
+        # call get_predictions method that will return a sorted list of movies and their predictions of likeability for the current user
+        predictions = predict.get_predictions(matrix)
         # initialize list of movie predictions
-        movie_prediction_list = []
+        recommendations = []
         # iterate over all predictions
         for key in predictions:
             # take in account only positive predictions
-            if predictions[key] >= 0.9:
+            if predictions[key] >= 0.8:
                 # create Movie object and set its parameters
                 movie = Movie(movies[key].properties["id"], movies[key].properties["name"], [], 
                 movies[key].properties["releaseDate"], movies[key].properties["overview"], 
                 movies[key].properties["directorName"], movies[key].properties["posterPath"])
+                # set movie recommendation percentage
+                movie.percentage = str(round(predictions[key], 2) * 100) + "%"
                 # add created object to list of movie predictions
-                movie_prediction_list.append(movie)
+                recommendations.append(movie)
+        # set size of roulette (default is 8, but if less movies are recommended it is equal to predicted movie list size)
+        roulette_size = 8 if len(recommendations) >= 8 else len(recommendations)
         # return moviePredictions template view with items of movie_prediction_list
-        return render_template("moviePredictions.html", list=random.sample(movie_prediction_list, 8))
+        return render_template("movieRecommendations.html", list=random.sample(recommendations, roulette_size))
     else:
         # if user is not logged in redirect to login page
         return redirect("/")
