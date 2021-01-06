@@ -70,8 +70,8 @@ def addRandomVotes(db,limit=40,page=0):
 	movieList = dbComms.movieGetAll(db,limit=limit,page=page)
 	for movie in movieList:
 		for i in range(minUserId,maxUserId):
-			rand = random.randrange(0,10,1)
-			if (rand == 10):
+			rand = random.randrange(0,11,1)
+			if (rand >= 10):
 				dbComms.userRateMovie(db,"fakeuser{0}@fakemail.com".format(str(i)),movie.id,1)
 				dbComms.userFavoritesMovie(db,"fakeuser{0}@fakemail.com".format(str(i)),movie.id)
 			elif (rand >= 8):
