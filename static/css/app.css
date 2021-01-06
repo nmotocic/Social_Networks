@@ -938,9 +938,11 @@ main {
               transform: translate(-48px, -2px);
               opacity: 0.5; }
               #nav ul li a#discover-movies::before {
-                background-image: url('../images/film-solid.svg'); }
+                background-image: url('../images/wheel-solid.svg');
+                background-size: 44px 44px;
+                transform: translate(-48px, 2px); }
           #nav ul li a#find-movies::before {
-            background-image: url('../images/search-solid.svg'); }
+            background-image: url('../images/film-solid.svg'); }
           #nav ul li a#user-profile::before {
             background-image: url('../images/user-circle-solid.svg'); }
           #nav ul li a#log-out::before {

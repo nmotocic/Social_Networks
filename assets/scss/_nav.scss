@@ -54,12 +54,14 @@
     
                 &#discover-movies {
                     &::before {
-                        background-image: url('../images/film-solid.svg');
+                        background-image: url('../images/wheel-solid.svg');
+                        background-size: $base-spacing*2.75 $base-spacing*2.75;
+                        transform: translate(-$base-spacing*3, 2px);
                     }
                 }
                 &#find-movies {
                     &::before {
-                        background-image: url('../images/search-solid.svg');
+                        background-image: url('../images/film-solid.svg');
                     }
                 }
                 &#user-profile {
