@@ -19,6 +19,8 @@ def userCheck(db,email):
 def userCreate(db,username,email):
 	if email is None:
 		return
+	if(userCheck(db,email)==True):
+		return
 	qry = 'CREATE (n:User {{name: "{0}", email: "{1}"}})'.format(cleanString(username),cleanString(email))
 	db.execute_query(qry)
 
