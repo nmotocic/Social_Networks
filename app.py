@@ -169,6 +169,10 @@ def favoriteMoviesList():
 	return render_template("movieFavs.html", list=ret)
 
 #Test method
+#Today votes (0-86400)
+#Last week votes (0-604800 timestamp)
+#Last month votes (0-2629743 timestamp)
+#All time (0)
 @app.route('/movies/favoritesX')
 def favoriteMoviesListLimited():
 	if(twitter.authorized==False):
@@ -179,6 +183,9 @@ def favoriteMoviesListLimited():
 
 @app.route('/movies/like')
 def testRate():
+	#ret = dbComms.movieGetRecentlyRated(db,lastSeconds=86400)
+	#ret = dbComms.movieGetRecentlyRated(db,lastSeconds=604800)
+	#ret = dbComms.movieGetRecentlyRated(db,lastSeconds=2629743)
 	ret = dbComms.movieGetRecentlyRated(db)
 	return render_template("movieFavs.html", list=ret);
 
