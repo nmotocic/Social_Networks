@@ -147,7 +147,8 @@ def userGetNegativeRatedMoviesLimited(db,email,lastSeconds=0):
 	relations = db.execute_and_fetch(qry)
 	return parseMovieRelations(relations)
 
-def movieGetRecentlyRated(db,lastSeconds=0):
+#Get movies rated withing lastSeconds seconds, list size is limited by limit
+def movieGetRecentlyRated(db,lastSeconds=0,limit=10):
 	if(lastSeconds!=0):
 		timeLimit = math.floor(time.time())-lastSeconds
 	else:
@@ -156,8 +157,12 @@ def movieGetRecentlyRated(db,lastSeconds=0):
 	relations = db.execute_and_fetch(qry)
 	sortedList = parseMovieRatings(relations)
 	retList = []
+	i = 0
 	for mov in sortedList:
 		retList.append(movieGetById(db,mov))
+		i = i+1
+		if(i>=10):
+			break
 	return retList
 
 #Movie controls
