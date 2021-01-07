@@ -1,57 +1,109 @@
 import os
 import json
 import requests
-from flask import Flask, render_template, redirect, url_for, session
+import sys
+import random
+from flask import Flask, render_template, redirect, url_for, session, request
+from flask_dance.contrib.twitter import make_twitter_blueprint, twitter
 from flask_dance.contrib.facebook import make_facebook_blueprint, facebook
+from flask_dance.consumer import oauth_authorized
 from social_network.database.memgraph import Memgraph
 from social_network import db_operations
+from social_network import dbComms
+from social_network import dbTestInfo
+from social_network import movieApiController
+from social_network import warnings
+from social_network.dbModels import User, Movie, Genre
+from social_network import predict
 from flask_scss import Scss
 
 app = Flask(__name__)
 app.debug = True
 app.secret_key = os.environ.get("FLASK_SECRET_KEY", "supersekrit")
+app.config["SECRET_KEY"] = "maxseCretPliz18882"
 
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+
+#Database
+db = Memgraph()
+
+#SCSS
 Scss(app, static_dir='static', asset_dir='assets')
 
-app.config['FACEBOOK_OAUTH_CLIENT_ID'] = ''
-app.config['FACEBOOK_OAUTH_CLIENT_SECRET'] = ''
+# Twitter connector
+twitter_bp = make_twitter_blueprint(
+    api_key="AckLZqFrceE6E2EctXUF1Bmly",
+    api_secret="CJlkvc0xfQYi731uICahGIJ9mrSw7zYYu7S3EmB7CCftkDASSr",
+)
+app.register_blueprint(twitter_bp, url_prefix="/twitter_login")
+# Twitter connection
+@app.route("/twitter")
+def twitter_login():
+    if not twitter.authorized:
+        return redirect(url_for("twitter.login"))
+    return redirect(url_for("account"))
+
+# FB connector
+app.config["FACEBOOK_OAUTH_CLIENT_ID"] = ""
+app.config["FACEBOOK_OAUTH_CLIENT_SECRET"] = ""
 facebook_bp = make_facebook_blueprint(rerequest_declined_permissions=True)
 facebook_bp.rerequest_declined_permissions = True
 app.register_blueprint(facebook_bp, url_prefix="/login")
-os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+# FB connection
+def fb_login():
+    if not facebook.authorized:
+        return redirect(url_for("facebook.login"))
+    return redirect(url_for("account"))
 
+#APIs
 omdbAPI = "https://www.omdbapi.com/?apikey=65f7361a&"
-
 openLibraryAPI = "http://openlibrary.org/"
 openLibraryCoverAPI = "http://covers.openlibrary.org/"
 
-db = Memgraph()
+# App
+@app.before_request
+def handleSession():
+    if "userEmail" in session:
+        authed = True
+    else:
+        authed = False
+    if twitter.authorized:
+        resp = twitter.get(
+            "account/verify_credentials.json", params={"include_email": "true"}
+        )
+        if resp.ok:
+            authed = True
+            resp_json = resp.json()
+            userName = resp_json["screen_name"]
+            userEmail = resp_json["email"]
+    elif facebook.authorized:
+        resp = facebook.get("/me?fields=name,email")
+        if resp.ok and reps.text:
+            authed = True
+            resp_json = resp.json()
+            userName = resp_json["name"]
+            userEmail = resp_json["email"]
+    if authed:
+        res = dbComms.userCheck(db, userEmail)
+        if res == False:
+            dbComms.userCreate(db, userName, userEmail)
+        if "userName" not in session or "userEmail" not in session:
+            session["userName"] = dbComms.userGetByEmail(db, userEmail).username
+            session["userEmail"] = userEmail
+    if "warning" in session:
+        session["warningMsg"] = session["warning"]
+        session["warning"] = warnings.noWarning()
+    else:
+        session["warningMsg"] = warnings.noWarning()
+        session["warning"] = warnings.noWarning()
 
-@app.route('/')
-@app.route('/index')
-def index():
-   user_data_json = None
-   movie_data_json = None
-   book_data_json = None
-   if 'userid' in session:
-      user_id = session['userid']
-      user_node = db_operations.get_user_by_fb_id(db, user_id)
-      if user_node:
-         user_data_json = json.loads(user_node)
-         movie_node = db_operations.get_movie_user_searched(db, user_id)
-         if movie_node:
-            movie_data_json = json.loads(movie_node)
-            novel_node = db_operations.get_book_based_on_movie(db, movie_data_json["imdbid"])
-            if novel_node:
-               book_data_json = json.loads(novel_node)
-   return render_template("index.html", user_data=user_data_json, movie_data=movie_data_json, book_data=book_data_json)
-
+# Route for search movies page
 @app.route('/find')
 def find():
     return render_template("findMovies.html")
 
 
-# Route for getting to the movie page
+# Route for movie detail display page
 @app.route('/movie/<imdb_id>')
 def movie(imdb_id):
     omdbAPIcall = omdbAPI + "i=" + imdb_id
@@ -63,27 +115,32 @@ def movie(imdb_id):
     else:
         return "<h1>Request failed</h1>"
     
-
-@app.route('/discover')
-def discover():
+# Route for movie roulette page
+@app.route('/roulette')
+def roulette():
     return render_template("movieDiscover.html")
 
+# Route for user profile page
 @app.route('/profile')
 def profile():
     return render_template("userProfile.html")
 
+# Route for user liked list page
 @app.route('/liked')
 def liked():
     return render_template("likedList.html")
 
+# Route for user disliked list page
 @app.route('/dislike')
 def dislike():
     return render_template("dislikedList.html")
 
+# Route for user bookmarked list page
 @app.route('/bookmarked')
 def booked():
     return render_template("bookmarkedList.html")
 
+# Route for login page
 @app.route('/login')
 def login():
     return render_template("login.html")
@@ -128,3 +185,188 @@ def movie_api(movie_title):
       return redirect(url_for("index"))
    else:
       return "<h1>Request failed</h1>"
+
+@app.route("/")
+@app.route("/index")
+def index():
+    return render_template("index.html", warning=session["warningMsg"])
+
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    session["warning"] = warnings.noWarning()
+    return redirect(url_for("index"))
+
+
+@app.route("/account", methods=["POST", "GET"])
+def account():
+    if twitter.authorized == False:
+        session["warning"] = warnings.noLogin()
+        return redirect(url_for("index"))
+    if request.method == "POST":
+        if request.form["nameInput"] != "":
+            # Change name and session info
+            session["userName"] = dbComms.userChangeName(
+                db, session["userEmail"], request.form["nameInput"]
+            )
+            return redirect(url_for("account"))
+    return render_template("account.html", user=session["userName"])
+
+
+# Movies
+# TMDB
+@app.route("/movies", methods=["POST", "GET"])
+def moviesList():
+    if twitter.authorized == False:
+        session["warning"] = warnings.noLogin()
+        return redirect(url_for("index"))
+    # Set filter
+    filtered = ""
+    if request.method == "POST":
+        retFilt = dbComms.genreGetAll(db)
+        if "genre" in request.form:
+            filtered = request.form["genre"]
+            ret = dbComms.movieGetByGenre(db, filtered)
+        else:
+            ret = dbComms.movieGetAll(db)
+        return render_template(
+            "movieList.html", list=ret, filter=retFilt, filtered=filtered
+        )
+    else:
+        ret = dbComms.movieGetAll(db)
+        retFilt = dbComms.genreGetAll(db)
+        return render_template("movieList.html", list=ret, filter=retFilt)
+
+
+@app.route("/movies/add/tmdb/<movieId>")
+def tmdbAdd(movieId):
+    movieApiController.apiTmdbAddById(db, movieId)
+    return redirect(url_for("moviesList"))
+
+
+@app.route("/movies/add/omdb", defaults={"movieTitle": "Die Hard"})
+@app.route("/movies/add/omdb/<movieTitle>")
+def omdbAdd(movieTitle):
+    movieApiController.apiOmdbAddByTitle(db, movieTitle)
+    return redirect(url_for("moviesList"))
+
+
+# Default vraca Die Hard
+@app.route("/movies/rating", defaults={"movieId": "tt0095016"})
+@app.route("/movies/rating/<movieId>")
+def getRating(movieId):
+    return dbComms.movieGetRating(db, movieId)
+
+
+@app.route("/movies/favorite/<movieId>")
+def setFavoriteMovie(movieId=0):
+    if twitter.authorized == False:
+        session["warning"] = warnings.noLogin()
+        return redirect(url_for("index"))
+    dbComms.userFavoritesMovie(db, session["userEmail"], movieId)
+    return redirect(url_for("moviesList"))
+
+
+@app.route("/movies/un-favorite/<movieId>")
+def removeFavoriteMovie(movieId=0):
+    if twitter.authorized == False:
+        session["warning"] = warnings.noLogin()
+        return redirect(url_for("index"))
+    dbComms.userUnFavoritesMovie(db, session["userEmail"], movieId)
+    return redirect(url_for("favoriteMoviesList"))
+
+
+@app.route("/movies/favorites")
+def favoriteMoviesList():
+    if twitter.authorized == False:
+        session["warning"] = warnings.noLogin()
+        return redirect(url_for("index"))
+    ret = dbComms.movieGetAllFavorited(db, session["userEmail"])
+    return render_template("movieFavs.html", list=ret)
+
+
+# Test method
+@app.route("/movies/favoritesX")
+def favoriteMoviesListLimited():
+    if twitter.authorized == False:
+        session["warning"] = warnings.noLogin()
+        return redirect(url_for("index"))
+    ret = dbComms.movieGetFavoritedLimited(db, session["userEmail"])
+    return render_template("movieFavs.html", list=ret)
+
+
+@app.route("/movies/like")
+def testRate():
+    ret = dbComms.movieGetRecentlyRated(db)
+    return render_template("movieFavs.html", list=ret)
+
+
+# Test DB controls
+@app.route("/db/prg")
+def purge():
+    purgeDatabase()
+    session.clear()
+    session["warning"] = warnings.noWarning()
+    return redirect("/")
+
+
+def purgeDatabase():
+    qry = "MATCH (node) DETACH DELETE node"
+    db.execute_query(qry)
+    return
+
+
+# TODO
+@app.route("/db/init")
+def initDatabase():
+    dbTestInfo.addOmdbMovies(db)
+    dbTestInfo.addTmdbMovies(db)
+    dbTestInfo.addTestUsers(db)
+    dbTestInfo.addTestLikes(db)
+    dbTestInfo.addRandomVotes(db)
+    return redirect("/")
+
+
+# Get movie recommendations for current user
+@app.route("/recommendations")
+def recommendations():
+    # check if user is currently logged in
+    if "userEmail" in session:
+        # get database id of the current user
+        current_user_id = dbComms.get_user_id_by_email(db, session["userEmail"])
+        # get user-item matrix to use in collaborative filtering
+        matrix = dbComms.get_user_ratings(db, current_user_id)
+        # for line in matrix:
+        #     print(line)
+        # sys.stdout.flush()
+        # store all movies from database in list
+        movies = dbComms.get_all_movies(db)
+        # call get_predictions method that will return a sorted list of movies and their predictions of likeability for the current user
+        predictions = predict.get_predictions(matrix)
+        # initialize list of movie predictions
+        recommendations = []
+        # iterate over all predictions
+        for key in predictions:
+            # take in account only positive predictions
+            if predictions[key] >= 0.8:
+                # create Movie object and set its parameters
+                movie = Movie(movies[key].properties["id"], movies[key].properties["name"], [], 
+                movies[key].properties["releaseDate"], movies[key].properties["overview"], 
+                movies[key].properties["directorName"], movies[key].properties["posterPath"])
+                # set movie recommendation percentage
+                movie.percentage = str(round(predictions[key], 2) * 100) + "%"
+                # add created object to list of movie predictions
+                recommendations.append(movie)
+        # set size of roulette (default is 8, but if less movies are recommended it is equal to predicted movie list size)
+        roulette_size = 8 if len(recommendations) >= 8 else len(recommendations)
+        # return moviePredictions template view with items of movie_prediction_list
+        return render_template("movieRecommendations.html", list=random.sample(recommendations, roulette_size))
+    else:
+        # if user is not logged in redirect to login page
+        return redirect("/")
+
+
+# Main
+if __name__ == "__main__":
+    app.run(debug=True)
