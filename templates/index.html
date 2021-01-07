@@ -1,10 +1,148 @@
-{% extends "base.html" %}
-{% block title %}Home{% endblock %}
-{% block content %}
-<h1>DM LV1</h1>
-<p>Kako bi koristili ovu stranicu trebate se prvo prijaviti preko svojeg Twitter korisničkog računa:	
-<a href="http://localhost:5000/twitter">Twitter login</a></p>
+<!doctype html>
 
-
-<p>{{warning}}</p>
-{% endblock %}
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="/static/css/style.css">
+        <link rel="icon" href="/static/images/FERFavicon.png">
+        <script src="/static/js/index.js" charset="utf-8"></script>
+        <title>Social Networks Lab Assignment 1</title>
+    </head>
+    <body>
+        <div class="widget">
+            <div class="widget-header">
+                <img src="/static/images/FERLogo.png" alt="FER Logo" height="100" width="100">
+                <h2 class="widget-title">Social Networks - Lab Assignment 1</h2>
+            </div>
+            <div class="widget-section">
+                <h2>Step 1: Log in with Facebook</h2>
+                <div class="interactive-area">
+                    <a href="http://localhost:5000/fb_login" class="btn">Log Into Facebook</a>
+                </div>
+                <ul>
+                    <li>
+                        <h4>Your Facebook ID: </h4>
+                        {% if user_data %}
+                            {{ user_data.fbid }}
+                        {% else %}
+                            *
+                        {% endif %}
+                    </li>
+                    <li>
+                        <h4>Your name: </h4>
+                        {% if user_data %}
+                            {{ user_data.name }}
+                        {% else %}
+                            *
+                        {% endif %}
+                    </li>
+                    <li>
+                        <h4>Your email: </h4>
+                        {% if user_data %}
+                            {{ user_data.email }}
+                        {% else %}
+                            *
+                        {% endif %}
+                    </li>
+                    <li>
+                        <h4>Your profile picture:</h4>
+                        {% if user_data %}
+                            <img src="{{ user_data.picture }}" height="80" width="80">
+                        {% else %}
+                            *
+                        {% endif %}
+                    </li>
+                </ul>
+            </div>
+            <div class="widget-section">
+                <h2>Step 2: Provide a movie title</h2>
+                <div class="interactive-area">
+                    <form>
+                        <input type="text" id="movie-title" name="movie-title" placeholder="Movie Title" class="text-area">
+                        <input type="button" onclick="getMovieData()" value="Submit" class="btn">
+                    </form>
+                </div>
+                <ul>
+                    <li>
+                        <h4>Movie Title: </h4>
+                        {% if movie_data %}
+                            {{ movie_data.title }}
+                        {% else %}
+                            *
+                        {% endif %}
+                    </li>
+                    <li>
+                        <h4>Director: </h4>
+                        {% if movie_data %}
+                            {{ movie_data.director }}
+                        {% else %}
+                            *
+                        {% endif %}
+                    </li>
+                    <li>
+                        <h4>Release Year: </h4>
+                        {% if movie_data %}
+                            {{ movie_data.year }}
+                        {% else %}
+                            *
+                        {% endif %}
+                    </li>
+                    <li>
+                        <h4>Poster: </h4>
+                        {% if movie_data %}
+                            <img src="{{ movie_data.poster }}" height="225" width="150">
+                        {% else %}
+                            *
+                        {% endif %}
+                    </li>
+                </ul>
+            </div>
+            <div class="widget-section">
+                <h2>Step 3: Provide a book title</h2>
+                <div class="interactive-area">
+                    <form>
+                        <input type="text" id="book-title" name="book-title" placeholder="Book Title" class="text-area">
+                        <input type="button" onclick="getBookData()" value="Submit" class="btn">
+                    </form>
+                </div>
+                <ul>
+                    <li>
+                        <h4>Book Title: </h4>
+                        {% if book_data %}
+                            {{ book_data.title }}
+                        {% else %}
+                            *
+                        {% endif %}
+                    </li>
+                    <li>
+                        <h4>Author: </h4>
+                        {% if book_data %}
+                            {{ book_data.author }}
+                        {% else %}
+                            *
+                        {% endif %}
+                    </li>
+                    <li>
+                        <h4>Book ISBN: </h4>
+                        {% if book_data %}
+                            {{ book_data.isbn }}
+                        {% else %}
+                            *
+                        {% endif %}
+                    </li>
+                    <li>
+                        <h4>Cover: </h4>
+                        {% if book_data %}
+                            <img src="{{ book_data.cover }}" height="250" width="170">
+                        {% else %}
+                            *
+                        {% endif %}
+                    </li>
+                </ul>
+            </div>
+            <div class="widget-footer">
+                <h4>Author: Toni Sterbic 0036502268</h4>
+            </div>
+        </div>
+    </body>
+</html>

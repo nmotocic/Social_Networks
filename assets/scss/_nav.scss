@@ -1,0 +1,122 @@
+#nav {
+    background: $main-black;
+    width: $nav-width;
+    height: 100%;
+    position: fixed;
+    overflow: visible;
+    opacity: 95%;
+
+    ul {
+        list-style-type: none;
+        padding: $base-spacing;
+        margin: 0;
+
+        li {
+            display: flex;
+            flex-direction: row;
+            border-bottom: 1px solid $highlight-blue;
+
+            &:last-of-type {
+                border-bottom: none;
+            }
+
+            a {
+                font-size: 1.6rem;
+                font-weight: bold;
+                z-index: 10;
+                width: 100%;
+                border-radius: 5px;
+                color: $text-white;
+                padding-left: $base-spacing*3;
+                margin-bottom: $base-spacing*.5;
+                margin-top: $base-spacing*.5;
+                text-shadow: 2px 2px 2px rgba($highlight-blue, 0.9);
+                cursor: pointer;
+
+                &:hover {
+                    cursor: pointer;
+                    background-color: rgba($highlight-blue, .35);
+                    color: $blue;
+                }
+
+                &::before {
+                    content: '';
+                    width: $base-spacing*2.5;
+                    height: $base-spacing*2.5;
+                    position: absolute;
+                    display: block;
+                    background-size: $base-spacing*2 $base-spacing*2;
+                    background-repeat: no-repeat;
+                    background-position: center;
+                    transform: translate(-$base-spacing*3, -2px);
+                    opacity: .5;
+                }
+    
+                &#discover-movies {
+                    &::before {
+                        background-image: url('../images/wheel-solid.svg');
+                        background-size: $base-spacing*2.75 $base-spacing*2.75;
+                        transform: translate(-$base-spacing*3, 2px);
+                    }
+                }
+                &#find-movies {
+                    &::before {
+                        background-image: url('../images/film-solid.svg');
+                    }
+                }
+                &#user-profile {
+                    &::before {
+                        background-image: url('../images/user-circle-solid.svg');
+                    }
+                }
+                &#log-out {
+                    &::before {
+                        background-image: url('../images/power-off-solid.svg');
+                    }
+                }
+            }
+        }
+    }
+
+    #toggle-nav {
+        position: absolute;
+        display: block;
+        cursor: pointer;
+        background: $white;
+        height: $base-spacing*2;
+        width: $base-spacing*2;
+        border: 0;
+        overflow: hidden;
+        padding: 0;
+        margin: 0;
+        opacity: 0.75;
+        outline: none;
+    }
+    
+    @media (max-width: $desktop-width) {
+        position: fixed;
+        box-shadow: 0 2px 4px 0 rgba(11, 48, 59, 0.12);
+        top: $header-height;
+        bottom: 0;
+        transform: translateX(-100%);        
+        transition: transform .3s ease-in-out;
+        z-index: 8;
+        #toggle-nav {
+            display: block;
+            z-index: 10;
+        }
+        *:not(#toggle-nav) {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .3s ease-in-out;
+
+        }
+        &.active {
+            transform: translateX(0);
+            *:not(#toggle-nav) {
+                opacity: 1;
+                pointer-events: all;
+            }
+        }
+    }
+}
