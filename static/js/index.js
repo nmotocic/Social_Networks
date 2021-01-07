@@ -182,8 +182,6 @@ if (rouletteWheel) {
     }
 }
 
-//Border
-
 function getMovieData () {
     var userMovieInput = document.getElementById('movie-title').value
     window.location = "http://localhost:5000/movie_api/" + userMovieInput
@@ -365,14 +363,6 @@ if (graphContainer) {
                     settingContainer.classList.add('active')
                 }
             }
-        }
-    }
-
-    const uploadFileButton = document.querySelector('#upload-file-button')
-    if (uploadFileButton) {
-        uploadFileButton.addEventListener('click', (event) => uploadImage())
-        const uploadImage = () => {
-            document.getElementById("file-input").click()
         }
     }
 

@@ -1,11 +1,11 @@
 {% extends "base.html" %}
-{% block title %}Movie Title{% endblock %}
+{% block title %}{{ movie_data_json['Title'] }}{% endblock %}
 
 {% block maincontent %}
     <div class="widget widget-extra-large">
         <div class="widget-header">
             <h1 class="widget-title">
-                Blade Runner 2049&nbsp;<span class="movie-release-year">(2017)</span>
+                {{ movie_data_json['Title'] }}&nbsp;<span class="movie-release-year">({{ movie_data_json['Year'] }})</span>
             </h1>
             <div class="movie-interactions">
                 <div class="movie-interaction-button" id="movie-like">
@@ -21,74 +21,82 @@
         </div>
         <div class="movie-main">
             <div class="movie-poster">
-                <img id="movie-poster-main" src="https://m.media-amazon.com/images/M/MV5BNzA1Njg4NzYxOV5BMl5BanBnXkFtZTgwODk5NjU3MzI@._V1_SX300.jpg"></img>
+                <img id="movie-poster-main" src="{{ movie_data_json['Poster'] }}"></img>
             </div>
             <div class="movie-details">
                 <div class="movie-detail-container">
-                    <section class="detail-name">Genere:</section>
+                    <section class="detail-name">Genre:</section>
                     <section class="detail-content">
-                        Action, Drama, Mystery, Sci-Fi, Thriller
+                        {{ movie_data_json['Genre'] }}
                     </section>
                 </div>
                 <div class="movie-detail-container">
                     <section class="detail-name">Runtime:</section>
                     <section class="detail-content">
-                        164 min
+                        {{ movie_data_json['Runtime'] }}
                     </section>
                 </div>
                 <div class="movie-detail-container">
                     <section class="detail-name">Rating:</section>
                     <section class="detail-content">
-                        R
+                        {{ movie_data_json['Rated'] }}
                     </section>
                 </div>
                 <div class="movie-detail-container">
                     <section class="detail-name">Director:</section>
                     <section class="detail-content">
-                        Denis Villeneuve
+                        {{ movie_data_json['Director'] }}
                     </section>
                 </div>
                 <div class="movie-detail-container">
                     <section class="detail-name">Actors:</section>
                     <section class="detail-content">
-                        Ryan Gosling, Dave Bautista, Robin Wright, Mark Arnold
+                        {{ movie_data_json['Actors'] }}
                     </section>
                 </div>
                 <div class="movie-detail-container">
                     <section class="detail-name">Plot Synopsis:</section>
                     <section class="detail-content">
-                        Young Blade Runner K's discovery of a long-buried secret leads him to track down former Blade Runner Rick Deckard, who's been missing for thirty years.
+                        {{ movie_data_json['Plot'] }}
                     </section>
                 </div>
             </div>
         </div>
-        <div class="movie-ratings">
-            <section>Ratings:</section>
-            <div class="rating">
-                <a href="">
-                    <img src="../static/images/imdb-logo.png"/>
-                </a>
-                <div class="rating-score">
-                    8.7/10
-                </div>
+        {% if movie_data_json['Ratings'] %}
+            <div class="movie-ratings">
+                <section>Ratings:</section>
+                {% if movie_data_json['Ratings'][0] %}
+                    <div class="rating">
+                        <a href="">
+                            <img src="../static/images/imdb-logo.png"/>
+                        </a>
+                        <div class="rating-score">
+                            {{ movie_data_json['Ratings'][0]['Value'] }}
+                        </div>
+                    </div>
+                {% endif %}
+                {% if movie_data_json['Ratings'][1] %}
+                    <div class="rating">
+                        <a href="">
+                            <img src="../static/images/rotten-tomatoes-logo.png"/>
+                        </a>
+                        <div class="rating-score">
+                                {{ movie_data_json['Ratings'][1]['Value'] }}
+                        </div>
+                    </div>
+                {% endif %}
+                {% if movie_data_json['Ratings'][2] %}
+                    <div class="rating">
+                        <a href="">
+                            <img src="../static/images/metacritic-logo.png"/>
+                        </a>
+                        <div class="rating-score">
+                                {{ movie_data_json['Ratings'][2]['Value'] }}
+                        </div>
+                    </div>
+                {% endif %}
             </div>
-            <div class="rating">
-                <a href="">
-                    <img src="../static/images/metacritic-logo.png"/>
-                </a>
-                <div class="rating-score">
-                    78/100
-                </div>
-            </div>
-            <div class="rating">
-                <a href="">
-                    <img src="../static/images/rotten-tomatoes-logo.png"/>
-                </a>
-                <div class="rating-score">
-                    90%
-                </div>
-            </div>
-        </div>
+        {% endif %}
     </div>
     <div id="background"></div>
 {% endblock %}

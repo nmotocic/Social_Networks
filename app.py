@@ -47,12 +47,22 @@ def index():
    return render_template("index.html", user_data=user_data_json, movie_data=movie_data_json, book_data=book_data_json)
 
 @app.route('/find')
-def movie():
+def find():
     return render_template("findMovies.html")
 
-@app.route('/movie')
-def find():
-    return render_template("movieDisplay.html")
+
+# Route for getting to the movie page
+@app.route('/movie/<imdb_id>')
+def movie(imdb_id):
+    omdbAPIcall = omdbAPI + "i=" + imdb_id
+    resp = requests.get(omdbAPIcall)
+    if resp.ok:
+        resp_content = resp.content
+        resp_json = json.loads(resp_content.decode("utf-8"))
+        return render_template("movieDisplay.html", movie_data_json=resp_json)
+    else:
+        return "<h1>Request failed</h1>"
+    
 
 @app.route('/discover')
 def discover():
@@ -115,45 +125,6 @@ def movie_api(movie_title):
          db_operations.add_movie(db, movie_id, movie_title, movie_year, movie_director, movie_poster)
          if 'userid' in session:
             db_operations.connect_user_to_movie(db, session['userid'], movie_id)
-      return redirect(url_for("index"))
-   else:
-      return "<h1>Request failed</h1>"
-
-@app.route('/book_api/<book_title>')
-def book_api(book_title):
-   openLibraryListAPIcall = openLibraryAPI + "search.json?title=" + book_title
-   resp_list = requests.get(openLibraryListAPIcall)
-   if resp_list.ok:
-      resp_list_content = resp_list.content
-      resp_list_content_json = json.loads(resp_list_content)
-      book_isbn_array = resp_list_content_json["docs"][0]["isbn"]
-      book_isbn = book_isbn_array[0]
-      for isbn in book_isbn_array:
-         try:
-            openLibraryBookAPIcall = openLibraryAPI + "api/books?bibkeys=ISBN:" + isbn + "&jscmd=details&format=json"
-            resp_book = requests.get(openLibraryBookAPIcall)
-            if resp_book.ok:
-               resp_book_content = resp_book.content
-               resp_book_content_json = json.loads(resp_book_content)
-               book_title = resp_book_content_json["ISBN:" + isbn]["details"]["title"]
-               book_author = resp_book_content_json["ISBN:" + isbn]["details"]["authors"][0]["name"]
-               book_isbn = isbn
-               break
-            else:
-               return "<h1>Request failed</h1>"
-         except:
-            continue
-      openLibraryCoverAPIcall = openLibraryCoverAPI + "b/isbn/" + book_isbn + ".jpg"
-      resp_cover = requests.get(openLibraryCoverAPIcall)
-      if resp_cover.ok:
-         book_cover = openLibraryCoverAPIcall
-      else:
-         return "<h1>Request failed</h1>"
-      book_node = db_operations.get_book_by_isbn(db, book_isbn)
-      if book_node is None:
-         db_operations.add_book(db, book_isbn, book_title, book_author, book_cover)
-         if 'userid' in session:
-            db_operations.connect_searched_movie_to_book(db, session['userid'], book_isbn)
       return redirect(url_for("index"))
    else:
       return "<h1>Request failed</h1>"
