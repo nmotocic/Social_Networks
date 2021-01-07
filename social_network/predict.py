@@ -2,7 +2,7 @@ import numpy as np
 import sys
 
 
-def get_prediction(user_movie, user_avg, movie_avg, param):
+def get_prediction(user_movie, user_avg, param):
     # initialize parameters I - current row, J - current column, K - similar users taken into account for prediction
     I, J, K = param
     # subtract row and column indices to start at 0
@@ -53,8 +53,6 @@ def get_predictions(matrix):
     line_index = 0
     # initialize user - movie matrix
     user_movie = []
-    # initialize list of average ratings for movies
-    movie_avg = []
     # initialize list of average movie ratings by users
     user_avg = []
     # initialize prediction dictionary
@@ -69,19 +67,6 @@ def get_predictions(matrix):
         elif line_index < M + 1:
             # add all ratings divided by space as list to user - movie matrix
             user_movie.append(line.rstrip().split(" "))
-            row = line.rstrip().split(" ")
-            # change all X to 0 in row
-            row = [0 if x == 'X' else int(x) for x in row]
-            avg = 0
-            # calculate average rating of all nonzero ratings
-            if not np.count_nonzero(row) == 0:
-                avg = sum(row) / np.count_nonzero(row)
-            # subtract average rating from all nonzero ratings
-            for i in range(len(row)):
-                if not row[i] == 0:
-                    row[i] = float(row[i] - avg)
-            # add row to average rating for movies list
-            movie_avg.append(row)
         # if line is after user - movie matrix
         elif line_index == M + 1:
             # transpose user - movie matrix to movie - user matrix
@@ -106,7 +91,7 @@ def get_predictions(matrix):
         # if line is query
         elif M + 1 < line_index < M + Q + 2:
             # get prediction of user rating for movie
-            prediction = get_prediction(user_movie, user_avg, movie_avg, list(map(int, line.rstrip().split(" "))))
+            prediction = get_prediction(user_movie, user_avg, list(map(int, line.rstrip().split(" "))))
             # get movie from query
             movie = int(line.rstrip().split(" ")[1])
             # add prediction to prediction dictionary
