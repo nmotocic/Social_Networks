@@ -10,9 +10,6 @@ def get_recommendations(db, current_user_id):
 	recommendations = []
 	# get user-item matrix to use in collaborative filtering
 	matrix = dbComms.get_user_ratings(db, current_user_id)
-	# for line in matrix:
-	#     print(line)
-	# sys.stdout.flush()
 	# store all movies from database in list
 	movies = dbComms.get_all_movies(db)
 	# call get_predictions method that will return a sorted list of movies and their predictions of likeability for the current user
