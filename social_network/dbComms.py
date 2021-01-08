@@ -6,6 +6,9 @@ import numpy as np
 from social_network.dbModels import *
 from social_network.dbRelationsParser import *
 
+
+stockAvatarUrl="https://image.shutterstock.com/image-vector/male-avatar-profile-picture-vector-600w-221431012.jpg"
+
 # User controls
 def userCheck(db, email):
 	qry = 'MATCH (n:User {{email: "{0}"}}) RETURN n'.format(email)
@@ -18,13 +21,15 @@ def userCheck(db, email):
 	return ret
 
 
-def userCreate(db, username, email):
+def userCreate(db, username, email, avatarUrl=stockAvatarUrl):
 	if email is None:
 		return
 	if userCheck(db, email) == True:
 		return
-	qry = 'CREATE (n:User {{name: "{0}", email: "{1}"}})'.format(
-		cleanString(username), cleanString(email)
+	if avatarUrl is None:
+		avatarUrl = stockAvatarUrl
+	qry = 'CREATE (n:User {{name: "{0}", email: "{1}", avatarUrl: "{2}"}})'.format(
+		cleanString(username), cleanString(email), cleanString(avatarUrl)
 	)
 	db.execute_query(qry)
 
@@ -36,7 +41,7 @@ def userGetByEmail(db, email):
 	relations = db.execute_and_fetch(qry)
 	for relation in relations:
 		user = relation["n"]
-		usr = User(user.properties["name"], user.properties["email"])
+		usr = User(user.properties["name"], user.properties["email"], user.properties["avatarUrl"])
 	return usr
 
 

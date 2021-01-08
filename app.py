@@ -76,6 +76,7 @@ def handleSession():
 			resp_json = resp.json()
 			userName = resp_json["screen_name"]
 			userEmail = resp_json["email"]
+			userAvatar = resp_json["profile_image_url"]
 	elif facebook.authorized:
 		resp = facebook.get("/me?fields=name,email")
 		if resp.ok and resp.text:
@@ -83,10 +84,11 @@ def handleSession():
 			resp_json = resp.json()
 			userName = resp_json["name"]
 			userEmail = resp_json["email"]
+			userAvatar = resp_json["picture"]["data"]["url"]
 	if authed:
 		res = dbComms.userCheck(db, userEmail)
 		if res == False:
-			dbComms.userCreate(db, userName, userEmail)
+			dbComms.userCreate(db, userName, userEmail,userAvatar)
 		if "userName" not in session or "userEmail" not in session:
 			session["userName"] = dbComms.userGetByEmail(db, userEmail).username
 			session["userEmail"] = userEmail
