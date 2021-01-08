@@ -43,8 +43,8 @@ def twitter_login():
 	return redirect(url_for("account"))
 
 # FB connector
-app.config["FACEBOOK_OAUTH_CLIENT_ID"] = ""
-app.config["FACEBOOK_OAUTH_CLIENT_SECRET"] = ""
+app.config["FACEBOOK_OAUTH_CLIENT_ID"] = "3468111173224517"
+app.config["FACEBOOK_OAUTH_CLIENT_SECRET"] = "7ea8279bf9d5de409cdf843e58ba0409"
 facebook_bp = make_facebook_blueprint(rerequest_declined_permissions=True)
 facebook_bp.rerequest_declined_permissions = True
 app.register_blueprint(facebook_bp, url_prefix="/login")
@@ -77,7 +77,7 @@ def handleSession():
 			userEmail = resp_json["email"]
 	elif facebook.authorized:
 		resp = facebook.get("/me?fields=name,email")
-		if resp.ok and reps.text:
+		if resp.ok and resp.text:
 			authed = True
 			resp_json = resp.json()
 			userName = resp_json["name"]
@@ -148,9 +148,9 @@ def movieFavorite(imdb_id):
 def roulette():
 	recommendations = []
 	if "userEmail" in session:
-		recommendations = recommender.get_recommendations(db, dbComms.get_user_id_by_email(db, session["userEmail"]))
-	return render_template("movieList.html", list=recommendations)
-	#return render_template("movieDiscover.html", list=recommendations)
+	    recommendations = recommender.get_recommendations(db, dbComms.get_user_id_by_email(db, session["userEmail"]))
+	# return render_template("movieList.html", list=recommendations)
+	return render_template("movieDiscover.html", movie_list=recommendations)
 
 # Route for user profile page
 @app.route('/profile')
@@ -181,10 +181,9 @@ def login():
 def fb_login():
 	if not facebook.authorized:
 		return redirect(url_for("facebook.login"))
-		resp = facebook.get("/me?fields=id,name,email,picture,birthday")
+	resp = facebook.get("/me?fields=id,name,email,picture,birthday")
 	if resp.ok and resp.text:
 		resp_json = resp.json()
-		return resp_json
 		user_id = resp_json["id"]
 		user_name = resp_json["name"]
 		user_mail = resp_json["email"]
@@ -193,7 +192,7 @@ def fb_login():
 		if user_node is None:
 			db_operations.add_user(db, user_id, user_name, user_mail, user_picture)
 		session['userid'] = user_id
-		return redirect(url_for("index"))
+		return redirect(url_for("find"))
 	else:
 		return "<h1>Request failed</h1>"
 

@@ -627,6 +627,7 @@ main {
 
                     img {
                         object-fit: cover;
+                        transform: translateY($base-spacing*.25);
                     }
                 }
 

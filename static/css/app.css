@@ -304,8 +304,7 @@ main {
     margin: 16px;
     padding-bottom: 16px;
     border-right: 1px solid #0368ff;
-    padding-right: 24px;
-    flex-grow: 1; }
+    padding-right: 24px; }
     @media (max-width: 1620px) {
       main .profile-main {
         padding-right: 0;
@@ -631,7 +630,8 @@ main {
             border-right: 1px solid #7d7d7d;
             padding: 12px; }
             main #login-page .login-options .login-button .icon-container img {
-              object-fit: cover; }
+              object-fit: cover;
+              transform: translateY(4px); }
         main #login-page .login-options .login-button h2 {
           margin-right: auto;
           margin-left: auto;
@@ -930,7 +930,7 @@ main {
     min-height: 320px; }
     .widget.widget-medium {
       width: 480px;
-      transform: translateX(-48%); }
+      transform: translateX(-40%); }
       @media (max-width: 1040px) {
         .widget.widget-medium {
           transform: translateX(0%);   }

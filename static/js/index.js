@@ -244,6 +244,7 @@ if (graphContainer) {
 
     const hideForLogin = document.getElementById("login-page")
     const userInfo = document.getElementById("user-info")
+    const baseLocation = "http://localhost:5000/"
 
     const logoElement = document.querySelector('#logo-image')
     const logoImageLargeSrc = "/static/images/MovieRouletteLogo.png"
@@ -293,48 +294,54 @@ if (graphContainer) {
     const likeButton = document.querySelector('#movie-like')
     const dislikeButton = document.querySelector('#movie-dislike')
     const bookmarkButton = document.querySelector('#movie-bookmark')
-
-    if (likeButton) {
-        likeButton.addEventListener('click', () => likePress())
-        const likePress = () => {
-            if (likeButton.classList.contains('active')) {
-                likeButton.classList.remove('active')
-                // Form submit goes here
-            } else {
-                if (dislikeButton.classList.contains('active')) {
-                    dislikeButton.classList.remove('active')
+    const urlSegments = window.location.href.split('/')
+    if (urlSegments) {
+        const movieID = urlSegments[urlSegments.length - 1]
+        console.log(movieID)
+        if (movieID) {
+            if (likeButton) {
+                likeButton.addEventListener('click', () => likePress())
+                const likePress = () => {
+                    if (likeButton.classList.contains('active')) {
+                        likeButton.classList.remove('active')
+                    } else {
+                        if (dislikeButton.classList.contains('active')) {
+                            dislikeButton.classList.remove('active')
+                        }
+                        likeButton.classList.add('active')
+                    }
+                    // console.log(baseLocation + 'movie/' + movieID + '/like')
+                    window.location.replace(baseLocation + 'movie/' + movieID + '/like')
                 }
-                likeButton.classList.add('active')
-                // Form submit goes here
             }
-        }
-    }
-
-    if (dislikeButton) {
-        dislikeButton.addEventListener('click', () => dislikePress())
-        const dislikePress = () => {
-            if (dislikeButton.classList.contains('active')) {
-                dislikeButton.classList.remove('active')
-                // Form submit goes here
-            } else {
-                if (likeButton.classList.contains('active')) {
-                    likeButton.classList.remove('active')
+        
+            if (dislikeButton) {
+                dislikeButton.addEventListener('click', () => dislikePress())
+                const dislikePress = () => {
+                    if (dislikeButton.classList.contains('active')) {
+                        dislikeButton.classList.remove('active')
+                    } else {
+                        if (likeButton.classList.contains('active')) {
+                            likeButton.classList.remove('active')
+                        }
+                        dislikeButton.classList.add('active')
+                    }
+                    // console.log(baseLocation + 'movie/' + movieID + '/dislike')
+                    window.location.replace(baseLocation + 'movie/' + movieID + '/dislike')
                 }
-                dislikeButton.classList.add('active')
-                // Form submit goes here
             }
-        }
-    }
-
-    if (bookmarkButton) {
-        bookmarkButton.addEventListener('click', () => bookmarkPress())
-        const bookmarkPress = () => {
-            if (bookmarkButton.classList.contains('active')) {
-                bookmarkButton.classList.remove('active')
-                // Form submit goes here
-            } else {
-                bookmarkButton.classList.add('active')
-                // Form submit goes here
+        
+            if (bookmarkButton) {
+                bookmarkButton.addEventListener('click', () => bookmarkPress())
+                const bookmarkPress = () => {
+                    if (bookmarkButton.classList.contains('active')) {
+                        bookmarkButton.classList.remove('active')
+                    } else {
+                        bookmarkButton.classList.add('active')
+                    }
+                    // console.log(baseLocation + 'movie/' + movieID + '/favourite')
+                    window.location.replace(baseLocation + 'movie/' + movieID + '/favorite')
+                }
             }
         }
     }

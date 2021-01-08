@@ -100,7 +100,7 @@
     }
     &.widget-medium {
         width: $base-spacing*30;
-        transform: translateX(-48%);
+        transform: translateX(-40%);
 
         @media (max-width: $desktop-width) {
             transform: translateX(0%);
