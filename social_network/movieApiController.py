@@ -36,6 +36,27 @@ def apiTmdbAddById(db,movieId):
 		dbComms.movieCreate(db,mov)
 		#Add rating
 		dbComms.movieAddRating(db,"TMDB",mov.id,resp_json["vote_average"])
+		return resp_json["imdb_id"]
+	else:
+		return None
+
+def apiTmdbSearch(db,movieName):
+	#Sastavljanje upita
+	reqStart = tmdbBase + "search/movie/"
+	reqEnd = tmdbKey
+	#Get
+	resp = requests.get("{0}{1}&query='{2}'".format(reqStart,reqEnd,movieName))
+	if resp.ok:
+		resp_json = resp.json()
+		movieIds = []
+		for i in range(0,min(len(resp_json["results"]),10)):
+			movieIds.append(resp_json["results"][i]["id"])
+		retList = []
+		for movieId in movieIds:
+			imdbId = apiTmdbAddById(db,movieId)
+			if imdbId is not None:
+				retList.append(dbComms.movieGetById(db,imdbId))
+		return retList
 
 
 #OMDB

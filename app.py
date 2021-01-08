@@ -301,6 +301,13 @@ def testRate():
     ret = dbComms.movieGetRecentlyRated(db)
     return render_template("movieFavs.html", list=ret)
 
+@app.route("/srch")
+def search():
+	ret = movieApiController.apiTmdbSearch(db,"Lord of the Rings")
+	st = ""
+	for mov in ret:
+		st += "id:{0} name:{1}\n".format(mov.id,mov.name)
+	return st
 
 # Test DB controls
 @app.route("/db/prg")
