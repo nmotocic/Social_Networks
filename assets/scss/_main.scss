@@ -142,6 +142,7 @@ main {
             #myChart {
                 height: $base-spacing*13;
                 width: $base-spacing*13;
+                object-fit: cover;
             }
         }
 
@@ -149,6 +150,7 @@ main {
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
+            flex-grow: .1;
 
             .list-info {
                 display: flex;
@@ -228,6 +230,8 @@ main {
             display: flex;
             flex-direction: column;
             color: $text-white;
+            margin-left: $base-spacing;
+            margin-right: $base-spacing;
 
             @media (max-width: $phablet-width) {
                 margin-top: $base-spacing;
