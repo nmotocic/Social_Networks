@@ -37,9 +37,11 @@
                 </div>
                 <div class="header-divider"></div>
                 <div id="user-info">
-                    <div class="user-image"></div>
+                    <div class="user-image">
+                        <img src="{{sessionData.avatar}}" id="logo-image">
+                    </div>
                     <h2 class="user-name">
-                        Username
+                        {{sessionData.username}}
                     </h2>
                 </div>
             </header>
