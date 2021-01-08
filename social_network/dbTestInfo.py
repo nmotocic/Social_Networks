@@ -9,13 +9,13 @@ maxUserId = 30
 
 def addTestUsers(db):
 	dbComms.userCreate(db, "Alice", "alice@fakemail.com")
-	dbComms.userCreate(db, "Bob", "bob@fakemail.com")
-	dbComms.userCreate(db, "George", "george@fakemail.com")
-	dbComms.userCreate(db, "Shrek", "shrek@fakemail.com")
-	for i in range(minUserId, maxUserId):
-		dbComms.userCreate(
-			db, "FakeUser" + str(i), "fakeuser{0}@fakemail.com".format(str(i))
-		)
+	# dbComms.userCreate(db, "Bob", "bob@fakemail.com")
+	# dbComms.userCreate(db, "George", "george@fakemail.com")
+	# dbComms.userCreate(db, "Shrek", "shrek@fakemail.com")
+	# for i in range(minUserId, maxUserId):
+	# 	dbComms.userCreate(
+	# 		db, "FakeUser" + str(i), "fakeuser{0}@fakemail.com".format(str(i))
+	# 	)
 
 
 def addTmdbMovies(db):
@@ -102,3 +102,15 @@ def addRandomVotes(db, limit=40, page=0):
 				dbComms.userRateMovie(
 					db, "fakeuser{0}@fakemail.com".format(str(i)), movie.id, 0
 				)
+
+def add_alice_likes(db):
+	user = "alice@fakemail.com"
+	likes = ["tt0119654", "tt0077766"]
+	dislikes = []
+	favorites = ["tt0087332"]  # Ghost busters
+	for movie in likes:
+		dbComms.userRateMovie(db, user, movie, 1)
+	for movie in dislikes:
+		dbComms.userRateMovie(db, user, movie, 0)
+	for movie in favorites:
+		dbComms.userFavoritesMovie(db, user, movie)

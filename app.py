@@ -148,7 +148,8 @@ def movieFavorite(imdb_id):
 def roulette():
 	recommendations = []
 	if "userEmail" in session:
-		recommendations = recommender.get_recommendations(db, dbComms.get_user_id_by_email(db, session["userEmail"]))
+		current_user_id = dbComms.get_user_id_by_email(db, session["userEmail"])
+		recommendations = recommender.get_recommendations(db, current_user_id)
 	return render_template("movieList.html", list=recommendations)
 	#return render_template("movieDiscover.html", list=recommendations)
 
@@ -377,8 +378,8 @@ def initDatabase():
 	dbTestInfo.addOmdbMovies(db)
 	dbTestInfo.addTmdbMovies(db)
 	dbTestInfo.addTestUsers(db)
-	dbTestInfo.addTestLikes(db)
-	dbTestInfo.addRandomVotes(db)
+	# dbTestInfo.addTestLikes(db)
+	dbTestInfo.add_alice_likes(db)
 	return redirect("/")
 
 
