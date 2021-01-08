@@ -171,7 +171,7 @@ def userCheckRating(db, email, movieId):
 		break
 	return ret
 
-def userGetRating(db, email ,movieId)
+def userGetRating(db, email ,movieId):
 	qry = 'MATCH (u:User {{ email : "{0}" }})-[:rated]->(m:Movie {{ id : "{1}" }}) RETURN u'.format(
 		email, movieId
 	)
