@@ -55,7 +55,9 @@ def apiTmdbSearch(db,movieName):
 		for movieId in movieIds:
 			imdbId = apiTmdbAddById(db,movieId)
 			if imdbId is not None:
-				retList.append(dbComms.movieGetById(db,imdbId))
+				mov = dbComms.movieGetById(db,imdbId)
+				if mov is not None:
+					retList.append(mov)
 		return retList
 
 
