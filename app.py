@@ -67,7 +67,8 @@ def handleSession():
 		userEmail = session["userEmail"]
 	else:
 		authed = False
-	if twitter.authorized:
+	userAvatar=""
+	if twitter.authorized and not authed:
 		resp = twitter.get(
 			"account/verify_credentials.json", params={"include_email": "true"}
 		)
@@ -77,7 +78,7 @@ def handleSession():
 			userName = resp_json["screen_name"]
 			userEmail = resp_json["email"]
 			userAvatar = resp_json["profile_image_url"]
-	elif facebook.authorized:
+	elif facebook.authorized and not authed:
 		resp = facebook.get("/me?fields=name,email")
 		if resp.ok and resp.text:
 			authed = True
@@ -114,7 +115,18 @@ def movie(imdb_id):
 	if resp.ok:
 		resp_content = resp.content
 		resp_json = json.loads(resp_content.decode("utf-8"))
-		return render_template("movieDisplay.html", movie_data_json=resp_json)
+		buttonStatus=["movie-interaction-button","movie-interaction-button","movie-interaction-button"]
+		if "userEmail" in session:
+			email = session["userEmail"]
+			rating = dbComms.userGetRating(db,email,imdb_id)
+			if rating == 0:
+				buttonStatus[1]="movie-interaction-button active"
+			elif rating == 1:
+				buttonStatus[0]="movie-interaction-button active"
+			if dbComms.userCheckFavorited(db,email,imdb_id):
+				buttonStatus[2]="movie-interaction-button active"
+			#return buttonStatus[0]
+		return render_template("movieDisplay.html", movie_data_json=resp_json, buttonStatus=buttonStatus)
 	else:
 		return "<h1>Request failed</h1>"
 
@@ -169,22 +181,42 @@ def roulette():
 # Route for user profile page
 @app.route('/profile')
 def profile():
-	return render_template("userProfile.html")
+	if "userEmail" in session:
+		email = session["userEmail"]
+		usr = dbComms.userGetByEmail(db,email)
+		positive = dbComms.userGetPositiveRatedMovies(db,email)
+		negative = dbComms.userGetNegativeRatedMovies(db,email)
+		favorite = dbComms.userGetAllFavorited(db,email)
+		return render_template("userProfile.html",user=usr,
+			positive=len(positive),negative=len(negative),favorite=len(favorite))
+	return redirect("/")
 
 # Route for user liked list page
 @app.route('/liked')
 def liked():
-	return render_template("likedList.html")
+	if "userEmail" in session:
+		email = session["userEmail"]
+		movieList = dbComms.userGetPositiveRatedMovies(db,email)
+		return render_template("likedList.html",movies=movieList)
+	return redirect("/")
 
 # Route for user disliked list page
 @app.route('/dislike')
 def dislike():
-	return render_template("dislikedList.html")
+	if "userEmail" in session:
+		email = session["userEmail"]
+		movieList = dbComms.userGetNegativeRatedMovies(db,email)
+		return render_template("dislikedList.html",movies=movieList)
+	return redirect("/")
 
 # Route for user bookmarked list page
 @app.route('/bookmarked')
 def booked():
-	return render_template("bookmarkedList.html")
+	if "userEmail" in session:
+		email = session["userEmail"]
+		movieList = dbComms.userGetAllFavorited(db,email)
+		return render_template("bookmarkedList.html",movies=movieList)
+	return redirect("/")
 
 # Route for login page
 @app.route('/login')

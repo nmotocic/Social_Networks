@@ -8,13 +8,13 @@
                 {{ movie_data_json['Title'] }}&nbsp;<span class="movie-release-year">({{ movie_data_json['Year'] }})</span>
             </h1>
             <div class="movie-interactions">
-                <div class="movie-interaction-button" id="movie-like">
+                <div class="{{buttonStatus[0]}}" id="movie-like">
                     <img src="../static/images/thumbs-up-active.svg">
                 </div>
-                <div class="movie-interaction-button" id="movie-dislike">
+                <div class="{{buttonStatus[1]}}" id="movie-dislike">
                     <img src="../static/images/thumbs-down-active.svg">
                 </div>
-                <div class="movie-interaction-button" id="movie-bookmark">
+                <div class="{{buttonStatus[2]}}" id="movie-bookmark">
                     <img src="../static/images/bookmark-active.svg">
                 </div>
             </div>

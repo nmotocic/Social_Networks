@@ -2,13 +2,14 @@ import json
 import sys
 import time
 import math
+import copy
 import numpy as np
 from social_network.dbModels import *
 from social_network.dbRelationsParser import *
 
 
 stockAvatarUrl="https://image.shutterstock.com/image-vector/male-avatar-profile-picture-vector-600w-221431012.jpg"
-
+stockPosterUrl="https://underscoremusic.co.uk/site/wp-content/uploads/2014/05/no-poster.jpg"
 # User controls
 def userCheck(db, email):
 	qry = 'MATCH (n:User {{email: "{0}"}}) RETURN n'.format(email)
@@ -29,16 +30,16 @@ def userCreate(db, username, email, avatarUrl=stockAvatarUrl):
 	if avatarUrl is None:
 		avatarUrl = stockAvatarUrl
 	qry = 'CREATE (n:User {{name: "{0}", email: "{1}", avatarUrl: "{2}"}})'.format(
-		cleanString(username), cleanString(email), cleanString(avatarUrl)
-	)
+		cleanString(username), email, cleanString(avatarUrl))
 	db.execute_query(qry)
 
 
 def userGetByEmail(db, email):
 	if email is None:
 		return
-	qry = 'MATCH (n:User {{email:"{0}"}}) RETURN n'.format(cleanString(email))
+	qry = 'MATCH (n:User {{email:"{0}"}}) RETURN n'.format(email)
 	relations = db.execute_and_fetch(qry)
+	usr = None
 	for relation in relations:
 		user = relation["n"]
 		usr = User(user.properties["name"], user.properties["email"], user.properties["avatarUrl"])
@@ -196,7 +197,7 @@ def userGetPositiveRatedMovies(db, email, lastSeconds=0):
 	return parseMovieRelations(relations)
 
 
-def userGetNegativeRatedMoviesLimited(db, email, lastSeconds=0):
+def userGetNegativeRatedMovies(db, email, lastSeconds=0):
 	if lastSeconds != 0:
 		timeLimit = math.floor(time.time()) - lastSeconds
 	else:
@@ -242,6 +243,8 @@ def movieCreate(db, movie):
 		movie.directorName = "Unkown"
 	if movieCheck(db, movie.id) == True:
 		return
+	if movie.posterPath is None or movie.posterPath == "":
+		movie.posterPath = stockPosterUrl
 	qry = 'CREATE (n:Movie {{id: "{0}",name: "{1}", releaseDate: "{2}", overview: "{3}", directorName: "{4}", posterPath: "{5}"}})'.format(
 		str(movie.id),
 		cleanString(movie.name),
