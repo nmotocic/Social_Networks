@@ -91,14 +91,23 @@ def handleSession():
 		if res == False:
 			dbComms.userCreate(db, userName, userEmail,userAvatar)
 		if "userName" not in session or "userEmail" not in session:
-			session["userName"] = dbComms.userGetByEmail(db, userEmail).username
+			user = dbComms.userGetByEmail(db,userEmail)
+			session["userName"] = user.username
 			session["userEmail"] = userEmail
+			session["userAvatar"] = user.avatarUrl
 	if "warning" in session:
 		session["warningMsg"] = session["warning"]
 		session["warning"] = warnings.noWarning()
 	else:
 		session["warningMsg"] = warnings.noWarning()
 		session["warning"] = warnings.noWarning()
+
+@app.context_processor
+def inject_user():
+	if "userAvatar" in session and "userName" in session:
+		return dict(sessionData={"avatar":session["userAvatar"],"username":session["userName"]})
+	else:
+		return dict(sessionData={"avatar":"","username":"Guest"})
 
 # Route for search movies page
 @app.route('/find')
@@ -266,7 +275,7 @@ def movie_api(movie_title):
 @app.route("/")
 @app.route("/index")
 def index():
-	return render_template("index.html", warning=session["warningMsg"])
+	return render_template("login.html", warning=session["warningMsg"])
 
 
 @app.route("/logout")

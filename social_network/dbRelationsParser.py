@@ -27,6 +27,7 @@ def parseMovieRelations(relations):
 def parseMovieRelationSingle(relations):
 	movieDict={}
 	genreList=[]
+	movie=None
 	for relation in relations:
 		#Relations
 		mov = relation['m']
