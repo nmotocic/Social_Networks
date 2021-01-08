@@ -297,7 +297,6 @@ if (graphContainer) {
     const urlSegments = window.location.href.split('/')
     if (urlSegments) {
         const movieID = urlSegments[urlSegments.length - 1]
-        console.log(movieID)
         if (movieID) {
             if (likeButton) {
                 likeButton.addEventListener('click', () => likePress())
@@ -368,6 +367,17 @@ if (graphContainer) {
                 } else {
                     settingContainer.classList.add('active')
                 }
+            }
+        }
+    }
+
+    const srchBtn = document.querySelector("#srch-btn")
+    var srchTextArea = document.getElementById("srch-text-area")
+    if (srchBtn) {
+        srchBtn.addEventListener('click', () => searchMovies())
+        const searchMovies = () => {
+            if (srchTextArea.value != "") {
+                window.location.replace( baseLocation + 'srch/' + srchTextArea.value )
             }
         }
     }

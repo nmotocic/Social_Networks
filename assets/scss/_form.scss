@@ -21,8 +21,8 @@ form {
             padding: $base-spacing*.5;
 
             input[type=text] {
+                padding-left: $base-spacing*.5;
                 color: $text-white;
-                margin-left: $base-spacing*.5;
                 margin-right: $base-spacing*.5;
                 border-radius: 4px;
                 font-size: 1.2rem;

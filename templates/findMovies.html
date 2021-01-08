@@ -6,113 +6,30 @@
         <div class="widget-header">
             <form method="get" action="" class="searchbar">
                 <div class="searchbar-container">
-                    <input class="search-input" type="text" placeholder="Search Movies"  name="search_string">
+                    <input id="srch-text-area" class="search-input" type="text" placeholder="Search Movies">
                     <div class="search-actions">
-                        <button class="btn small" type="submit"><span>Search</span></button>
+                        <div class="btn small" id="srch-btn"><span>Search</span></div>
                     </div>
                 </div>
             </form>
         </div>
         <div class="movie-display">
             <div class="movie-display-title">
-                <h1>Trending Movies:</h1>
+                <h1>{{ list_title }}</h1><br/>
             </div>
             <div class="movie-display-grid">
-                <a class="movie-card" href="https://www.imdb.com/title/tt1856101/">
-                    <div class="movie-poster">
-                        <img src="https://m.media-amazon.com/images/M/MV5BNzA1Njg4NzYxOV5BMl5BanBnXkFtZTgwODk5NjU3MzI@._V1_SX300.jpg"></img>
-                    </div>
-                    <div class="movie-title">
-                        <h3>Blade Runner 2049</h3>
-                    </div>
-                </a>
-
-                <a class="movie-card" href="https://www.imdb.com/title/tt1856101/">
-                    <div class="movie-poster">
-                        <img src="https://m.media-amazon.com/images/M/MV5BNzA1Njg4NzYxOV5BMl5BanBnXkFtZTgwODk5NjU3MzI@._V1_SX300.jpg"></img>
-                    </div>
-                    <div class="movie-title">
-                        <h3>Blade Runner 2049</h3>
-                    </div>
-                </a><a class="movie-card" href="https://www.imdb.com/title/tt1856101/">
-                    <div class="movie-poster">
-                        <img src="https://m.media-amazon.com/images/M/MV5BNzA1Njg4NzYxOV5BMl5BanBnXkFtZTgwODk5NjU3MzI@._V1_SX300.jpg"></img>
-                    </div>
-                    <div class="movie-title">
-                        <h3>Blade Runner 2049</h3>
-                    </div>
-                </a><a class="movie-card" href="https://www.imdb.com/title/tt1856101/">
-                    <div class="movie-poster">
-                        <img src="https://m.media-amazon.com/images/M/MV5BNzA1Njg4NzYxOV5BMl5BanBnXkFtZTgwODk5NjU3MzI@._V1_SX300.jpg"></img>
-                    </div>
-                    <div class="movie-title">
-                        <h3>Blade Runner 2049</h3>
-                    </div>
-                </a><a class="movie-card" href="https://www.imdb.com/title/tt1856101/">
-                    <div class="movie-poster">
-                        <img src="https://m.media-amazon.com/images/M/MV5BNzA1Njg4NzYxOV5BMl5BanBnXkFtZTgwODk5NjU3MzI@._V1_SX300.jpg"></img>
-                    </div>
-                    <div class="movie-title">
-                        <h3>Blade Runner 2049</h3>
-                    </div>
-                </a><a class="movie-card" href="https://www.imdb.com/title/tt1856101/">
-                    <div class="movie-poster">
-                        <img src="https://m.media-amazon.com/images/M/MV5BNzA1Njg4NzYxOV5BMl5BanBnXkFtZTgwODk5NjU3MzI@._V1_SX300.jpg"></img>
-                    </div>
-                    <div class="movie-title">
-                        <h3>Blade Runner 2049</h3>
-                    </div>
-                </a><a class="movie-card" href="https://www.imdb.com/title/tt1856101/">
-                    <div class="movie-poster">
-                        <img src="https://m.media-amazon.com/images/M/MV5BNzA1Njg4NzYxOV5BMl5BanBnXkFtZTgwODk5NjU3MzI@._V1_SX300.jpg"></img>
-                    </div>
-                    <div class="movie-title">
-                        <h3>Blade Runner 2049</h3>
-                    </div>
-                </a><a class="movie-card" href="https://www.imdb.com/title/tt1856101/">
-                    <div class="movie-poster">
-                        <img src="https://m.media-amazon.com/images/M/MV5BNzA1Njg4NzYxOV5BMl5BanBnXkFtZTgwODk5NjU3MzI@._V1_SX300.jpg"></img>
-                    </div>
-                    <div class="movie-title">
-                        <h3>Blade Runner 2049</h3>
-                    </div>
-                </a><a class="movie-card" href="https://www.imdb.com/title/tt1856101/">
-                    <div class="movie-poster">
-                        <img src="https://m.media-amazon.com/images/M/MV5BNzA1Njg4NzYxOV5BMl5BanBnXkFtZTgwODk5NjU3MzI@._V1_SX300.jpg"></img>
-                    </div>
-                    <div class="movie-title">
-                        <h3>Blade Runner 2049</h3>
-                    </div>
-                </a><a class="movie-card" href="https://www.imdb.com/title/tt1856101/">
-                    <div class="movie-poster">
-                        <img src="https://m.media-amazon.com/images/M/MV5BNzA1Njg4NzYxOV5BMl5BanBnXkFtZTgwODk5NjU3MzI@._V1_SX300.jpg"></img>
-                    </div>
-                    <div class="movie-title">
-                        <h3>Blade Runner 2049</h3>
-                    </div>
-                </a><a class="movie-card" href="https://www.imdb.com/title/tt1856101/">
-                    <div class="movie-poster">
-                        <img src="https://m.media-amazon.com/images/M/MV5BNzA1Njg4NzYxOV5BMl5BanBnXkFtZTgwODk5NjU3MzI@._V1_SX300.jpg"></img>
-                    </div>
-                    <div class="movie-title">
-                        <h3>Blade Runner 2049</h3>
-                    </div>
-                </a><a class="movie-card" href="https://www.imdb.com/title/tt1856101/">
-                    <div class="movie-poster">
-                        <img src="https://m.media-amazon.com/images/M/MV5BNzA1Njg4NzYxOV5BMl5BanBnXkFtZTgwODk5NjU3MzI@._V1_SX300.jpg"></img>
-                    </div>
-                    <div class="movie-title">
-                        <h3>Blade Runner 2049</h3>
-                    </div>
-                </a><a class="movie-card" href="https://www.imdb.com/title/tt1856101/">
-                    <div class="movie-poster">
-                        <img src="https://m.media-amazon.com/images/M/MV5BNzA1Njg4NzYxOV5BMl5BanBnXkFtZTgwODk5NjU3MzI@._V1_SX300.jpg"></img>
-                    </div>
-                    <div class="movie-title">
-                        <h3>Blade Runner 2049</h3>
-                    </div>
-                </a>
-
+                {% for movie in list %}
+                    <a class="movie-card" href="{{ '/movie/' + movie.id }}">
+                        <div class="movie-poster">
+                            {% if  movie.posterPath %}
+                                <img src="{{ movie.posterPath }}"></img>
+                            {% endif %}
+                        </div>
+                        <div class="movie-title">
+                            <h3>{{ movie.name }}</h3>
+                        </div>
+                    </a>
+                {% endfor %}
             </div>
         </div>
     </div>

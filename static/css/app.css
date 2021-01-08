@@ -14,8 +14,8 @@ form {
       align-items: flex-start;
       padding: 8px; }
       form.searchbar .searchbar-container input[type=text] {
+        padding-left: 8px;
         color: #e5e5e5;
-        margin-left: 8px;
         margin-right: 8px;
         border-radius: 4px;
         font-size: 1.2rem;
@@ -204,7 +204,9 @@ main {
             border-bottom: 1px solid #0368ff; }
             @media (max-width: 680px) {
               main .movie-main {
-                flex-direction: column;   }
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;   }
 }
               main .movie-main .movie-poster {
                 border-radius: 6px; }
@@ -375,7 +377,8 @@ main {
         main .discovery-settings {
           margin-bottom: 16px;
           flex-direction: column;
-          margin-left: 0;   }
+          margin-left: 0;
+          margin-right: 0;   }
           main .discovery-settings #toggle-settings {
             margin-left: 0;
             margin-top: 16px;   }
@@ -679,10 +682,12 @@ main {
     main .movie-display .movie-display-grid {
       display: flex;
       flex-direction: row;
-      justify-content: space-between;
+      justify-content: center;
       flex-wrap: wrap;
       margin-top: 16px;
-      margin-right: -16px; }
+      margin-right: -16px;
+      margin-left: auto;
+      margin-right: auto; }
       @media (max-width: 680px) {
         main .movie-display .movie-display-grid {
           justify-content: center;   }
@@ -693,9 +698,13 @@ main {
           justify-content: center;
           width: 240px;
           height: 416px;
-          margin-right: 28px; }
-          main .movie-display .movie-display-grid .movie-card:last-of-type {
-            margin-right: auto; }
+          margin-right: 40px;
+          margin-left: 40px; }
+          @media (max-width: 400px) {
+            main .movie-display .movie-display-grid .movie-card {
+              margin-right: 4px;
+              margin-left: 4px;   }
+}
             main .movie-display .movie-display-grid .movie-card:hover .movie-poster {
               box-shadow: 0px 0px 4px 5px rgba(3, 104, 255, 0.9); }
               main .movie-display .movie-display-grid .movie-card:hover .movie-title h3 {
@@ -869,8 +878,8 @@ main {
     .btn:hover {
       background-color: #0ca7ff; }
       .btn.small {
-        width: 112px;
-        height: 32px;
+        width: 88px;
+        height: 16px;
         padding: 8px;
         line-height: 1.5rem;
         font-size: 1.1rem; }
@@ -920,7 +929,8 @@ main {
         @media (max-width: 680px) {
           .widget .widget-header .widget-title {
             text-align: center;
-            margin-left: 0;   }
+            margin-left: 4px;
+            margin-right: 4px;   }
 }
     .widget .widget-header .movie-release-year {
       color: #7d7d7d;

@@ -104,7 +104,7 @@ def handleSession():
 def find():
 	# only movies rated in the last week (604800 == seconds in a week)
 	lst = dbComms.movieGetRecentlyRated(db, 604800)
-	return render_template("findMovies.html", list = lst)
+	return render_template("findMovies.html", list = lst, list_title="Trending Movies:")
 
 # Route for movie detail display page
 @app.route('/movie/<imdb_id>')
@@ -346,10 +346,10 @@ def testRate():
 	ret = dbComms.movieGetRecentlyRated(db)
 	return render_template("movieList.html", list=ret)
 
-@app.route("/srch")
-def search():
-	ret = movieApiController.apiTmdbSearch(db,"Lord of the Rings")
-	return render_template("movieList.html", list=ret)
+@app.route("/srch/<srchString>")
+def search(srchString):
+	ret = movieApiController.apiTmdbSearch(db, srchString)
+	return render_template("findMovies.html", list=ret, list_title="Search Results For: " + srchString)
 
 @app.route("/likeShrek")
 def shrekify():
