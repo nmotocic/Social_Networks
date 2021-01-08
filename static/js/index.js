@@ -193,48 +193,51 @@ function getBookData () {
 }
 
 var graphDiv = document.getElementById("myChart");
+const likeNum = document.getElementById("like-number").textContent;
+const dislikeNum = document.getElementById("dislike-number").textContent;
+const bookmarkNum = document.getElementById("bookmark-number").textContent;
 
 if (graphDiv) {
     var graphContainer = document.getElementById("myChart").getContext("2d");
-}
 
-var chartData = {
-    labels : ["Liked", "Disliked", "Bookmarked"],
-    datasets : [{
-        label: 'Legend',
-        fill: true,
-        lineTension: 0.1,
-        backgroundColor: ["#18c939", "#c91818", "#0368ff"],
-        borderColor: "#1f1f1f",
-        borderCapStyle: 'butt',
-        borderDash: [],
-        borderDashOffset: 0.0,
-        borderJoinStyle: 'miter',
-        pointBorderColor: "rgba(75,192,192,1)",
-        pointBackgroundColor: "#fff",
-        pointBorderWidth: 1,
-        pointHoverRadius: 5,
-        pointHoverBackgroundColor: "rgba(75,192,192,1)",
-        pointHoverBorderColor: "rgba(220,220,220,1)",
-        pointHoverBorderWidth: 2,
-        pointRadius: 1,
-        pointHitRadius: 10,
-        data : [220, 50, 60]
-    }]
-};
-
-var chartOptions = {
-    legend: {
-        display: false,
+    var chartData = {
+        labels : ["Liked", "Disliked", "Bookmarked"],
+        datasets : [{
+            label: 'Legend',
+            fill: true,
+            lineTension: 0.1,
+            backgroundColor: ["#18c939", "#c91818", "#0368ff"],
+            borderColor: "#1f1f1f",
+            borderCapStyle: 'butt',
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderJoinStyle: 'miter',
+            pointBorderColor: "rgba(75,192,192,1)",
+            pointBackgroundColor: "#fff",
+            pointBorderWidth: 1,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: "rgba(75,192,192,1)",
+            pointHoverBorderColor: "rgba(220,220,220,1)",
+            pointHoverBorderWidth: 2,
+            pointRadius: 1,
+            pointHitRadius: 10,
+            data : [likeNum, dislikeNum, bookmarkNum]
+        }]
+    };
+    
+    var chartOptions = {
+        legend: {
+            display: false,
+        }
+    };
+    
+    if (graphContainer) {
+        var myChart = new Chart(graphContainer, {
+            type: 'doughnut',
+            data: chartData,
+            options: chartOptions
+        });
     }
-};
-
-if (graphContainer) {
-    var myChart = new Chart(graphContainer, {
-        type: 'doughnut',
-        data: chartData,
-        options: chartOptions
-    });
 }
 
 ;(() => {
