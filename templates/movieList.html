@@ -1,0 +1,56 @@
+{% extends "oldBase.html" %}
+{% block title%}Movies{% endblock %}
+
+{% block style %}
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+{% endblock %}
+
+{% block content %}
+	<form action="", method="post">
+		<h3>Filters:</h3>
+			{% for fi in filter %}
+		 		<input type="radio" id=fi.name name="genre" value="{{fi.name}}">
+	  			<label for="{{fi.name}}">{{fi.name}}</label>
+			{% endfor %}
+		<br>
+		<input type="submit" value="Search">
+	</form>
+	<a href="http://localhost:5000/movies/favorites">My favorited movies</a>
+	<h2>Movie list: {{filtered}}</h2>
+	<table>
+		<tr>
+			<th>Movie title</th>
+			<th>Genres</th>
+			<th>Overview</th>
+			<th>Release date</th>
+			<th>Favorite</th>
+		</tr>
+		{% for x in list %}
+			<tr>
+				<td>{{x.name}}</td>
+				<td>{% for y in x.genres %}
+					<ul>
+						<li>{{y}}</li>
+		  			</ul>
+				{% endfor %}</td>
+				<td>{{x.overview}}</td>
+				<td>{{x.releaseDate}}</td>
+				<td><a href="http://localhost:5000/movies/favorite/{{x.id}}">Favorite</a></td>
+			</tr>
+		{% endfor %}
+		</table>
+{% endblock %}
