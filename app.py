@@ -306,10 +306,7 @@ def testRate():
 @app.route("/srch")
 def search():
 	ret = movieApiController.apiTmdbSearch(db,"Lord of the Rings")
-	st = ""
-	for mov in ret:
-		st += "id:{0} name:{1}\n".format(mov.id,mov.name)
-	return st
+	return render_template("movieList.html", list=ret)
 
 @app.route("/likeShrek")
 def shrekify():
