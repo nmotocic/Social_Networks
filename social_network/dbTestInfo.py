@@ -9,13 +9,13 @@ maxUserId = 30
 
 def addTestUsers(db):
 	dbComms.userCreate(db, "Alice", "alice@fakemail.com")
-	# dbComms.userCreate(db, "Bob", "bob@fakemail.com")
-	# dbComms.userCreate(db, "George", "george@fakemail.com")
-	# dbComms.userCreate(db, "Shrek", "shrek@fakemail.com")
-	# for i in range(minUserId, maxUserId):
-	# 	dbComms.userCreate(
-	# 		db, "FakeUser" + str(i), "fakeuser{0}@fakemail.com".format(str(i))
-	# 	)
+	dbComms.userCreate(db, "Bob", "bob@fakemail.com")
+	dbComms.userCreate(db, "George", "george@fakemail.com")
+	dbComms.userCreate(db, "Shrek", "shrek@fakemail.com")
+	for i in range(minUserId, maxUserId):
+		dbComms.userCreate(
+			db, "FakeUser" + str(i), "fakeuser{0}@fakemail.com".format(str(i))
+		)
 
 
 def addTmdbMovies(db):

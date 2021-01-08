@@ -64,7 +64,7 @@ openLibraryCoverAPI = "http://covers.openlibrary.org/"
 def handleSession():
 	if "userEmail" in session:
 		authed = True
-		userEmail=session["userEmail"]
+		userEmail = session["userEmail"]
 	else:
 		authed = False
 	if twitter.authorized:
@@ -100,7 +100,9 @@ def handleSession():
 # Route for search movies page
 @app.route('/find')
 def find():
-	return render_template("findMovies.html")
+	# only movies rated in the last week (604800 == seconds in a week)
+	lst = dbComms.movieGetRecentlyRated(db, 604800)
+	return render_template("findMovies.html", list = lst)
 
 # Route for movie detail display page
 @app.route('/movie/<imdb_id>')
@@ -148,6 +150,7 @@ def movieFavorite(imdb_id):
 		else:
 			dbComms.userFavoritesMovie(db,session["userEmail"],imdb_id)
 	return redirect("/movie/{0}".format(imdb_id))
+
 # Route for movie roulette page
 @app.route('/roulette')
 def roulette():
@@ -155,8 +158,11 @@ def roulette():
 	if "userEmail" in session:
 		current_user_id = dbComms.get_user_id_by_email(db, session["userEmail"])
 		recommendations = recommender.get_recommendations(db, current_user_id)
-	return render_template("movieList.html", list=recommendations)
-	#return render_template("movieDiscover.html", list=recommendations)
+	# if the number of recommendations is zero, just recommend trending/popular movies
+	if len(recommendations) == 0:
+		recommendations = dbComms.movieGetRecentlyRated(db, 604800)
+	# return render_template("movieList.html", list=recommendations)
+	return render_template("movieDiscover.html", list=recommendations)
 
 # Route for user profile page
 @app.route('/profile')
@@ -382,8 +388,8 @@ def initDatabase():
 	dbTestInfo.addOmdbMovies(db)
 	dbTestInfo.addTmdbMovies(db)
 	dbTestInfo.addTestUsers(db)
-	# dbTestInfo.addTestLikes(db)
-	dbTestInfo.add_alice_likes(db)
+	dbTestInfo.addTestLikes(db)
+	dbTestInfo.addRandomVotes(db)
 	return redirect("/")
 
 
