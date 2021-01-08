@@ -112,7 +112,37 @@ def movie(imdb_id):
 		return render_template("movieDisplay.html", movie_data_json=resp_json)
 	else:
 		return "<h1>Request failed</h1>"
-	
+
+@app.route('/movie/<imdb_id>/like')
+def movieLike(imdb_id):
+	if "userEmail" in session:
+		rating = dbComms.userGetRating(db,session["userEmail"],imdb_id)
+		if rating is not None:
+			if rating == 0:
+				dbComms.userRateMovie(db,session["userEmail"],imdb_id,1)
+			else:
+				dbComms.userUnRateMovie(db,session["userEmail"],imdb_id)
+	return redirect("/movie/{0}".format(imdb_id))
+
+@app.route('/movie/<imdb_id>/dislike')
+def movieDislike(imdb_id):
+	if "userEmail" in session:
+		rating = dbComms.userGetRating(db,session["userEmail"],imdb_id)
+		if rating is not None:
+			if rating == 1:
+				dbComms.userRateMovie(db,session["userEmail"],imdb_id,0)
+			else:
+				dbComms.userUnRateMovie(db,session["userEmail"],imdb_id)
+	return redirect("/movie/{0}".format(imdb_id))
+
+@app.route('/movie/<imdb_id>/favorite')
+def movieFavorite(imdb_id):
+	if "userEmail" in session:
+		if (dbComms.userCheckFavorite(db,session["userEmail"],imdb_id)):
+			dbComms.userUnFavoritesMovie(db,session["userEmail"],imdb_id)
+		else:
+			dbComms.userFavoritesMovie(db,session["userEmail"],imdb_id)
+	return redirect("/movie/{0}".format(imdb_id))
 # Route for movie roulette page
 @app.route('/roulette')
 def roulette():
@@ -348,7 +378,7 @@ def initDatabase():
 	dbTestInfo.addTmdbMovies(db)
 	dbTestInfo.addTestUsers(db)
 	dbTestInfo.addTestLikes(db)
-	#dbTestInfo.addRandomVotes(db)
+	dbTestInfo.addRandomVotes(db)
 	return redirect("/")
 
 

@@ -71,7 +71,7 @@ def addTestLikes(db):
 	# Shrek likes
 	# Shrek,Shrek, FFVII, Monster Inc
 	user = "shrek@fakemail.com"
-	likes = ["tt0126029", "tt0126029", "tt0385700", "tt0198781"]
+	likes = ["tt0126029"]
 	favorites = ["tt0126029"]  # Shrek
 	dislikes = ["tt0077766"]  # Jaws 2
 	for movie in likes:
