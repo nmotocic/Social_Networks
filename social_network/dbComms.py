@@ -172,13 +172,11 @@ def userCheckRating(db, email, movieId):
 	return ret
 
 def userGetRating(db, email ,movieId):
-	qry = 'MATCH (u:User {{ email : "{0}" }})-[:rated]->(m:Movie {{ id : "{1}" }}) RETURN u'.format(
+	qry = 'MATCH (u:User {{ email : "{0}" }})-[r:rated]->(m:Movie {{ id : "{1}" }}) RETURN r'.format(
 		email, movieId
 	)
 	result = db.execute_and_fetch(qry)
-	for row in result:
-		return dbRelationsParser.parseMovieRatingSingle(result)
-	return None
+	return parseMovieRatingSingle(result)
 
 # If lastSeconds 0 get all, otherwise get movies rated within "lastSeconds"
 def userGetPositiveRatedMovies(db, email, lastSeconds=0):

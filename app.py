@@ -64,6 +64,7 @@ openLibraryCoverAPI = "http://covers.openlibrary.org/"
 def handleSession():
 	if "userEmail" in session:
 		authed = True
+		userEmail=session["userEmail"]
 	else:
 		authed = False
 	if twitter.authorized:
@@ -122,6 +123,8 @@ def movieLike(imdb_id):
 				dbComms.userRateMovie(db,session["userEmail"],imdb_id,1)
 			else:
 				dbComms.userUnRateMovie(db,session["userEmail"],imdb_id)
+		else:
+			dbComms.userRateMovie(db,session["userEmail"],imdb_id,1)
 	return redirect("/movie/{0}".format(imdb_id))
 
 @app.route('/movie/<imdb_id>/dislike')
@@ -133,12 +136,14 @@ def movieDislike(imdb_id):
 				dbComms.userRateMovie(db,session["userEmail"],imdb_id,0)
 			else:
 				dbComms.userUnRateMovie(db,session["userEmail"],imdb_id)
+		else:
+			dbComms.userRateMovie(db,session["userEmail"],imdb_id,0)
 	return redirect("/movie/{0}".format(imdb_id))
 
 @app.route('/movie/<imdb_id>/favorite')
 def movieFavorite(imdb_id):
 	if "userEmail" in session:
-		if (dbComms.userCheckFavorite(db,session["userEmail"],imdb_id)):
+		if (dbComms.userCheckFavorited(db,session["userEmail"],imdb_id)):
 			dbComms.userUnFavoritesMovie(db,session["userEmail"],imdb_id)
 		else:
 			dbComms.userFavoritesMovie(db,session["userEmail"],imdb_id)
