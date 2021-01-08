@@ -8,9 +8,12 @@ authors = [""]
 [tool.poetry.dependencies]
 python = "^3.7"
 flask = "^1.1.2"
-pymgclient = "^0.1.0"
-flask_dance = "^3.0.0"
+Flask-Dance = "^3.2.0"
 Flask-Scss = "^0.5"
+requests = "^2.25.1"
+pymgclient = "^0.1.0"
+numpy = "^1.19.5"
+
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
