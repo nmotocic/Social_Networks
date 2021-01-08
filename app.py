@@ -2,7 +2,6 @@ import os
 import json
 import requests
 import sys
-import random
 from flask import Flask, render_template, redirect, url_for, session, request
 from flask_dance.contrib.twitter import make_twitter_blueprint, twitter
 from flask_dance.contrib.facebook import make_facebook_blueprint, facebook
@@ -13,8 +12,8 @@ from social_network import dbComms
 from social_network import dbTestInfo
 from social_network import movieApiController
 from social_network import warnings
+from social_network import recommender
 from social_network.dbModels import User, Movie, Genre
-from social_network import predict
 from flask_scss import Scss
 
 app = Flask(__name__)
@@ -118,7 +117,10 @@ def movie(imdb_id):
 # Route for movie roulette page
 @app.route('/roulette')
 def roulette():
-    return render_template("movieDiscover.html")
+    recommendations = []
+    if "userEmail" in session:
+        recommendations = recommender.get_recommendations(db, dbComms.get_user_id_by_email(db, session["userEmail"]))
+    return render_template("movieDiscover.html", list=recommendations)
 
 # Route for user profile page
 @app.route('/profile')
@@ -326,45 +328,6 @@ def initDatabase():
     dbTestInfo.addTestLikes(db)
     dbTestInfo.addRandomVotes(db)
     return redirect("/")
-
-
-# Get movie recommendations for current user
-@app.route("/recommendations")
-def recommendations():
-    # check if user is currently logged in
-    if "userEmail" in session:
-        # get database id of the current user
-        current_user_id = dbComms.get_user_id_by_email(db, session["userEmail"])
-        # get user-item matrix to use in collaborative filtering
-        matrix = dbComms.get_user_ratings(db, current_user_id)
-        # for line in matrix:
-        #     print(line)
-        # sys.stdout.flush()
-        # store all movies from database in list
-        movies = dbComms.get_all_movies(db)
-        # call get_predictions method that will return a sorted list of movies and their predictions of likeability for the current user
-        predictions = predict.get_predictions(matrix)
-        # initialize list of movie predictions
-        recommendations = []
-        # iterate over all predictions
-        for key in predictions:
-            # take in account only positive predictions
-            if predictions[key] >= 0.8:
-                # create Movie object and set its parameters
-                movie = Movie(movies[key].properties["id"], movies[key].properties["name"], [], 
-                movies[key].properties["releaseDate"], movies[key].properties["overview"], 
-                movies[key].properties["directorName"], movies[key].properties["posterPath"])
-                # set movie recommendation percentage
-                movie.percentage = str(round(predictions[key], 2) * 100) + "%"
-                # add created object to list of movie predictions
-                recommendations.append(movie)
-        # set size of roulette (default is 8, but if less movies are recommended it is equal to predicted movie list size)
-        roulette_size = 8 if len(recommendations) >= 8 else len(recommendations)
-        # return moviePredictions template view with items of movie_prediction_list
-        return render_template("movieRecommendations.html", list=random.sample(recommendations, roulette_size))
-    else:
-        # if user is not logged in redirect to login page
-        return redirect("/")
 
 
 # Main
