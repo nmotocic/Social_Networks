@@ -284,7 +284,7 @@ def favoriteMoviesList():
 	if twitter.authorized == False:
 		session["warning"] = warnings.noLogin()
 		return redirect(url_for("index"))
-	ret = dbComms.movieGetAllFavorited(db, session["userEmail"])
+	ret = dbComms.userGetAllFavorited(db, session["userEmail"])
 	return render_template("movieFavs.html", list=ret)
 
 

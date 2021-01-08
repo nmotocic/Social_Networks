@@ -59,3 +59,10 @@ def parseMovieRatings(relations):
 	for movie in movieDict:
 		calculatedDict[movie] = movieDict[movie][0]/movieDict[movie][1]+0.05*movieDict[movie][1]
 	return sorted(calculatedDict, key=calculatedDict.get, reverse=True)
+
+def parseMovieRatingSingle(relations):
+	calculatedDict = {}
+	for relation in relations:
+		#Relations
+		rel = relation['r']
+		return rel.properties["rating"]
