@@ -659,6 +659,10 @@ main {
             border-bottom: 1px solid rgba($highlight-blue, .6);
             width: 100%;
 
+            @media (max-width: $phablet-width) {
+                flex-direction: column;
+            }
+
             .title-icon {
                 width: $base-spacing*3.5;
                 height: $base-spacing*3.5;
@@ -792,8 +796,6 @@ main {
     }
 
     @media (max-width: $phablet-width) {
-        margin-left: $base-spacing*.25;
-        margin-right: $base-spacing*.25;
         margin-bottom: $base-spacing*.25;
         margin-top: $base-spacing;
         padding: 0;
