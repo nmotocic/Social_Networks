@@ -192,7 +192,6 @@ function getBookData () {
     window.location = "http://localhost:5000/book_api/" + userBookInput
 }
 
-Chart.defaults.global.responsive = false;
 var graphDiv = document.getElementById("myChart");
 
 if (graphDiv) {
