@@ -6,14 +6,14 @@ def get_prediction(user_movie, user_avg, param):
 	# initialize parameters I - current row, J - current column, K - similar users taken into account for prediction
 	I, J, K = param
 	# subtract row and column indices to start at 0
-	I -= 1
-	J -= 1
+	I -= 0
+	J -= 0
 	# initialize similarity dictionary
 	sims = {}
 	# iterate over all columns of average user ratings
 	for col_num, col in enumerate(user_avg):
 		# if current column is different from given column
-		if not col == user_avg[J]:
+		if not col_num == J:
 			# initialize numerator
 			numer = 0
 			# initialize denominators
@@ -21,11 +21,12 @@ def get_prediction(user_movie, user_avg, param):
 			# iterate over all user average movie ratings
 			for i in range(len(col)):
 				# multiply user rating by average user rating for single movie
-				numer += user_avg[J][i] * col[i]
-				# square average user rating for movie
-				denom_1 += user_avg[J][i] * user_avg[J][i]
-				# square current user rating for movie
-				denom_2 += col[i] * col[i]      
+				if not col[i] == -1:
+					numer += user_avg[J][i] * col[i]
+					# square average user rating for movie
+					denom_1 += user_avg[J][i] * user_avg[J][i]
+					# square current user rating for movie
+					denom_2 += col[i] * col[i]
 			# calculate similarities
 			sim = numer / (np.sqrt(denom_1) * np.sqrt(denom_2))
 			# if similarity is higher than 0 and current user rating of movie exists
@@ -74,14 +75,18 @@ def get_predictions(matrix):
 			# iterate over movie - user matrix
 			for row in movie_user:
 				# change all X to 0
-				row = [0 if x == 'X' else int(x) for x in row]
+				row = [-1 if x == 'X' else int(x) for x in row]
 				avg = 0
 				# calculate average rating of all nonzero ratings
-				if not np.count_nonzero(row) == 0:
-					avg = sum(row) / np.count_nonzero(row)
+				positives = []
+				for x in row:
+					if x >= 0:
+						positives.append(x)
+				if not len(positives) == 0:
+					avg = sum(positives) / len(positives)
 				# subtract average rating from all nonzero ratings
 				for i in range(len(row)):
-					if not row[i] == 0:
+					if not row[i] == -1 and not row[i] == avg:
 						row[i] = float(row[i] - avg)
 				user_avg.append(row)
 			# read current line which is the number of prediction queries

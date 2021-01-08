@@ -21,6 +21,7 @@ def get_recommendations(db, current_user_id):
 	recommendations = []
 	# iterate over all predictions
 	for key in predictions:
+		sys.stdout.flush()
 		# take in account only positive predictions
 		if predictions[key] >= 0.8:
 			# create Movie object and set its parameters
