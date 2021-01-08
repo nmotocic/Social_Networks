@@ -11,25 +11,19 @@
         <div class="profile-container">
             <div class="profile-main">
                 <div class="user-image">
-                    <img id="user-image-main" src="https://external-preview.redd.it/ERjNu9y3IVe0uWs5mBsX97dWyQ9Js0jL-kUo5XHn4R8.jpg?auto=webp&s=823ebc8c7ae4198886cf6c0d23acde708d8aff03"></img>
+                    <img id="user-image-main" src={{user.avatarUrl}}></img>
                 </div>
                 <div class="user-details">
                     <div class="user-detail-container">
                         <section class="detail-name">Username:</section>
                         <section class="detail-content">
-                            Username
-                        </section>
-                    </div>
-                    <div class="user-detail-container">
-                        <section class="detail-name">Date of Birth:</section>
-                        <section class="detail-content">
-                            10.3.1997.
+                            {{user.username}}
                         </section>
                     </div>
                     <div class="user-detail-container">
                         <section class="detail-name">E-Mail:</section>
                         <section class="detail-content">
-                            user@gmail.com
+                            {{user.email}}
                         </section>
                     </div>
                 </div>
@@ -39,17 +33,17 @@
                     <a href="/liked" class="list-info">
                         <img src="../static/images/thumbs-up-active.svg"/>
                         <section>Liked Movies:</section>
-                        <span>220</span>
+                        <span>{{positive}}</span>
                     </a>
                     <a href="/dislike" class="list-info">
                         <img src="../static/images/thumbs-down-active.svg"/>
                         <section>Disliked Movies:</section>
-                        <span>50</span>
+                        <span>{{negative}}</span>
                     </a>
                     <a href="/bookmarked" class="list-info">
                         <img src="../static/images/bookmark-active.svg"/>
                         <section>Bookmarked Movies:</section>
-                        <span>60</span>
+                        <span>{{favorite}}</span>
                     </a>
                 </div>
                 <div class="graph">

@@ -67,7 +67,8 @@ def handleSession():
 		userEmail = session["userEmail"]
 	else:
 		authed = False
-	if twitter.authorized:
+	userAvatar=""
+	if twitter.authorized and not authed:
 		resp = twitter.get(
 			"account/verify_credentials.json", params={"include_email": "true"}
 		)
@@ -77,7 +78,7 @@ def handleSession():
 			userName = resp_json["screen_name"]
 			userEmail = resp_json["email"]
 			userAvatar = resp_json["profile_image_url"]
-	elif facebook.authorized:
+	elif facebook.authorized and not authed:
 		resp = facebook.get("/me?fields=name,email")
 		if resp.ok and resp.text:
 			authed = True
@@ -169,7 +170,15 @@ def roulette():
 # Route for user profile page
 @app.route('/profile')
 def profile():
-	return render_template("userProfile.html")
+	if "userEmail" in session:
+		email = session["userEmail"]
+		usr = dbComms.userGetByEmail(db,email)
+		positive = dbComms.userGetPositiveRatedMovies(db,email)
+		negative = dbComms.userGetNegativeRatedMovies(db,email)
+		favorite = dbComms.userGetAllFavorited(db,email)
+		return render_template("userProfile.html",user=usr,
+			positive=len(positive),negative=len(negative),favorite=len(favorite))
+	return redirect("/")
 
 # Route for user liked list page
 @app.route('/liked')
