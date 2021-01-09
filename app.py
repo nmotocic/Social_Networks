@@ -5,6 +5,7 @@ import sys
 from flask import Flask, render_template, redirect, url_for, session, request
 from flask_dance.contrib.twitter import make_twitter_blueprint, twitter
 from flask_dance.contrib.facebook import make_facebook_blueprint, facebook
+from flask_dance.contrib.github import make_github_blueprint, github
 from flask_dance.consumer import oauth_authorized
 from social_network.database.memgraph import Memgraph
 from social_network import db_operations
@@ -51,9 +52,20 @@ facebook_bp = make_facebook_blueprint(rerequest_declined_permissions=True)
 facebook_bp.rerequest_declined_permissions = True
 app.register_blueprint(facebook_bp, url_prefix="/login")
 # FB connection
+@app.route("/facebook")
 def fb_login():
 	if not facebook.authorized and not twitter.authorized:
 		return redirect(url_for("facebook.login"))
+	return redirect(url_for("profile"))
+
+#GitHub connector
+github_blueprint = make_github_blueprint(client_id="3fd3ed5da5ba6866d500",client_secret="3d9bb861579f18533b71d261628b195205e67388")
+app.register_blueprint(github_blueprint, url_prefix='/github_login')
+
+@app.route("/github")
+def github_login():
+	if not github.authorized:
+		return redirect(url_for('github.login'))
 	return redirect(url_for("profile"))
 
 #APIs
@@ -90,6 +102,14 @@ def handleSession():
 			if "email" in resp_json:
 				userEmail = resp_json["email"]
 			userAvatar = resp_json["picture"]["data"]["url"]
+	elif github.authorized and not authed:
+		resp = github.get('/user')
+		if resp.ok:
+			authed=True
+			resp_json = resp.json()
+			userName = resp_json["login"]
+			userEmail = resp_json["email"]
+			userAvatar = resp_json["avatar_url"]
 	if authed and userEmail:
 		res = dbComms.userCheck(db, userEmail)
 		if res == False:
@@ -241,7 +261,7 @@ def booked():
 @app.route('/login')
 def login():
 	return render_template("login.html")
-
+"""
 @app.route('/fb_login')
 def fb_login():
 	if not facebook.authorized:
@@ -264,7 +284,7 @@ def fb_login():
 		return redirect(url_for("find"))
 	else:
 		return "<h1>Request failed</h1>"
-
+"""
 @app.route('/movie_api/<movie_title>')
 def movie_api(movie_title):
 	omdbAPIcall = omdbAPI + "t=" + movie_title
@@ -432,6 +452,10 @@ def purgeDatabase():
 	db.execute_query(qry)
 	return
 
+@app.route("/test")
+def test():
+	resp = github.get('/user')
+	return resp.json()
 
 # TODO
 @app.route("/db/init")
