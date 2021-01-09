@@ -157,8 +157,6 @@ def userUnRateMovie(db, email, movieId):
 		return
 	if userCheck(db, email) == False or movieCheck(db, movieId) == False:
 		return
-	if not userCheckFavorited(db, email, movieId):
-		return
 	qry = 'MATCH ( u:User {{ email:"{0}"}} )-[r:rated]->( m:Movie {{ id: "{1}" }} ) DELETE r'.format(
 		email, movieId
 	)
