@@ -62,12 +62,51 @@
                 </div>
             </div>
         </div>
+        <div class="movie-statistics">
+                <div class="parameters-container">
+                    <div class="single-parameter">
+                        <section class="parameter-name">
+                            Parameter 1:
+                        </section>
+                        <section class="parameter-value">
+                            100
+                        </section>
+                    </div><div class="single-parameter">
+                        <section class="parameter-name">
+                            Parameter 2:
+                        </section>
+                        <section class="parameter-value">
+                            100
+                        </section>
+                    </div>
+            </div>
+            <div class="weekly-rating chart-cotainer">
+                <canvas id="weeklyChart"></canvas>
+            </div>
+            <div class="alltime-rating chart-cotainer">
+                <canvas id="alltimeChart"></canvas>
+            </div>
+            <div class="hidden-data">
+                <span id="likes-weekly-chart">
+                    120
+                </span>
+                <span id="dislikes-weekly-chart">
+                    80
+                </span>
+                <span id="likes-alltime-chart">
+                    420
+                </span>
+                <span id="dislikes-alltime-chart">
+                    169
+                </span>
+            </div>
+        </div>
         {% if movie_data_json['Ratings'] %}
             <div class="movie-ratings">
                 <section>Ratings:</section>
                 {% if movie_data_json['Ratings'][0] %}
                     <div class="rating">
-                        <a href="">
+                        <a href="https://www.imdb.com/">
                             <img src="../static/images/imdb-logo.png"/>
                         </a>
                         <div class="rating-score">
@@ -77,7 +116,7 @@
                 {% endif %}
                 {% if movie_data_json['Ratings'][1] %}
                     <div class="rating">
-                        <a href="">
+                        <a href="https://www.rottentomatoes.com/">
                             <img src="../static/images/rotten-tomatoes-logo.png"/>
                         </a>
                         <div class="rating-score">
@@ -87,7 +126,7 @@
                 {% endif %}
                 {% if movie_data_json['Ratings'][2] %}
                     <div class="rating">
-                        <a href="">
+                        <a href="https://www.metacritic.com/">
                             <img src="../static/images/metacritic-logo.png"/>
                         </a>
                         <div class="rating-score">
