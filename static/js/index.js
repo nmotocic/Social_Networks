@@ -263,7 +263,7 @@ const likeAlltimeDisplay =  document.getElementById("likes-weekly-chart");
 if (likeAlltimeDisplay) {
     var likeAlltimeNum = likeAlltimeDisplay.textContent
 }
-const dislikeAlltimeDisplay =  document.getElementById("likes-weekly-chart");
+const dislikeAlltimeDisplay =  document.getElementById("dislikes-weekly-chart");
 if (dislikeAlltimeDisplay) {
     var dislikeAlltimeNum = dislikeAlltimeDisplay.textContent
 }
