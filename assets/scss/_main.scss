@@ -260,15 +260,23 @@ main {
             flex-direction: row;
             flex-wrap: wrap;
 
-            label {
-                color: $text-white;
-                font-size: 1.2rem;
-                margin-right: $base-spacing;
-            }
+            .filter-option {
+                width: $base-spacing*18;
+                display: flex;
+                flex-direction: row;
+                justify-content: flex-start;
+                margin-bottom: $base-spacing*.5;
 
-            input {
-                width: $base-spacing*1.25;
-                height: $base-spacing*1.25;
+                label {
+                    color: $text-white;
+                    font-size: 1.2rem;
+                    margin-right: $base-spacing;
+                }
+    
+                input {
+                    width: $base-spacing*1.25;
+                    height: $base-spacing*1.25;
+                }
             }
         }
 
@@ -835,6 +843,7 @@ main {
 
             @media (max-width: $phablet-width) {
                 flex-direction: column;
+                align-items: center;
             }
 
             .title-icon {

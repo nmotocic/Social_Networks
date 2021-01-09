@@ -355,13 +355,19 @@ main {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap; }
-        main #filter-settings .radio-options label {
-          color: #e5e5e5;
-          font-size: 1.2rem;
-          margin-right: 16px; }
-          main #filter-settings .radio-options input {
-            width: 20px;
-            height: 20px; }
+        main #filter-settings .radio-options .filter-option {
+          width: 288px;
+          display: flex;
+          flex-direction: row;
+          justify-content: flex-start;
+          margin-bottom: 8px; }
+          main #filter-settings .radio-options .filter-option label {
+            color: #e5e5e5;
+            font-size: 1.2rem;
+            margin-right: 16px; }
+            main #filter-settings .radio-options .filter-option input {
+              width: 20px;
+              height: 20px; }
     main #filter-settings .apply-container {
       margin-top: 16px; }
   main .profile-main {
@@ -782,7 +788,8 @@ main {
       width: 100%; }
       @media (max-width: 680px) {
         main .movie-display .movie-display-title {
-          flex-direction: column;   }
+          flex-direction: column;
+          align-items: center;   }
 }
         main .movie-display .movie-display-title .title-icon {
           width: 56px;

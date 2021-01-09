@@ -15,11 +15,15 @@
         </div>
         <div id="filter-settings">
             <div class="radio-options">
-                <input type="radio" id="filter-all" name="genre" value="all" checked="true" class="filter-radio">
-                <label for="all">All Movies</label>
+                <div class="filter-option">
+                    <input type="radio" id="filter-all" name="genre" value="all" checked="true" class="filter-radio">
+                    <label for="all">All Movies</label>
+                </div>
                 {% for genre in genreList %}
-                <input type="radio" id="filter-action" name="genre" value="{{ genre.name }}" class="filter-radio">
-                <label for="action">{{ genre.name }} Movies</label>
+                    <div class="filter-option">
+                        <input type="radio" id="filter-action" name="genre" value="{{ genre.name }}" class="filter-radio">
+                        <label for="action">{{ genre.name }} Movies</label>
+                    </div>
                 {% endfor %}
             </div>
             <div class="apply-container">
