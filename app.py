@@ -246,7 +246,7 @@ def login():
 def fb_login():
 	if not facebook.authorized:
 		return redirect(url_for("facebook.login"))
-	resp = facebook.get("/me?fields=id,name,email,picture,birthday")
+	resp = facebook.get("/me?fields=id,name,email,picture,location")
 	if resp.ok and resp.text:
 		resp_json = resp.json()
 		user_id = resp_json["id"]
@@ -255,6 +255,8 @@ def fb_login():
 		if "email" in resp_json:
 			user_mail = resp_json["email"]
 		user_picture = resp_json["picture"]["data"]["url"]
+		user_location = resp_json["location"]["name"].split(", ")
+		user_country = user_location[-1]
 		user_node = db_operations.get_user_by_fb_id(db, user_id)
 		if user_node is None and userEmail:
 			db_operations.add_user(db, user_id, user_name, user_mail, user_picture)
@@ -297,6 +299,14 @@ def logout():
 	session.clear()
 	session["warning"] = warnings.noWarning()
 	return redirect(url_for("index"))
+
+@app.route("/explore/<genre>/<page>")
+def explore(genre, page):
+	if genre == "all":
+		title = "All Movies"
+	else:
+		title = genre.capitalize() + " Movies"
+	return render_template("databaseExplore.html", current_genre=genre, current_title=title, current_page=page, max_page=10)
 
 # Movies
 # TMDB
