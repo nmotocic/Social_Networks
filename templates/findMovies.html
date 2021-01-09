@@ -24,6 +24,26 @@
                             {% if  movie.posterPath %}
                                 <img src="{{ movie.posterPath }}"></img>
                             {% endif %}
+                            <div class="movie-short-info">
+                                <div class="movie-detail-container">
+                                    <section class="detail-name">Genre:</section>
+                                    <section class="detail-content">
+                                        Action
+                                    </section>
+                                    <section class="detail-name">Runtime:</section>
+                                    <section class="detail-content">
+                                        120 min
+                                    </section>
+                                    <section class="detail-name">Rating:</section>
+                                    <section class="detail-content">
+                                        R
+                                    </section>
+                                    <section class="detail-name">Director:</section>
+                                    <section class="detail-content">
+                                        MAN
+                                    </section>
+                                </div>
+                            </div>
                         </div>
                         <div class="movie-title">
                             <h3>{{ movie.name }}</h3>

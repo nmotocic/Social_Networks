@@ -846,14 +846,35 @@ main {
 }
             main .movie-display .movie-display-grid .movie-card:hover .movie-poster {
               box-shadow: 0px 0px 4px 5px rgba(3, 104, 255, 0.9); }
-              main .movie-display .movie-display-grid .movie-card:hover .movie-title h3 {
-                text-shadow: 2px 2px 2px rgba(3, 104, 255, 0.9), -2px -2px 2px rgba(12, 167, 255, 0.9),
-                                -2px 2px 2px rgba(3, 104, 255, 0.9), 2px -2px 2px rgba(3, 104, 255, 0.9); }
+              main .movie-display .movie-display-grid .movie-card:hover .movie-poster .movie-short-info {
+                transform: translateY(-360px); }
+                main .movie-display .movie-display-grid .movie-card:hover .movie-poster img {
+                  opacity: 0.25;
+                  -webkit-filter: blur(5px);
+                  -moz-filter: blur(5px);
+                  -o-filter: blur(5px);
+                  -ms-filter: blur(5px);
+                  filter: blur(5px); }
+            main .movie-display .movie-display-grid .movie-card:hover .movie-title h3 {
+              text-shadow: 2px 2px 2px rgba(3, 104, 255, 0.9), -2px -2px 2px rgba(12, 167, 255, 0.9),
+                            -2px 2px 2px rgba(3, 104, 255, 0.9), 2px -2px 2px rgba(3, 104, 255, 0.9); }
           main .movie-display .movie-display-grid .movie-card .movie-poster {
+            display: flex;
+            flex-direction: column;
             width: 240px;
             height: 360px;
             border-radius: 6px;
-            box-shadow: 3px 4px 4px rgba(3, 104, 255, 0.9); }
+            box-shadow: 3px 4px 4px rgba(3, 104, 255, 0.9);
+            overflow: hidden; }
+            main .movie-display .movie-display-grid .movie-card .movie-poster .movie-short-info {
+              color: #e5e5e5;
+              padding: 16px;
+              font-size: 1.2rem; }
+              main .movie-display .movie-display-grid .movie-card .movie-poster .movie-short-info .detail-name {
+                font-weight: bold;
+                text-shadow: 2px 2px 2px rgba(3, 104, 255, 0.9); }
+                main .movie-display .movie-display-grid .movie-card .movie-poster .movie-short-info .detail-content {
+                  margin-bottom: 12px; }
             main .movie-display .movie-display-grid .movie-card .movie-poster img {
               width: 240px;
               height: 360px;
