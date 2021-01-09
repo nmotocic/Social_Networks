@@ -4,9 +4,16 @@ from social_network import movieApiController
 import random
 import math
 import time
-
+#Random users
 minUserId=1
 maxUserId=30
+#Preff users
+minActionUserId = 1
+maxActionUserId = 16
+minDramaUserId = 1
+maxDramaUserId = 11
+minThrillerUserId = 1
+maxThrillerUserId = 6
 
 def addTestUsers(db):
 	dbComms.userCreate(db,"Alice","alice@fakemail.com")
@@ -15,6 +22,17 @@ def addTestUsers(db):
 	dbComms.userCreate(db,"Shrek","shrek@fakemail.com")
 	for i in range (minUserId,maxUserId):
 		dbComms.userCreate(db,"FakeUser"+str(i),"fakeuser{0}@fakemail.com".format(str(i)))
+
+def addPrefUsers(db):
+	#Action
+	for i in range (minActionUserId,maxActionUserId):
+		dbComms.userCreate(db,"ActionUser"+str(i),"actionuser{0}@fakemail.com".format(str(i)))
+	#Drama
+	for i in range (minDramaUserId,maxDramaUserId):
+		dbComms.userCreate(db,"DramaUser"+str(i),"dramauser{0}@fakemail.com".format(str(i)))
+	#Thriller
+	for i in range (minThrillerUserId,maxThrillerUserId):
+		dbComms.userCreate(db,"ThrillerUser"+str(i),"thrilleruser{0}@fakemail.com".format(str(i)))
 
 def addTmdbMovies(db):
 	for i in range(550,650):
@@ -107,3 +125,42 @@ def addRandomVotes(db,limit=10,page=0):
 				dbComms.userRateMovie(db,"fakeuser{0}@fakemail.com".format(str(i)),movie.id,1,timestampOverride=timestampOverride)
 			elif (rand <= 2):
 				dbComms.userRateMovie(db,"fakeuser{0}@fakemail.com".format(str(i)),movie.id,0,timestampOverride=timestampOverride)
+
+def addAllPrefVotes(db):
+	addPrefVotes(db,"Drama",minDramaUserId,maxDramaUserId)
+	addPrefVotes(db,"Action",minActionUserId,maxActionUserId)
+	addPrefVotes(db,"Thriller",minThrillerUserId,maxThrillerUserId)
+
+def addPrefVotes(db,userType,lowerLimit,upperLimit,limit=50,page=0):
+	#Today votes
+	movieList = dbComms.movieGetAll(db,limit=limit,page=page)
+	pref = userType
+	mail = userType.lower()
+	for movie in movieList:
+		for i in range(lowerLimit,round(upperLimit/3)):
+			rand = random.randrange(0,11,1)
+			if userType in movie.genres:
+				rand+=8
+			if (rand >= 13):
+				dbComms.userRateMovie(db,"{0}user{1}@fakemail.com".format(mail,str(i)),movie.id,1)
+				dbComms.userFavoritesMovie(db,"fakeuser{1}@fakemail.com".format(mail,str(i)),movie.id)
+			elif (rand >= 9):
+				dbComms.userRateMovie(db,"{0}user{1}@fakemail.com".format(mail,str(i)),movie.id,1)
+			elif (rand == 4):
+				dbComms.userRateMovie(db,"{0}user{1}@fakemail.com".format(mail,str(i)),movie.id,0)
+	#Last month votes (604800-2629743 timestamp)
+	timestampOverride = time.time()-2400000
+	movieList = dbComms.movieGetAll(db,limit,page=page+2)
+	for movie in movieList:
+		for i in range(minUserId,maxUserId):
+			rand = random.randrange(0,11,1)
+			if userType in movie.genres:
+				rand+=8
+			if (rand >= 13):
+				dbComms.userRateMovie(db,"{0}user{1}@fakemail.com".format(mail,str(i)),movie.id,1,timestampOverride=timestampOverride)
+				dbComms.userFavoritesMovie(db,"fakeuser{1}@fakemail.com".format(mail,str(i)),movie.id,timestampOverride=timestampOverride)
+			elif (rand >= 8):
+				dbComms.userRateMovie(db,"{0}user{1}@fakemail.com".format(mail,str(i)),movie.id,1,timestampOverride=timestampOverride)
+			elif (rand == 0):
+				dbComms.userRateMovie(db,"{0}user{1}@fakemail.com".format(mail,str(i)),movie.id,0,timestampOverride=timestampOverride)
+

@@ -40,7 +40,7 @@ app.register_blueprint(twitter_bp, url_prefix="/twitter_login")
 def twitter_login():
 	if not facebook.authorized and  not twitter.authorized:
 		return redirect(url_for("twitter.login"))
-	return redirect(url_for("account"))
+	return redirect(url_for("profile"))
 
 # FB connector
 app.config["FACEBOOK_OAUTH_CLIENT_ID"] = "3468111173224517"
@@ -52,7 +52,7 @@ app.register_blueprint(facebook_bp, url_prefix="/login")
 def fb_login():
 	if not facebook.authorized and  not twitter.authorized:
 		return redirect(url_for("facebook.login"))
-	return redirect(url_for("account"))
+	return redirect(url_for("profile"))
 
 #APIs
 omdbAPI = "https://www.omdbapi.com/?apikey=65f7361a&"
@@ -281,6 +281,8 @@ def movie_api(movie_title):
 @app.route("/")
 @app.route("/index")
 def index():
+	if "userEmail" in session:
+		return redirect(url_for("profile"))
 	return render_template("login.html", warning=session["warningMsg"])
 
 
@@ -289,22 +291,6 @@ def logout():
 	session.clear()
 	session["warning"] = warnings.noWarning()
 	return redirect(url_for("index"))
-
-
-@app.route("/account", methods=["POST", "GET"])
-def account():
-	if twitter.authorized == False:
-		session["warning"] = warnings.noLogin()
-		return redirect(url_for("index"))
-	if request.method == "POST":
-		if request.form["nameInput"] != "":
-			# Change name and session info
-			session["userName"] = dbComms.userChangeName(
-				db, session["userEmail"], request.form["nameInput"]
-			)
-			return redirect(url_for("account"))
-	return render_template("account.html", user=session["userName"])
-
 
 # Movies
 # TMDB
@@ -436,9 +422,11 @@ def purgeDatabase():
 def initDatabase():
 	dbTestInfo.addOmdbMovies(db)
 	dbTestInfo.addTmdbMovies(db)
-	dbTestInfo.addTestUsers(db)
-	dbTestInfo.addTestLikes(db)
-	dbTestInfo.addRandomVotes(db)
+	#dbTestInfo.addTestUsers(db)
+	#dbTestInfo.addTestLikes(db)
+	#dbTestInfo.addRandomVotes(db)
+	dbTestInfo.addPrefUsers(db)
+	dbTestInfo.addAllPrefVotes(db)
 	return redirect("/")
 
 
