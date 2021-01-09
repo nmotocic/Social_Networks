@@ -26,21 +26,19 @@
                             {% endif %}
                             <div class="movie-short-info">
                                 <div class="movie-detail-container">
-                                    <section class="detail-name">Genre:</section>
+                                    <section class="detail-name">Genres:</section>
                                     <section class="detail-content">
-                                        Action
+                                        {% for genre in movie.genres %}
+                                            {{ genre }}
+                                        {% endfor %}
                                     </section>
-                                    <section class="detail-name">Runtime:</section>
+                                    <section class="detail-name">Release date:</section>
                                     <section class="detail-content">
-                                        120 min
-                                    </section>
-                                    <section class="detail-name">Rating:</section>
-                                    <section class="detail-content">
-                                        R
+                                        {{ movie.releaseDate }}
                                     </section>
                                     <section class="detail-name">Director:</section>
                                     <section class="detail-content">
-                                        MAN
+                                        {{ movie.directorName }}
                                     </section>
                                 </div>
                             </div>

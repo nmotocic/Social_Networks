@@ -37,12 +37,30 @@
                 <h1>{{ current_title }}</h1>
             </div>
             <div class="movie-display-grid">
-                {% for movie in movieList %}
+                    {% for movie in movieList %}
                     <a class="movie-card" href="{{ '/movie/' + movie.id }}">
                         <div class="movie-poster">
                             {% if  movie.posterPath %}
                                 <img src="{{ movie.posterPath }}"></img>
                             {% endif %}
+                            <div class="movie-short-info">
+                                <div class="movie-detail-container">
+                                    <section class="detail-name">Genres:</section>
+                                    <section class="detail-content">
+                                        {% for genre in movie.genres %}
+                                            {{ genre }}
+                                        {% endfor %}
+                                    </section>
+                                    <section class="detail-name">Release date:</section>
+                                    <section class="detail-content">
+                                        {{ movie.releaseDate }}
+                                    </section>
+                                    <section class="detail-name">Director:</section>
+                                    <section class="detail-content">
+                                        {{ movie.directorName }}
+                                    </section>
+                                </div>
+                            </div>
                         </div>
                         <div class="movie-title">
                             <h3>{{ movie.name }}</h3>

@@ -10,17 +10,35 @@
             </div>
             
             <div class="movie-display-grid">
-                {% for x in movies %}
-                <tr>
-                    <a class="movie-card" href={{"/movie/{0}".format(x.id)}}>
+                    {% for movie in movies %}
+                    <a class="movie-card" href="{{ '/movie/' + movie.id }}">
                         <div class="movie-poster">
-                            <img src={{x.posterPath}}></img>
+                            {% if  movie.posterPath %}
+                                <img src="{{ movie.posterPath }}"></img>
+                            {% endif %}
+                            <div class="movie-short-info">
+                                <div class="movie-detail-container">
+                                    <section class="detail-name">Genres:</section>
+                                    <section class="detail-content">
+                                        {% for genre in movie.genres %}
+                                            {{ genre }}
+                                        {% endfor %}
+                                    </section>
+                                    <section class="detail-name">Release date:</section>
+                                    <section class="detail-content">
+                                        {{ movie.releaseDate }}
+                                    </section>
+                                    <section class="detail-name">Director:</section>
+                                    <section class="detail-content">
+                                        {{ movie.directorName }}
+                                    </section>
+                                </div>
+                            </div>
                         </div>
                         <div class="movie-title">
-                        <h3>{{x.name}}</h3>
+                            <h3>{{ movie.name }}</h3>
                         </div>
                     </a>
-                </tr>
                 {% endfor %}
             </div>
         </div>
