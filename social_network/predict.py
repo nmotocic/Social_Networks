@@ -5,9 +5,6 @@ import sys
 def get_prediction(user_movie, user_avg, param):
 	# initialize parameters I - current row, J - current column, K - similar users taken into account for prediction
 	I, J, K = param
-	# subtract row and column indices to start at 0
-	I -= 0
-	J -= 0
 	# initialize similarity dictionary
 	sims = {}
 	# iterate over all columns of average user ratings
