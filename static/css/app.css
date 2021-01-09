@@ -641,6 +641,69 @@ main {
           color: #e5e5e5;
           font-size: 1.8rem;
           font-weight: bold; }
+  main .movie-statistics {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    padding-bottom: 16px;
+    margin-bottom: 16px;
+    margin-left: 16px;
+    margin-right: 16px;
+    border-bottom: 1px solid #0368ff; }
+    @media (max-width: 680px) {
+      main .movie-statistics {
+        flex-direction: column;   }
+}
+      main .movie-statistics .hidden-data {
+        display: none; }
+        main .movie-statistics .chart-cotainer {
+          max-height: 208px;
+          max-width: 208px;
+          margin-right: 32px; }
+          @media (max-width: 680px) {
+            main .movie-statistics .chart-cotainer {
+              margin-right: auto;
+              margin-left: auto;
+              margin-top: 16px;   }
+}
+            main .movie-statistics .chart-cotainer #weeklyChart {
+              height: 208px;
+              width: 208px;
+              object-fit: cover; }
+              main .movie-statistics .chart-cotainer #alltimeChart {
+                height: 208px;
+                width: 208px;
+                object-fit: cover; }
+    main .movie-statistics .parameters-container {
+      color: #e5e5e5;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      border-radius: 6px;
+      background-color: #2b2b2b;
+      padding-left: 8px;
+      padding-right: 8px;
+      font-size: 1.3rem;
+      margin-top: auto;
+      margin-bottom: auto; }
+      main .movie-statistics .parameters-container .single-parameter {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        border-bottom: 1px solid #a0a0a0;
+        padding-right: 8px;
+        padding-left: 8px;
+        line-height: 3.4rem; }
+        main .movie-statistics .parameters-container .single-parameter:last-of-type {
+          border-bottom: none; }
+          main .movie-statistics .parameters-container .single-parameter .parameter-name {
+            font-weight: bold;
+            flex-grow: 1; }
+            main .movie-statistics .parameters-container .single-parameter .parameter-value {
+              margin-left: auto;
+              padding-left: 16px;
+              color: #e5e5e5; }
   main .movie-display {
     display: flex;
     flex-direction: column;

@@ -645,6 +645,90 @@ main {
         }
     }
 
+    .movie-statistics {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        padding-bottom: $base-spacing;
+        margin-bottom: $base-spacing;
+        margin-left: $base-spacing;
+        margin-right: $base-spacing;
+        border-bottom: 1px solid $highlight-blue;
+
+        @media (max-width: $phablet-width) {
+            flex-direction: column;
+        }
+
+        .hidden-data {
+            display: none;
+        }
+
+        .chart-cotainer {
+            max-height: $base-spacing*13;
+            max-width: $base-spacing*13;
+            margin-right: $base-spacing*2;
+
+            @media (max-width: $phablet-width) {
+                margin-right: auto;
+                margin-left: auto;
+                margin-top: $base-spacing;
+            }
+
+            #weeklyChart {
+                height: $base-spacing*13;
+                width: $base-spacing*13;
+                object-fit: cover;
+            }
+
+            #alltimeChart {
+                height: $base-spacing*13;
+                width: $base-spacing*13;
+                object-fit: cover;
+            }
+        }
+
+        .parameters-container {
+            color: $text-white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 6px;
+            background-color: $background-grey;
+            padding-left: $base-spacing*.5;
+            padding-right: $base-spacing*.5;
+            font-size: 1.3rem;
+            margin-top: auto;
+            margin-bottom: auto;
+
+            .single-parameter {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-evenly;
+                border-bottom: 1px solid $grey;
+                padding-right: $base-spacing*.5;
+                padding-left: $base-spacing*.5;
+                line-height: 3.4rem;
+
+
+                &:last-of-type {
+                    border-bottom: none;
+                }
+
+                .parameter-name {
+                    font-weight: bold;
+                    flex-grow: 1;
+                }
+
+                .parameter-value {
+                    margin-left: auto;
+                    padding-left: $base-spacing;
+                    color: $text-white;
+                }
+            }
+        }
+    }
+
     .movie-display {
         display: flex;
         flex-direction: column;
