@@ -38,19 +38,21 @@ app.register_blueprint(twitter_bp, url_prefix="/twitter_login")
 # Twitter connection
 @app.route("/twitter")
 def twitter_login():
-	if not facebook.authorized and  not twitter.authorized:
+	if not facebook.authorized and not twitter.authorized:
 		return redirect(url_for("twitter.login"))
 	return redirect(url_for("profile"))
 
 # FB connector
-app.config["FACEBOOK_OAUTH_CLIENT_ID"] = "3468111173224517"
-app.config["FACEBOOK_OAUTH_CLIENT_SECRET"] = "7ea8279bf9d5de409cdf843e58ba0409"
+# app.config["FACEBOOK_OAUTH_CLIENT_ID"] = "3468111173224517"
+# app.config["FACEBOOK_OAUTH_CLIENT_SECRET"] = "7ea8279bf9d5de409cdf843e58ba0409"
+app.config["FACEBOOK_OAUTH_CLIENT_ID"] = "141269584858"
+app.config["FACEBOOK_OAUTH_CLIENT_SECRET"] = "f9343613c08bce71b9540819a11478fd"
 facebook_bp = make_facebook_blueprint(rerequest_declined_permissions=True)
 facebook_bp.rerequest_declined_permissions = True
 app.register_blueprint(facebook_bp, url_prefix="/login")
 # FB connection
 def fb_login():
-	if not facebook.authorized and  not twitter.authorized:
+	if not facebook.authorized and not twitter.authorized:
 		return redirect(url_for("facebook.login"))
 	return redirect(url_for("profile"))
 
@@ -79,14 +81,16 @@ def handleSession():
 			userEmail = resp_json["email"]
 			userAvatar = resp_json["profile_image_url"]
 	elif facebook.authorized and not authed:
-		resp = facebook.get("/me?fields=name,email")
+		resp = facebook.get("/me?fields=id,name,email,picture,birthday")
 		if resp.ok and resp.text:
 			authed = True
 			resp_json = resp.json()
 			userName = resp_json["name"]
-			userEmail = resp_json["email"]
+			userEmail = ""
+			if "email" in resp_json:
+				userEmail = resp_json["email"]
 			userAvatar = resp_json["picture"]["data"]["url"]
-	if authed:
+	if authed and userEmail:
 		res = dbComms.userCheck(db, userEmail)
 		if res == False:
 			dbComms.userCreate(db, userName, userEmail,userAvatar)
@@ -247,10 +251,12 @@ def fb_login():
 		resp_json = resp.json()
 		user_id = resp_json["id"]
 		user_name = resp_json["name"]
-		user_mail = resp_json["email"]
+		userEmail = ""
+		if "email" in resp_json:
+			user_mail = resp_json["email"]
 		user_picture = resp_json["picture"]["data"]["url"]
 		user_node = db_operations.get_user_by_fb_id(db, user_id)
-		if user_node is None:
+		if user_node is None and userEmail:
 			db_operations.add_user(db, user_id, user_name, user_mail, user_picture)
 		session['userid'] = user_id
 		return redirect(url_for("find"))
