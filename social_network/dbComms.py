@@ -182,7 +182,9 @@ def userGetRating(db, email ,movieId):
 		email, movieId
 	)
 	result = db.execute_and_fetch(qry)
-	return parseMovieRatingSingle(result)
+	for relation in result:
+		return parseMovieRatingSingle(result)
+	return None
 
 # If lastSeconds 0 get all, otherwise get movies rated within "lastSeconds"
 def userGetPositiveRatedMovies(db, email, lastSeconds=0):
@@ -224,6 +226,21 @@ def movieGetRecentlyRated(db, lastSeconds=0):
 		retList.append(movieGetById(db, mov))
 	return retList
 
+def movieGetUserRatings(db, movieId):
+	if movieId is None:
+		return
+	qry = 'MATCH (u:User)-[r:rated]->(m:Movie {{ id: "{0}" }}) RETURN u,r,m'.format(
+		movieId
+	)
+	relations = db.execute_and_fetch(qry)
+	retDict = {"positive":0,"negative":0}
+	for relation in relations:
+		rating = parseMovieRatingSingle(relation)
+		if rating==1:
+			retDict["positive"]+=1
+		elif rating == 0:
+			retDict["negative"]+=1
+	return retDict
 
 # Movie controls
 def movieCheck(db, id):
