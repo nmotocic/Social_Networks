@@ -185,6 +185,8 @@ def roulette():
 	if len(recommendations) == 0:
 		recommendations = dbComms.movieGetRecentlyRated(db, 604800)
 	# return render_template("movieList.html", list=recommendations)
+	if len(recommendations) == 0:
+		return redirect("/")
 	return render_template("movieDiscover.html", list=recommendations)
 
 # Route for user profile page
