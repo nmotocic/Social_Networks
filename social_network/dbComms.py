@@ -183,7 +183,7 @@ def userGetRating(db, email ,movieId):
 	)
 	result = db.execute_and_fetch(qry)
 	for relation in result:
-		return parseMovieRatingSingle(result)
+		return parseMovieRatingSingle(relation)
 	return None
 
 # If lastSeconds 0 get all, otherwise get movies rated within "lastSeconds"
