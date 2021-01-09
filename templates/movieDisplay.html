@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block title %}{{ movie_data_json['Title'] }}{% endblock %}
+
+{% block maincontent %}
+    <div class="widget widget-extra-large">
+        <div class="widget-header">
+            <h1 class="widget-title">
+                {{ movie_data_json['Title'] }}&nbsp;<span class="movie-release-year">({{ movie_data_json['Year'] }})</span>
+            </h1>
+            <div class="movie-interactions">
+                <div class="{{buttonStatus[0]}}" id="movie-like">
+                    <img src="../static/images/thumbs-up-active.svg">
+                </div>
+                <div class="{{buttonStatus[1]}}" id="movie-dislike">
+                    <img src="../static/images/thumbs-down-active.svg">
+                </div>
+                <div class="{{buttonStatus[2]}}" id="movie-bookmark">
+                    <img src="../static/images/bookmark-active.svg">
+                </div>
+            </div>
+        </div>
+        <div class="movie-main">
+            <div class="movie-poster">
+                <img id="movie-poster-main" src="{{ movie_data_json['Poster'] }}"></img>
+            </div>
+            <div class="movie-details">
+                <div class="movie-detail-container">
+                    <section class="detail-name">Genre:</section>
+                    <section class="detail-content">
+                        {{ movie_data_json['Genre'] }}
+                    </section>
+                </div>
+                <div class="movie-detail-container">
+                    <section class="detail-name">Runtime:</section>
+                    <section class="detail-content">
+                        {{ movie_data_json['Runtime'] }}
+                    </section>
+                </div>
+                <div class="movie-detail-container">
+                    <section class="detail-name">Rating:</section>
+                    <section class="detail-content">
+                        {{ movie_data_json['Rated'] }}
+                    </section>
+                </div>
+                <div class="movie-detail-container">
+                    <section class="detail-name">Director:</section>
+                    <section class="detail-content">
+                        {{ movie_data_json['Director'] }}
+                    </section>
+                </div>
+                <div class="movie-detail-container">
+                    <section class="detail-name">Actors:</section>
+                    <section class="detail-content">
+                        {{ movie_data_json['Actors'] }}
+                    </section>
+                </div>
+                <div class="movie-detail-container">
+                    <section class="detail-name">Plot Synopsis:</section>
+                    <section class="detail-content">
+                        {{ movie_data_json['Plot'] }}
+                    </section>
+                </div>
+            </div>
+        </div>
+        {% if movie_data_json['Ratings'] %}
+            <div class="movie-ratings">
+                <section>Ratings:</section>
+                {% if movie_data_json['Ratings'][0] %}
+                    <div class="rating">
+                        <a href="">
+                            <img src="../static/images/imdb-logo.png"/>
+                        </a>
+                        <div class="rating-score">
+                            {{ movie_data_json['Ratings'][0]['Value'] }}
+                        </div>
+                    </div>
+                {% endif %}
+                {% if movie_data_json['Ratings'][1] %}
+                    <div class="rating">
+                        <a href="">
+                            <img src="../static/images/rotten-tomatoes-logo.png"/>
+                        </a>
+                        <div class="rating-score">
+                                {{ movie_data_json['Ratings'][1]['Value'] }}
+                        </div>
+                    </div>
+                {% endif %}
+                {% if movie_data_json['Ratings'][2] %}
+                    <div class="rating">
+                        <a href="">
+                            <img src="../static/images/metacritic-logo.png"/>
+                        </a>
+                        <div class="rating-score">
+                                {{ movie_data_json['Ratings'][2]['Value'] }}
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+    <div id="background"></div>
+{% endblock %}

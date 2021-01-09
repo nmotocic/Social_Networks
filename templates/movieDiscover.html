@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Roulette{% endblock %}
+
+{% block maincontent %}
+    <div class="widget widget-extra-large">
+        <div class="widget-header">
+            <h1 class="widget-title">
+                Discover Movies
+            </h1>
+            <div class="discovery-settings">
+                <button class="btn medium" onClick="window.location.reload();">
+                    <span>Spin Again</span>
+                </button>
+                <div class="btn medium" id="toggle-settings">
+                    <span>Settings</span>
+                </div>
+            </div>
+        </div>
+        <div id="roulette-settings">
+            <div class="setting-container">
+                <div class="radio-option">
+                    <input type="radio" id="from-recommended" name="source" value="recommend" checked="true">
+                    <label for="from-recommended">Recommend New Movies</label>
+                </div>
+                <div class="radio-option">
+                    <input type="radio" id="from-bookmarked" name="source" value="bookmark">
+                    <label for="from-bookmarked">Use Bookmarked Movies</label><br>
+                </div>
+            </div>
+            {{ movie_list }}
+        </div>
+        <div id="roulette-container">
+            <div id="chart"></div>
+        </div>
+        <div class="selected-movie-display">
+            {% for i in range(0, 8) %} 
+                <div class="hidden-movie-data" id="movie-{{ i }}">
+                    <a class="roulette-card" href="{{ '/movie/' + list[i].id }}">
+                        <div class="movie-poster">
+                            {% if list[i].posterPath %}
+                                <img src="{{ list[i].posterPath }}"></img>
+                            {% endif %}
+                        </div>
+                        <div class="movie-title">
+                            <h3>{{ list[i].name }}</h3>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div id="background"></div>
+{% endblock %}

@@ -2,9 +2,13 @@
 
 #Twitter/Facebook
 class User:
-	def __init__(self,username,email):
+	def __init__(self,username,email,avatarUrl=""):
 		self.username = username
 		self.email = email
+		if avatarUrl is None:
+			self.avatarUrl = ""
+		else:
+			self.avatarUrl = avatarUrl
 	def setName(self,username):
 		self.username = username
 

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Liked Movies{% endblock %}
+
+{% block maincontent %}
+    <div class="widget widget-extra-large">
+        <div class="movie-display">
+            <div class="movie-display-title">
+                <div class="title-icon" id="movie-like"></div>
+                <h1>Liked Movies:</h1>
+            </div>
+            
+            <div class="movie-display-grid">
+                {% for x in movies %}
+                <tr>
+                    <a class="movie-card" href={{"/movie/{0}".format(x.id)}}>
+                        <div class="movie-poster">
+                            <img src={{x.posterPath}}></img>
+                        </div>
+                        <div class="movie-title">
+                        <h3>{{x.name}}</h3>
+                        </div>
+                    </a>
+                </tr>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div id="background"></div>
+    <form class="hidden">
+        
+    </form>
+{% endblock %}

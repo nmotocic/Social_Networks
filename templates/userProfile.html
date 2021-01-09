@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Profile{% endblock %}
+
+{% block maincontent %}
+    <div class="widget widget-extra-large">
+        <div class="widget-header">
+            <h1 class="widget-title">
+                Your Profile
+            </h1>
+        </div>
+        <div class="profile-container">
+            <div class="profile-main">
+                <div class="user-image">
+                    <img id="user-image-main" src={{user.avatarUrl}}></img>
+                </div>
+                <div class="user-details">
+                    <div class="user-detail-container">
+                        <section class="detail-name">Username:</section>
+                        <section class="detail-content">
+                            {{user.username}}
+                        </section>
+                    </div>
+                    <div class="user-detail-container">
+                        <section class="detail-name">E-Mail:</section>
+                        <section class="detail-content">
+                            {{user.email}}
+                        </section>
+                    </div>
+                </div>
+            </div>
+            <div class="profile-stats">
+                <div class="lists">
+                    <a href="/liked" class="list-info">
+                        <img src="../static/images/thumbs-up-active.svg"/>
+                        <section>Liked Movies:</section>
+                        <span id="like-number">{{positive}}</span>
+                    </a>
+                    <a href="/dislike" class="list-info">
+                        <img src="../static/images/thumbs-down-active.svg"/>
+                        <section>Disliked Movies:</section>
+                        <span id="dislike-number">{{negative}}</span>
+                    </a>
+                    <a href="/bookmarked" class="list-info">
+                        <img src="../static/images/bookmark-active.svg"/>
+                        <section>Bookmarked Movies:</section>
+                        <span id="bookmark-number">{{favorite}}</span>
+                    </a>
+                </div>
+                <div class="graph">
+                    <canvas id="myChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="background"></div>
+{% endblock %}

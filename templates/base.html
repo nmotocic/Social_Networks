@@ -1,36 +1,79 @@
-<!doctype html>
+<!-- Base HTML template that is inherited by all other templates. -->
+
+<!DOCTYPE html>
 <html>
-	<head>
-		<title>{% block title %}{% endblock %}</title>
-		<style>{% block style %}{% endblock %}</style>
-		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-	</head>
-	<body>
-		<nav class="navbar navbar-expand-lg navbar-light bg-light">
-		  <a class="navbar-brand" href="/">DruMreLV1</a>
-		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-		    <span class="navbar-toggler-icon"></span>
-		  </button>
-		  <div class="collapse navbar-collapse" id="navbarNav">
-		    <ul class="navbar-nav">
-		      <li class="nav-item active">
-		        <a class="nav-link" href="/">Home<span class="sr-only">(current)</span></a>
-		      </li>
-		      <li class="nav-item">
-		        <a class="nav-link" href="/twitter">My profile</a>
-		      </li>
-		      <li class="nav-item">
-		        <a class="nav-link" href="/movies">Movies</a>
-		      </li>
-		    </ul>
-		  </div>
-		</nav>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>
+            {% block title %}{% endblock %}
+        </title>
+
+        <!-- Fonts -->
+        <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+
+        <!-- Favicon -->
+        <link rel="icon" href="/static/images/MovieRouletteFaviconl.png" tyoe="image/gif" sizes="16x16">
+
+        <!-- Scripts -->
+        <script src="/static/js/index.js" defer></script>
+
+        <!-- Styles -->
+        <link title="base-styling" rel="stylesheet" href="/static/css/app.css">
+        <link title="timeline-styles" rel="stylesheet" href="https://cdn.knightlab.com/libs/timeline3/latest/css/timeline.css">
 
 
-		{% block content %}
-		{% endblock %}
-	</body>
+    </head>
+
+    <body>
+        {% block header %}
+            <header>
+                <button id="toggle-nav" class="toggle-nav-btn" type="button"></button>
+                <div class="logo">
+                    <img src="/static/images/MovieRouletteLogo.png" alt="CLup" id="logo-image">
+                </div>
+                <div class="header-divider"></div>
+                <div id="user-info">
+                    <div class="user-image">
+                        <img src="{{sessionData.avatar}}" id="logo-image">
+                    </div>
+                    <h2 class="user-name">
+                        {{sessionData.username}}
+                    </h2>
+                </div>
+            </header>
+        {% endblock %}
+
+        {% block navbar %}
+            <nav id="nav">
+                <ul class="nav-container">
+                    <li class="nav-option">
+                        <a id="discover-movies" href="/roulette">Roulette</a>
+                    </li>
+                    <li class="nav-option">
+                        <a id="find-movies" href="/find">Find Movies</a>
+                    </li>
+                    <li class="nav-option">
+                        <a id="user-profile" href="/profile">Your Profile</a>
+                    </li>
+                    <li class="nav-option">
+                        <a id="log-out" href="/logout">Logout</a>
+                    </li>
+                </ul>
+            </nav>
+        {% endblock %}
+
+        <main>
+        {% block maincontent %}{% endblock %}
+        </main>
+
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+    </body>
 </html>

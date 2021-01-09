@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Find Movies{% endblock %}
+
+{% block maincontent %}
+    <div class="widget widget-extra-large">
+        <div class="widget-header">
+            <form method="get" action="" class="searchbar">
+                <div class="searchbar-container">
+                    <input id="srch-text-area" class="search-input" type="text" placeholder="Search Movies">
+                    <div class="search-actions">
+                        <div class="btn small" id="srch-btn"><span>Search</span></div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="movie-display">
+            <div class="movie-display-title">
+                <h1>{{ list_title }}</h1>
+            </div>
+            <div class="movie-display-grid">
+                {% for movie in list %}
+                    <a class="movie-card" href="{{ '/movie/' + movie.id }}">
+                        <div class="movie-poster">
+                            {% if  movie.posterPath %}
+                                <img src="{{ movie.posterPath }}"></img>
+                            {% endif %}
+                        </div>
+                        <div class="movie-title">
+                            <h3>{{ movie.name }}</h3>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div id="background"></div>
+    <form class="hidden">
+        
+    </form>
+{% endblock %}
