@@ -86,7 +86,7 @@ def addTestLikes(db):
 	for movie in favorites:
 		dbComms.userFavoritesMovie(db,user,movie)
 
-def addRandomVotes(db,limit=10,page=0):
+def addRandomVotes(db,limit=50,page=0):
 	#Today votes
 	movieList = dbComms.movieGetAll(db,limit=limit,page=page)
 	for movie in movieList:
@@ -97,33 +97,33 @@ def addRandomVotes(db,limit=10,page=0):
 				dbComms.userFavoritesMovie(db,"fakeuser{0}@fakemail.com".format(str(i)),movie.id)
 			elif (rand >= 8):
 				dbComms.userRateMovie(db,"fakeuser{0}@fakemail.com".format(str(i)),movie.id,1)
-			elif (rand == 0):
+			elif (rand == 2):
 				dbComms.userRateMovie(db,"fakeuser{0}@fakemail.com".format(str(i)),movie.id,0)
 	#Last week votes (0-604800 timestamp)
 	timestampOverride = time.time()-400000
-	movieList = dbComms.movieGetAll(db,limit=limit,page=page+1)
+	movieList = dbComms.movieGetAll(db,limit=limit,page=page)
 	for movie in movieList:
-		for i in range(minUserId,round(2*maxUserId/3)):
+		for i in range(round(maxUserId/3),round(2*maxUserId/3)):
 			rand = random.randrange(0,11,1)
 			if (rand >= 10):
 				dbComms.userRateMovie(db,"fakeuser{0}@fakemail.com".format(str(i)),movie.id,1,timestampOverride=timestampOverride)
 				dbComms.userFavoritesMovie(db,"fakeuser{0}@fakemail.com".format(str(i)),movie.id,timestampOverride=timestampOverride)
 			elif (rand >= 6):
 				dbComms.userRateMovie(db,"fakeuser{0}@fakemail.com".format(str(i)),movie.id,1,timestampOverride=timestampOverride)
-			elif (rand <= 1):
+			elif (rand <= 2):
 				dbComms.userRateMovie(db,"fakeuser{0}@fakemail.com".format(str(i)),movie.id,0,timestampOverride=timestampOverride)
 	#Last month votes (604800-2629743 timestamp)
 	timestampOverride = time.time()-2400000
-	movieList = dbComms.movieGetAll(db,limit,page=page+2)
+	movieList = dbComms.movieGetAll(db,limit,page=page)
 	for movie in movieList:
-		for i in range(minUserId,maxUserId):
+		for i in range(round(2*maxUserId/3),maxUserId):
 			rand = random.randrange(0,11,1)
 			if (rand >= 10):
 				dbComms.userRateMovie(db,"fakeuser{0}@fakemail.com".format(str(i)),movie.id,1,timestampOverride=timestampOverride)
 				dbComms.userFavoritesMovie(db,"fakeuser{0}@fakemail.com".format(str(i)),movie.id,timestampOverride=timestampOverride)
-			elif (rand >= 3):
+			elif (rand >= 4):
 				dbComms.userRateMovie(db,"fakeuser{0}@fakemail.com".format(str(i)),movie.id,1,timestampOverride=timestampOverride)
-			elif (rand <= 2):
+			elif (rand <= 3):
 				dbComms.userRateMovie(db,"fakeuser{0}@fakemail.com".format(str(i)),movie.id,0,timestampOverride=timestampOverride)
 
 def addAllPrefVotes(db):

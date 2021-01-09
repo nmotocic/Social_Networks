@@ -429,6 +429,14 @@ def initDatabase():
 	dbTestInfo.addAllPrefVotes(db)
 	return redirect("/")
 
+@app.route("/db/rand")
+def initRandom():
+	#dbTestInfo.addOmdbMovies(db)
+	#dbTestInfo.addTmdbMovies(db)
+	dbTestInfo.addTestUsers(db)
+	dbTestInfo.addTestLikes(db)
+	dbTestInfo.addRandomVotes(db)
+	return redirect("/")
 
 # Main
 if __name__ == "__main__":

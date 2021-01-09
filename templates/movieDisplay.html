@@ -66,17 +66,17 @@
                 <div class="parameters-container">
                     <div class="single-parameter">
                         <section class="parameter-name">
-                            Parameter 1:
+                            Roulette score (Last 7 days):
                         </section>
                         <section class="parameter-value">
-                            100
+                            {{ ratingsLatest["score"] }}
                         </section>
                     </div><div class="single-parameter">
                         <section class="parameter-name">
-                            Parameter 2:
+                            Roulette score (Overall):
                         </section>
                         <section class="parameter-value">
-                            100
+                            {{ ratingsOverall["score"] }}
                         </section>
                     </div>
             </div>
@@ -88,16 +88,16 @@
             </div>
             <div class="hidden-data">
                 <span id="likes-weekly-chart">
-                    120
+                    {{ ratingsLatest["positive"] }}
                 </span>
                 <span id="dislikes-weekly-chart">
-                    80
+                    {{ ratingsLatest["negative"] }}
                 </span>
                 <span id="likes-alltime-chart">
-                    420
+                    {{ ratingsOverall["positive"] }}
                 </span>
                 <span id="dislikes-alltime-chart">
-                    169
+                    {{ ratingsOverall["negative"] }}
                 </span>
             </div>
         </div>

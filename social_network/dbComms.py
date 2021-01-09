@@ -242,6 +242,12 @@ def movieGetUserRatings(db, movieId, lastSeconds=0):
 			retDict["positive"]+=1
 		elif rating == 0:
 			retDict["negative"]+=1
+	if(retDict["negative"]==0 and retDict["positive"]>0):
+		retDict["score"]="100%"
+	elif retDict["negative"]==0 and retDict["positive"]==0:
+		retDict["score"]="No user ratings"
+	else:
+		retDict["score"] = str(round((retDict["positive"]/(retDict["negative"]+retDict["positive"])*100)))+"%"
 	return retDict
 
 # Movie controls
