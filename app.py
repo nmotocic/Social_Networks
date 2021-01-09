@@ -121,7 +121,10 @@ def find():
 def movie(imdb_id):
 	omdbAPIcall = omdbAPI + "i=" + imdb_id
 	resp = requests.get(omdbAPIcall)
-	ratingDict = dbComms.movieGetUserRatings(db, imdb_id)
+	# only ratings in the last week (604800 == seconds in a week)
+	ratingDictLatest = dbComms.movieGetUserRatings(db, imdb_id, lastSeconds=604800)
+	# all ratings
+	ratingDictOverall = dbComms.movieGetUserRatings(db, imdb_id)
 	if resp.ok:
 		resp_content = resp.content
 		resp_json = json.loads(resp_content.decode("utf-8"))
@@ -136,7 +139,7 @@ def movie(imdb_id):
 			if dbComms.userCheckFavorited(db,email,imdb_id):
 				buttonStatus[2]="movie-interaction-button active"
 			#return buttonStatus[0]
-		return render_template("movieDisplay.html", movie_data_json=resp_json, buttonStatus=buttonStatus, ratings=ratingDict)
+		return render_template("movieDisplay.html", movie_data_json=resp_json, buttonStatus=buttonStatus, ratingsLatest=ratingDictLatest, ratingsOverall=ratingDictOverall)
 	else:
 		return "<h1>Request failed</h1>"
 

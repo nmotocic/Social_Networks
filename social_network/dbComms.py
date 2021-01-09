@@ -226,11 +226,15 @@ def movieGetRecentlyRated(db, lastSeconds=0):
 		retList.append(movieGetById(db, mov))
 	return retList
 
-def movieGetUserRatings(db, movieId):
+def movieGetUserRatings(db, movieId, lastSeconds=0):
 	if movieId is None:
 		return
-	qry = 'MATCH (u:User)-[r:rated]->(m:Movie {{ id: "{0}" }}) RETURN u,r,m'.format(
-		movieId
+	if lastSeconds != 0:
+		timeLimit = math.floor(time.time()) - lastSeconds
+	else:
+		timeLimit = 0
+	qry = 'MATCH (u:User)-[r:rated]->(m:Movie {{ id: "{0}" }}) WHERE r.timestamp>={1} RETURN u,r,m'.format(
+		movieId,timeLimit
 	)
 	relations = db.execute_and_fetch(qry)
 	retDict = {"positive":0,"negative":0}
