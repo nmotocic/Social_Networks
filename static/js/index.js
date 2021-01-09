@@ -76,7 +76,9 @@ if (rouletteWheel) {
 
     container.on("click", spin);
     function spin(d){
-        
+        // let sound = new Audio("./static/sounds/roulette.wav")
+        // sound.volume = 0.05
+        // sound.play()
         container.on("click", null);
 
         var domSlices = document.getElementsByClassName("slice");
