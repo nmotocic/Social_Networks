@@ -197,11 +197,11 @@ const likeDisplay = document.getElementById("like-number");
 if (likeDisplay) {
     var likeNum = likeDisplay.textContent
 }
-const dislikeDisplay = document.getElementById("like-number");
+const dislikeDisplay = document.getElementById("dislike-number");
 if (dislikeDisplay) {
     var dislikeNum = dislikeDisplay.textContent
 }
-const bookmarkDisplay = document.getElementById("like-number");
+const bookmarkDisplay = document.getElementById("bookmark-number");
 if (bookmarkDisplay) {
     var bookmarkNum = bookmarkDisplay.textContent
 }
