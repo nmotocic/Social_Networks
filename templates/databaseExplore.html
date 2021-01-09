@@ -17,12 +17,10 @@
             <div class="radio-options">
                 <input type="radio" id="filter-all" name="genre" value="all" checked="true" class="filter-radio">
                 <label for="all">All Movies</label>
-                <input type="radio" id="filter-action" name="genre" value="action" class="filter-radio">
-                <label for="action">Action Movies</label>
-                <input type="radio" id="filter-thriller" name="genre" value="thriller" class="filter-radio">
-                <label for="thriller">Thriller Movies</label>
-                <input type="radio" id="filter-drama" name="genre" value="drama" class="filter-radio">
-                <label for="drama">Drama Movies</label>
+                {% for genre in genreList %}
+                <input type="radio" id="filter-action" name="genre" value="{{ genre.name }}" class="filter-radio">
+                <label for="action">{{ genre.name }} Movies</label>
+                {% endfor %}
             </div>
             <div class="apply-container">
                 <div class="btn small" id="apply-filter">
@@ -35,7 +33,7 @@
                 <h1>{{ current_title }}</h1>
             </div>
             <div class="movie-display-grid">
-                {% for movie in list %}
+                {% for movie in movieList %}
                     <a class="movie-card" href="{{ '/movie/' + movie.id }}">
                         <div class="movie-poster">
                             {% if  movie.posterPath %}

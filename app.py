@@ -322,11 +322,25 @@ def logout():
 
 @app.route("/explore/<genre>/<page>")
 def explore(genre, page):
+	limit=10
+	try:
+		page=int(page)
+	except:
+		return redirect("/explore/all/0")
+	genreList = dbComms.genreGetAll(db)
+	if(genre=="all"):
+		movieList = dbComms.movieGetAll(db,page=page,limit=limit)
+	else:
+		movieList = dbComms.movieGetByGenre(db,genre,page=page,limit=limit)
 	if genre == "all":
 		title = "All Movies"
 	else:
 		title = genre.capitalize() + " Movies"
-	return render_template("databaseExplore.html", current_genre=genre, current_title=title, current_page=page, max_page=10)
+	if len(movieList)<limit:
+		max_page=page
+	else:
+		max_page=page+1
+	return render_template("databaseExplore.html", current_genre=genre, current_title=title, current_page=page, max_page=max_page, genreList=genreList, movieList=movieList)
 
 # Movies
 # TMDB

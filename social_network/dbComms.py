@@ -310,8 +310,8 @@ def movieGetByGenre(db, genre, limit=10, page=0):
 		).format(genre)
 	else:
 		qry = (
-			'MATCH (:Genre {{name : "{0}"}})<-[:isGenre]-(m:Movie) WITH DISTINCT m SKIP {1} LIMIT {2} MATCH (m)-[r:isGenre]->(g:Genre) RETURN m,r,g'
-		).format(genre, page * limit, limit)
+			'MATCH (q:Genre)<-[:isGenre]-(m:Movie) WHERE toLower(q.name)="{0}" WITH DISTINCT m SKIP {1} LIMIT {2} MATCH (m)-[r:isGenre]->(g:Genre) RETURN m,r,g'
+		).format(genre.lower(), page * limit, limit)
 	relations = db.execute_and_fetch(qry)
 	retList = parseMovieRelations(relations)
 	return retList
