@@ -259,11 +259,11 @@ const dislikeWeeklyDisplay =  document.getElementById("dislikes-weekly-chart");
 if (dislikeWeeklyDisplay) {
     var dislikeWeeklyNum = dislikeWeeklyDisplay.textContent
 }
-const likeAlltimeDisplay =  document.getElementById("likes-weekly-chart");
+const likeAlltimeDisplay =  document.getElementById("likes-alltime-chart");
 if (likeAlltimeDisplay) {
     var likeAlltimeNum = likeAlltimeDisplay.textContent
 }
-const dislikeAlltimeDisplay =  document.getElementById("dislikes-weekly-chart");
+const dislikeAlltimeDisplay =  document.getElementById("dislikes-alltime-chart");
 if (dislikeAlltimeDisplay) {
     var dislikeAlltimeNum = dislikeAlltimeDisplay.textContent
 }
