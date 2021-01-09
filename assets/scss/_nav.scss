@@ -64,6 +64,11 @@
                         background-image: url('../images/film-solid.svg');
                     }
                 }
+                &#explore-database {
+                    &::before {
+                        background-image: url('../images/database-solid.svg');
+                    }
+                }
                 &#user-profile {
                     &::before {
                         background-image: url('../images/user-circle-solid.svg');

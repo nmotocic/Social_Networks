@@ -498,6 +498,21 @@ if (alltimeGraphDiv) {
         }
     }
 
+    const toggleFilterButton = document.querySelector('#toggle-filter')
+    const filterContainer = document.querySelector('#filter-settings')
+    if (toggleFilterButton) {
+        if (filterContainer) {
+            toggleFilterButton.addEventListener('click', () => toggleFilterDisplay())
+            const toggleFilterDisplay = () => {
+                if (filterContainer.classList.contains('active')) {
+                    filterContainer.classList.remove('active')
+                } else {
+                    filterContainer.classList.add('active')
+                }
+            }
+        }
+    }
+
     const srchBtn = document.querySelector("#srch-btn")
     var srchTextArea = document.getElementById("srch-text-area")
     if (srchBtn) {
@@ -505,6 +520,25 @@ if (alltimeGraphDiv) {
         const searchMovies = () => {
             if (srchTextArea.value != "") {
                 window.location.replace( baseLocation + 'srch/' + srchTextArea.value )
+            }
+        }
+    }
+
+    const applyFilterBtn = document.querySelector("#apply-filter")
+    const radioOptions = document.querySelectorAll(".filter-radio")
+    
+    if (applyFilterBtn) {
+        if (radioOptions) {
+            applyFilterBtn.addEventListener('click', () => filterMovies())
+            const filterMovies = () => {
+                for(i = 0; i < radioOptions.length; i++) {
+                    if (radioOptions[i].checked) {
+                        var activeGenre = radioOptions[i].value
+                    }
+                }
+                if (activeGenre) {
+                    window.location.replace( baseLocation + 'explore/' + activeGenre + '/0' )
+                }
             }
         }
     }
