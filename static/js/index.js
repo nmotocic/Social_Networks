@@ -193,9 +193,18 @@ function getBookData () {
 }
 
 var graphDiv = document.getElementById("myChart");
-const likeNum = document.getElementById("like-number").textContent;
-const dislikeNum = document.getElementById("dislike-number").textContent;
-const bookmarkNum = document.getElementById("bookmark-number").textContent;
+const likeDisplay = document.getElementById("like-number");
+if (likeDisplay) {
+    var likeNum = likeDisplay.textContent
+}
+const dislikeDisplay = document.getElementById("like-number");
+if (dislikeDisplay) {
+    var dislikeNum = dislikeDisplay.textContent
+}
+const bookmarkDisplay = document.getElementById("like-number");
+if (bookmarkDisplay) {
+    var bookmarkNum = bookmarkDisplay.textContent
+}
 
 if (graphDiv) {
     var graphContainer = document.getElementById("myChart").getContext("2d");

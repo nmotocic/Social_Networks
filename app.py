@@ -396,7 +396,7 @@ def testRate():
 @app.route("/srch/<srchString>")
 def search(srchString):
 	ret = movieApiController.apiTmdbSearch(db, srchString)
-	return render_template("findMovies.html", list=ret, list_title="Search Results For: " + srchString)
+	return render_template("findMovies.html", list=ret, list_title="Search Results For: '" + srchString + "'")
 
 @app.route("/likeShrek")
 def shrekify():
