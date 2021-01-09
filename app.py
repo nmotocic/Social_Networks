@@ -38,7 +38,7 @@ app.register_blueprint(twitter_bp, url_prefix="/twitter_login")
 # Twitter connection
 @app.route("/twitter")
 def twitter_login():
-	if not twitter.authorized:
+	if not facebook.authorized and  not twitter.authorized:
 		return redirect(url_for("twitter.login"))
 	return redirect(url_for("account"))
 
@@ -50,7 +50,7 @@ facebook_bp.rerequest_declined_permissions = True
 app.register_blueprint(facebook_bp, url_prefix="/login")
 # FB connection
 def fb_login():
-	if not facebook.authorized:
+	if not facebook.authorized and  not twitter.authorized:
 		return redirect(url_for("facebook.login"))
 	return redirect(url_for("account"))
 
