@@ -12,7 +12,7 @@ def get_recommendations(db, current_user_id, startingPerc=0.8, stepSize=0.1, min
 	# store all movies from database in list
 	movies = dbComms.get_all_movies(db)
 	# end if there are not enough movies
-	if(len(movies)<10):
+	if(len(movies) < 10):
 		return recommendations
 	# call get_predictions method that will return a sorted list of movies and their predictions of likeability for the current user
 	predictions = predict.get_predictions(matrix)

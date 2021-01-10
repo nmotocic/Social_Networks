@@ -474,9 +474,15 @@ def get_user_ratings(db, current_user_id):
 				# if the id is the same as the current logged in users id
 				if user_id == current_user_id:
 					# add query to the list of predictions that are needed to recommend the movie to the user
-					queries.append(
-						str(user_ids.index(user_id)) + " " + str(movie_ids.index(movie_id)) + " " + str(len(user_ids))
-					)
+					rating_exists = False
+					for u_id in user_ids:
+						if (u_id, movie_id) in ratings:
+							rating_exists = True
+							break
+					if rating_exists:
+						queries.append(
+							str(user_ids.index(user_id)) + " " + str(movie_ids.index(movie_id)) + " " + str(len(user_ids))
+						)
 					# add no rating sign "X" to the line
 				line += "X "
 		# add line (row) to the matrix
