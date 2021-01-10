@@ -5,6 +5,8 @@ import sys
 def get_prediction(user_movie, user_avg, param):
 	# initialize parameters I - current row, J - current column, K - similar users taken into account for prediction
 	I, J, K = param
+	I-=1
+	J-=1
 	# initialize similarity dictionary
 	sims = {}
 	# iterate over all columns of average user ratings
@@ -25,7 +27,9 @@ def get_prediction(user_movie, user_avg, param):
 					# square current user rating for movie
 					denom_2 += col[i] * col[i]
 			# calculate similarities
-			sim = numer / (np.sqrt(denom_1) * np.sqrt(denom_2))
+			sim = 0
+			if not numer == 0 and not denom_1 == 0 and not denom_2 == 0:
+				sim = numer / (np.sqrt(denom_1) * np.sqrt(denom_2))
 			# if similarity is higher than 0 and current user rating of movie exists
 			if sim >= 0 and not user_movie[I][col_num] == 'X':
 				# add similarity to similiarity dictionary
@@ -37,10 +41,10 @@ def get_prediction(user_movie, user_avg, param):
 	# for each movie rating similarity with other users in similarity dictionary
 	for col_num in sims:
 		# add multiplied rating of current user and similarity factor of other users
-		rating += float(int(user_movie[I][col_num]) * sims[col_num])
+		rating += float(float(user_movie[I][col_num]) * sims[col_num])
 		# add number of similarities with other users for this column (movie)
 		sum_of_sims += sims[col_num]
-	if sum_of_sims > 0:
+	if not sum_of_sims == 0:
 		# average the rating out by dividing with number of similarities with other users
 		rating /= sum_of_sims
 	return rating
@@ -97,7 +101,7 @@ def get_predictions(matrix):
 			# get movie from query
 			movie = int(line.rstrip().split(" ")[1])
 			# add prediction to prediction dictionary
-			predictions[int(line.rstrip().split(" ")[1])] = prediction - 1 # subtract by one to get values in range of [-1,1] instead of [0,2]
+			predictions[int(line.rstrip().split(" ")[1])] = (prediction - 1) / 4
 			counter += 1
 		line_index += 1
 	# return sorted dictionary of recommended movies by rating prediction from highest to lowest

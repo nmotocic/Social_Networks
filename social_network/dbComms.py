@@ -431,6 +431,13 @@ def get_user_ratings(db, current_user_id):
 	ratings = {}
 	# set query that will fetch all rating relations between users and movies
 	qry = "MATCH (u:User)-[r:rated]->(m:Movie) RETURN u,r,m"
+	qry_favs = "MATCH (u:User)-[f:favorited]->(m:Movie) RETURN u,f,m"
+	favorites = db.execute_and_fetch(qry_favs)
+	favs = {}
+	for favorite in favorites:
+		user = favorite["u"]
+		movie = favorite["m"]
+		favs[(user.id, movie.id)] = 1
 	# execute query and fetch results
 	relations = db.execute_and_fetch(qry)
 	# get all user ids in list
@@ -443,12 +450,12 @@ def get_user_ratings(db, current_user_id):
 		movie = relation["m"]
 		rating = relation["r"].properties["rating"]
 		# if rating is 0 that means the user dislikes the movie
-		if rating == 0:
-			# set rating to 1 so that collaborative filltering can parse it correctly
-			ratings[(user.id, movie.id)] = 1
-		elif rating == 1:
-			# if rating is 1 that means the user likes the movie
-			ratings[(user.id, movie.id)] = 2
+		rating *= 4
+		rating += 1
+		if (user.id, movie.id) in favs:
+			rating += 1
+		
+		ratings[(user.id, movie.id)] = rating
 	# initialize matrix and set its first row to the number of users and number of movies
 	matrix = [str(len(user_ids)) + " " + str(len(movie_ids))]
 	# initialize list of queries

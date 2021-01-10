@@ -29,7 +29,6 @@ def get_recommendations(db, current_user_id, startingPerc=0.8, stepSize=0.1, min
 	upperLimit = 1
 	while (len(recommendations)<sampleSize and lowerLimit>=minPerc):
 		for key in predictions:
-			#sys.stdout.flush()
 			# take in account only positive predictions
 			if (predictions[key] > lowerLimit and predictions[key]<=upperLimit):
 				# create Movie object and set its parameters
