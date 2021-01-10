@@ -309,12 +309,12 @@ def explore(genre, page):
 
 
 # Test DB controls
-#@app.route("/db/prg")
+# @app.route("/db/prg")
 def purge():
 	purgeDatabase()
 	session.clear()
 	session["warning"] = warnings.noWarning()
-	#return redirect("/")
+	# return redirect("/")
 
 
 def purgeDatabase():

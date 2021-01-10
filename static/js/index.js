@@ -19,14 +19,14 @@ if (rouletteWheel) {
         //randomNumbers = getRandomNumbers();
 
     var data = [
-                {"label":"Dell LAPTOP",  "value":1,  "question":"What CSS property is used for specifying the area between the content and its border?"}, // padding
-                {"label":"IMAC PRO",  "value":2,  "question":"What CSS property is used for changing the font?"}, //font-family
-                {"label":"SUZUKI",  "value":3,  "question":"What CSS property is used for changing the color of text?"}, //color
-                {"label":"HONDA",  "value":4,  "question":"What CSS property is used for changing the boldness of text?"}, //font-weight
-                {"label":"FERRARI",  "value":5,  "question":"What CSS property is used for changing the size of text?"}, //font-size
-                {"label":"APARTMENT",  "value":6,  "question":"What CSS property is used for changing the background color of a box?"}, //background-color
-                {"label":"IPAD PRO",  "value":7,  "question":"Which word is used for specifying an HTML tag that is inside another tag?"}, //nesting
-                {"label":"LAND",  "value":8,  "question":"Which side of the box is the third number in: margin:1px 1px 1px 1px; ?"}
+                {"label":"",  "value":1,  "question":""},
+                {"label":"",  "value":2,  "question":""},
+                {"label":"",  "value":3,  "question":""},
+                {"label":"",  "value":4,  "question":""},
+                {"label":"",  "value":5,  "question":""},
+                {"label":"",  "value":6,  "question":""},
+                {"label":"",  "value":7,  "question":""}, 
+                {"label":"",  "value":8,  "question":""}
     ];
     var svg = d3.select('#chart')
         .append("svg")
@@ -76,9 +76,6 @@ if (rouletteWheel) {
 
     container.on("click", spin);
     function spin(d){
-        // let sound = new Audio("./static/sounds/roulette.wav")
-        // sound.volume = 0.05
-        // sound.play()
         container.on("click", null);
 
         var domSlices = document.getElementsByClassName("slice");
@@ -86,7 +83,6 @@ if (rouletteWheel) {
             domSlices.item(num).classList.add('active');
         }
 
-        //all slices have been seen, all done
         console.log("OldPick: " + oldpick.length, "Data length: " + data.length);
         if(oldpick.length == data.length){
             console.log("done");
@@ -112,12 +108,6 @@ if (rouletteWheel) {
             .duration(3000)
             .attrTween("transform", rotTween)
             .each("end", function(){
-                //mark question as seen
-                // d3.select(".slice:nth-child(" + (picked + 1) + ") path")
-                //     .attr("fill", "#111");
-                //populate question
-                // d3.select("#question h1")
-                //     .text(data[picked].question);
                 oldrotation = rotation;
         
                 /* Get the result value from object "data" */
@@ -175,7 +165,7 @@ if (rouletteWheel) {
             window.crypto.getRandomValues(array);
             console.log("works");
         } else {
-            //no support for crypto, get crappy random numbers
+            //no support for crypto, get bad random numbers
             for(var i=0; i < 1000; i++){
                 array[i] = Math.floor(Math.random() * 100000) + 1;
             }
@@ -436,7 +426,6 @@ if (alltimeGraphDiv) {
                         }
                         likeButton.classList.add('active')
                     }
-                    // console.log(baseLocation + 'movie/' + movieID + '/like')
                     window.location.replace(baseLocation + 'movie/' + movieID + '/like')
                 }
             }
@@ -452,7 +441,6 @@ if (alltimeGraphDiv) {
                         }
                         dislikeButton.classList.add('active')
                     }
-                    // console.log(baseLocation + 'movie/' + movieID + '/dislike')
                     window.location.replace(baseLocation + 'movie/' + movieID + '/dislike')
                 }
             }
@@ -465,7 +453,6 @@ if (alltimeGraphDiv) {
                     } else {
                         bookmarkButton.classList.add('active')
                     }
-                    // console.log(baseLocation + 'movie/' + movieID + '/favourite')
                     window.location.replace(baseLocation + 'movie/' + movieID + '/favorite')
                 }
             }

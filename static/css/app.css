@@ -597,7 +597,7 @@ main {
             margin-right: auto; }
             main .selected-movie-display .hidden-movie-data .roulette-card:hover .movie-poster {
               box-shadow: 0px 0px 4px 5px rgba(3, 104, 255, 0.9); }
-              main .selected-movie-display .hidden-movie-data .roulette-card:hover .movie-title h3 {
+              main .selected-movie-display .hidden-movie-data .roulette-card:hover .movie-title h2 {
                 text-shadow: 2px 2px 2px rgba(3, 104, 255, 0.9), -2px -2px 2px rgba(12, 167, 255, 0.9),
                                 -2px 2px 2px rgba(3, 104, 255, 0.9), 2px -2px 2px rgba(3, 104, 255, 0.9); }
           main .selected-movie-display .hidden-movie-data .roulette-card .movie-poster {
@@ -614,7 +614,7 @@ main {
             display: flex;
             flex-direction: row;
             justify-content: center; }
-            main .selected-movie-display .hidden-movie-data .roulette-card .movie-title h3 {
+            main .selected-movie-display .hidden-movie-data .roulette-card .movie-title h2 {
               color: #e5e5e5;
               text-justify: center;
               text-shadow: 2px 2px 2px rgba(3, 104, 255, 0.9); }
@@ -659,7 +659,15 @@ main {
                   width: 32px;
                   height: 32px; }
                   main .movie-interactions .movie-interaction-button.active img {
-                    display: block; }
+                    display: flex;
+                    align-self: center;
+                    justify-self: center; }
+                    main .movie-interactions .movie-interaction-button.active#movie-like {
+                      background-image: none; }
+                      main .movie-interactions .movie-interaction-button.active#movie-dislike {
+                        background-image: none; }
+                        main .movie-interactions .movie-interaction-button.active#movie-bookmark {
+                          background-image: none; }
   main #login-page {
     display: flex;
     flex-direction: column;
@@ -804,8 +812,8 @@ main {
           background-position: center;
           background-repeat: no-repeat;
           background-size: 32px;
-          margin-right: 8px;
-          margin-top: 8px; }
+          margin-right: 16px;
+          transform: translateY(-10%); }
           main .movie-display .movie-display-title .title-icon#movie-like {
             background-image: url("../images/thumbs-up-solid.svg"); }
             main .movie-display .movie-display-title .title-icon#movie-dislike {
