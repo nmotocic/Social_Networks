@@ -5,8 +5,6 @@ import sys
 def get_prediction(user_movie, user_avg, param):
 	# initialize parameters I - current row, J - current column, K - similar users taken into account for prediction
 	I, J, K = param
-	I-=1
-	J-=1
 	# initialize similarity dictionary
 	sims = {}
 	# iterate over all columns of average user ratings
@@ -101,7 +99,7 @@ def get_predictions(matrix):
 			# get movie from query
 			movie = int(line.rstrip().split(" ")[1])
 			# add prediction to prediction dictionary
-			predictions[int(line.rstrip().split(" ")[1])] = (prediction - 1) / 4
+			predictions[int(line.rstrip().split(" ")[1])] = prediction / 5
 			counter += 1
 		line_index += 1
 	# return sorted dictionary of recommended movies by rating prediction from highest to lowest

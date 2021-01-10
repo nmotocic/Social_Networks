@@ -450,7 +450,7 @@ def get_user_ratings(db, current_user_id):
 		movie = relation["m"]
 		rating = relation["r"].properties["rating"]
 		# if rating is 0 that means the user dislikes the movie
-		rating *= 4
+		rating *= 3
 		rating += 1
 		if (user.id, movie.id) in favs:
 			rating += 1
