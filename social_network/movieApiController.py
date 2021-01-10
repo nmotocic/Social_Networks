@@ -77,3 +77,13 @@ def apiOmdbAddByTitle(db,movieTitle):
 		#Add ratings
 		for rating in resp_json["Ratings"]:
 			dbComms.movieAddRating(db,rating["Source"],resp_json["imdbID"],rating["Value"])
+
+def apiOmdbGetById(movie_id):
+	omdbAPIcall = omdbAPI + "i=" + movie_id
+	resp = requests.get(omdbAPIcall)
+	if resp.ok:
+		resp_content = resp.content
+		resp_json = json.loads(resp_content.decode("utf-8"))
+		return resp_json
+	else:
+		return None

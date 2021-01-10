@@ -9,11 +9,11 @@ minUserId=1
 maxUserId=30
 #Preff users
 minActionUserId = 1
-maxActionUserId = 16
+maxActionUserId = 30
 minDramaUserId = 1
-maxDramaUserId = 11
+maxDramaUserId = 15
 minThrillerUserId = 1
-maxThrillerUserId = 6
+maxThrillerUserId = 12
 
 def addTestUsers(db):
 	dbComms.userCreate(db,"Alice","alice@fakemail.com")
@@ -35,11 +35,11 @@ def addPrefUsers(db):
 		dbComms.userCreate(db,"ThrillerUser"+str(i),"thrilleruser{0}@fakemail.com".format(str(i)))
 
 def addTmdbMovies(db):
-	for i in range(550,650):
+	for i in range(550,1110):
 		movieApiController.apiTmdbAddById(db,i)
 
 def addOmdbMovies(db):
-	movieList = ["Shrek","Spider Man","Mister Bean","Avatar","Forrest Gump","Alice in Wonderland","Chernobyl"]
+	movieList = ["Shrek","Spider Man","Avatar","Forrest Gump","Alice in Wonderland","Chernobyl"]
 	for movie in movieList:
 		movieApiController.apiOmdbAddByTitle(db,movie)
 def addTestLikes(db):

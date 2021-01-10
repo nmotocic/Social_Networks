@@ -519,7 +519,7 @@ if (alltimeGraphDiv) {
         srchBtn.addEventListener('click', () => searchMovies())
         const searchMovies = () => {
             if (srchTextArea.value != "") {
-                window.location.replace( baseLocation + 'srch/' + srchTextArea.value )
+                window.location.replace( baseLocation + 'find/' + srchTextArea.value )
             }
         }
     }

@@ -76,12 +76,12 @@ openLibraryCoverAPI = "http://covers.openlibrary.org/"
 # App
 @app.before_request
 def handleSession():
-	if "userEmail" in session:
+	authed = False
+	if ("userEmail" in session and "userAvatar" in session and "userName" in session):
 		authed = True
 		userEmail = session["userEmail"]
-	else:
-		authed = False
-	userAvatar=""
+	elif ("userEmail" in session or "userAvatar" in session or "userName" in session):
+		session.clear()
 	if twitter.authorized and not authed:
 		resp = twitter.get(
 			"account/verify_credentials.json", params={"include_email": "true"}
@@ -126,6 +126,7 @@ def handleSession():
 		session["warningMsg"] = warnings.noWarning()
 		session["warning"] = warnings.noWarning()
 
+# Show avatar and username
 @app.context_processor
 def inject_user():
 	if "userAvatar" in session and "userName" in session:
@@ -140,33 +141,35 @@ def find():
 	lst = dbComms.movieGetRecentlyRated(db, 604800)
 	return render_template("findMovies.html", list = lst, list_title="Trending Movies:")
 
+@app.route("/find/<srchString>")
+def search(srchString):
+	ret = movieApiController.apiTmdbSearch(db, srchString)
+	return render_template("findMovies.html", list=ret, list_title="Search Results For: '" + srchString + "'")
+
 # Route for movie detail display page
 @app.route('/movie/<imdb_id>')
 def movie(imdb_id):
-	omdbAPIcall = omdbAPI + "i=" + imdb_id
-	resp = requests.get(omdbAPIcall)
+	movie_json = movieApiController.apiOmdbGetById(imdb_id)
+	if movie_json is None:
+		return redirect(url_for("find"))
 	# only ratings in the last week (604800 == seconds in a week)
 	ratingDictLatest = dbComms.movieGetUserRatings(db, imdb_id, lastSeconds=604800)
 	# all ratings
 	ratingDictOverall = dbComms.movieGetUserRatings(db, imdb_id)
-	if resp.ok:
-		resp_content = resp.content
-		resp_json = json.loads(resp_content.decode("utf-8"))
-		buttonStatus=["movie-interaction-button","movie-interaction-button","movie-interaction-button"]
-		if "userEmail" in session:
-			email = session["userEmail"]
-			rating = dbComms.userGetRating(db,email,imdb_id)
-			if rating == 0:
-				buttonStatus[1]="movie-interaction-button active"
-			elif rating == 1:
-				buttonStatus[0]="movie-interaction-button active"
-			if dbComms.userCheckFavorited(db,email,imdb_id):
-				buttonStatus[2]="movie-interaction-button active"
+	buttonStatus=["movie-interaction-button","movie-interaction-button","movie-interaction-button"]
+	if "userEmail" in session:
+		email = session["userEmail"]
+		rating = dbComms.userGetRating(db,email,imdb_id)
+		if rating == 0:
+			buttonStatus[1]="movie-interaction-button active"
+		elif rating == 1:
+			buttonStatus[0]="movie-interaction-button active"
+		if dbComms.userCheckFavorited(db,email,imdb_id):
+			buttonStatus[2]="movie-interaction-button active"
 			#return buttonStatus[0]
-		return render_template("movieDisplay.html", movie_data_json=resp_json, buttonStatus=buttonStatus, ratingsLatest=ratingDictLatest, ratingsOverall=ratingDictOverall)
-	else:
-		return "<h1>Request failed</h1>"
+	return render_template("movieDisplay.html", movie_data_json=movie_json, buttonStatus=buttonStatus, ratingsLatest=ratingDictLatest, ratingsOverall=ratingDictOverall)
 
+#Movie like/dislike/bookmark
 @app.route('/movie/<imdb_id>/like')
 def movieLike(imdb_id):
 	if "userEmail" in session:
@@ -209,6 +212,8 @@ def roulette():
 	if "userEmail" in session:
 		current_user_id = dbComms.get_user_id_by_email(db, session["userEmail"])
 		recommendations = recommender.get_recommendations(db, current_user_id)
+	else:
+		return redirect("/")
 	# if the number of recommendations is zero, just recommend trending/popular movies
 	if len(recommendations) == 0:
 		recommendations = dbComms.movieGetRecentlyRated(db, 604800)
@@ -261,51 +266,8 @@ def booked():
 @app.route('/login')
 def login():
 	return render_template("login.html")
-"""
-@app.route('/fb_login')
-def fb_login():
-	if not facebook.authorized:
-		return redirect(url_for("facebook.login"))
-	resp = facebook.get("/me?fields=id,name,email,picture,location")
-	if resp.ok and resp.text:
-		resp_json = resp.json()
-		user_id = resp_json["id"]
-		user_name = resp_json["name"]
-		userEmail = ""
-		if "email" in resp_json:
-			user_mail = resp_json["email"]
-		user_picture = resp_json["picture"]["data"]["url"]
-		user_location = resp_json["location"]["name"].split(", ")
-		user_country = user_location[-1]
-		user_node = db_operations.get_user_by_fb_id(db, user_id)
-		if user_node is None and userEmail:
-			db_operations.add_user(db, user_id, user_name, user_mail, user_picture)
-		session['userid'] = user_id
-		return redirect(url_for("find"))
-	else:
-		return "<h1>Request failed</h1>"
-"""
-@app.route('/movie_api/<movie_title>')
-def movie_api(movie_title):
-	omdbAPIcall = omdbAPI + "t=" + movie_title
-	resp = requests.get(omdbAPIcall)
-	if resp.ok:
-		resp_content = resp.content
-		resp_json = json.loads(resp_content.decode("utf-8"))
-		movie_id = resp_json["imdbID"]
-		movie_title = resp_json["Title"]
-		movie_year = resp_json["Year"]
-		movie_director = resp_json["Director"]
-		movie_poster = resp_json["Poster"]
-		movie_node = db_operations.get_movie_by_imdb_id(db, movie_id)
-		if movie_node is None:
-			db_operations.add_movie(db, movie_id, movie_title, movie_year, movie_director, movie_poster)
-			if 'userid' in session:
-				db_operations.connect_user_to_movie(db, session['userid'], movie_id)
-		return redirect(url_for("index"))
-	else:
-		return "<h1>Request failed</h1>"
 
+# Index page
 @app.route("/")
 @app.route("/index")
 def index():
@@ -313,15 +275,18 @@ def index():
 		return redirect(url_for("profile"))
 	return render_template("login.html", warning=session["warningMsg"])
 
-
+#Logout command
 @app.route("/logout")
 def logout():
 	session.clear()
 	session["warning"] = warnings.noWarning()
 	return redirect(url_for("index"))
 
+#Database explore
 @app.route("/explore/<genre>/<page>")
 def explore(genre, page):
+	if "userEmail" not in session:
+		return redirect(url_for("index"))
 	limit=10
 	try:
 		page=int(page)
@@ -342,123 +307,14 @@ def explore(genre, page):
 		max_page=page+1
 	return render_template("databaseExplore.html", current_genre=genre, current_title=title, current_page=page, max_page=max_page, genreList=genreList, movieList=movieList)
 
-# Movies
-# TMDB
-@app.route("/movies", methods=["POST", "GET"])
-def moviesList():
-	if twitter.authorized == False:
-		session["warning"] = warnings.noLogin()
-		return redirect(url_for("index"))
-	# Set filter
-	filtered = ""
-	if request.method == "POST":
-		retFilt = dbComms.genreGetAll(db)
-		if "genre" in request.form:
-			filtered = request.form["genre"]
-			ret = dbComms.movieGetByGenre(db, filtered)
-		else:
-			ret = dbComms.movieGetAll(db)
-		return render_template(
-			"movieList.html", list=ret, filter=retFilt, filtered=filtered
-		)
-	else:
-		ret = dbComms.movieGetAll(db)
-		retFilt = dbComms.genreGetAll(db)
-		return render_template("movieList.html", list=ret, filter=retFilt)
-
-
-@app.route("/movies/add/tmdb/<movieId>")
-def tmdbAdd(movieId):
-	movieApiController.apiTmdbAddById(db, movieId)
-	return redirect(url_for("moviesList"))
-
-
-@app.route("/movies/add/omdb", defaults={"movieTitle": "Die Hard"})
-@app.route("/movies/add/omdb/<movieTitle>")
-def omdbAdd(movieTitle):
-	movieApiController.apiOmdbAddByTitle(db, movieTitle)
-	return redirect(url_for("moviesList"))
-
-
-# Default vraca Die Hard
-@app.route("/movies/rating", defaults={"movieId": "tt0095016"})
-@app.route("/movies/rating/<movieId>")
-def getRating(movieId):
-	return dbComms.movieGetRating(db, movieId)
-
-
-@app.route("/movies/favorite/<movieId>")
-def setFavoriteMovie(movieId=0):
-	if twitter.authorized == False:
-		session["warning"] = warnings.noLogin()
-		return redirect(url_for("index"))
-	dbComms.userFavoritesMovie(db, session["userEmail"], movieId)
-	return redirect(url_for("moviesList"))
-
-
-@app.route("/movies/un-favorite/<movieId>")
-def removeFavoriteMovie(movieId=0):
-	if twitter.authorized == False:
-		session["warning"] = warnings.noLogin()
-		return redirect(url_for("index"))
-	dbComms.userUnFavoritesMovie(db, session["userEmail"], movieId)
-	return redirect(url_for("favoriteMoviesList"))
-
-
-@app.route("/movies/favorites")
-def favoriteMoviesList():
-	if twitter.authorized == False:
-		session["warning"] = warnings.noLogin()
-		return redirect(url_for("index"))
-	ret = dbComms.userGetAllFavorited(db, session["userEmail"])
-	return render_template("movieFavs.html", list=ret)
-
-
-# Test method
-@app.route("/movies/favoritesX")
-def favoriteMoviesListLimited():
-	if twitter.authorized == False:
-		session["warning"] = warnings.noLogin()
-		return redirect(url_for("index"))
-	ret = dbComms.movieGetFavoritedLimited(db, session["userEmail"])
-	return render_template("movieFavs.html", list=ret)
-
-
-@app.route("/movies/like")
-def testRate():
-	ret = dbComms.movieGetRecentlyRated(db)
-	return render_template("movieList.html", list=ret)
-
-@app.route("/srch/<srchString>")
-def search(srchString):
-	ret = movieApiController.apiTmdbSearch(db, srchString)
-	return render_template("findMovies.html", list=ret, list_title="Search Results For: '" + srchString + "'")
-
-@app.route("/likeShrek")
-def shrekify():
-	if twitter.authorized == False:
-		session["warning"] = warnings.noLogin()
-		return redirect(url_for("index"))
-	user = session["userEmail"]
-	likes = ["tt0126029", "tt0126029", "tt0385700", "tt0198781"]
-	favorites = ["tt0126029"]  # Shrek
-	dislikes = ["tt0077766"]  # Jaws 2
-	for movie in likes:
-		dbComms.userRateMovie(db, user, movie, 1)
-	for movie in dislikes:
-		dbComms.userRateMovie(db, user, movie, 0)
-	for movie in favorites:
-		dbComms.userFavoritesMovie(db, user, movie)
-	return redirect(url_for("index"))
-
 
 # Test DB controls
-@app.route("/db/prg")
+#@app.route("/db/prg")
 def purge():
 	purgeDatabase()
 	session.clear()
 	session["warning"] = warnings.noWarning()
-	return redirect("/")
+	#return redirect("/")
 
 
 def purgeDatabase():
@@ -466,30 +322,17 @@ def purgeDatabase():
 	db.execute_query(qry)
 	return
 
-@app.route("/test")
-def test():
-	resp = github.get('/user')
-	return resp.json()
-
 # TODO
 @app.route("/db/init")
 def initDatabase():
-	dbTestInfo.addOmdbMovies(db)
-	dbTestInfo.addTmdbMovies(db)
-	#dbTestInfo.addTestUsers(db)
-	#dbTestInfo.addTestLikes(db)
-	#dbTestInfo.addRandomVotes(db)
-	dbTestInfo.addPrefUsers(db)
-	dbTestInfo.addAllPrefVotes(db)
-	return redirect("/")
-
-@app.route("/db/rand")
-def initRandom():
-	#dbTestInfo.addOmdbMovies(db)
-	#dbTestInfo.addTmdbMovies(db)
-	dbTestInfo.addTestUsers(db)
-	dbTestInfo.addTestLikes(db)
-	dbTestInfo.addRandomVotes(db)
+	if len(dbComms.movieGetAll(db))<=10:
+		dbTestInfo.addOmdbMovies(db)
+		dbTestInfo.addTmdbMovies(db)
+		dbTestInfo.addTestUsers(db)
+		dbTestInfo.addTestLikes(db)
+		dbTestInfo.addRandomVotes(db)
+		dbTestInfo.addPrefUsers(db)
+		dbTestInfo.addAllPrefVotes(db)
 	return redirect("/")
 
 # Main
