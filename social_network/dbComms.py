@@ -4,6 +4,7 @@ import time
 import math
 import copy
 import numpy as np
+from datetime import datetime
 from social_network.dbModels import *
 from social_network.dbRelationsParser import *
 
@@ -29,8 +30,8 @@ def userCreate(db, username, email, avatarUrl=stockAvatarUrl):
 		return
 	if avatarUrl is None:
 		avatarUrl = stockAvatarUrl
-	qry = 'CREATE (n:User {{name: "{0}", email: "{1}", avatarUrl: "{2}"}})'.format(
-		cleanString(username), email, cleanString(avatarUrl))
+	qry = 'CREATE (n:User {{name: "{0}", email: "{1}", avatarUrl: "{2}", creationDate: "{3}"}})'.format(
+		cleanString(username), email, cleanString(avatarUrl),datetime.today().strftime('%Y-%m-%d'))
 	db.execute_query(qry)
 
 
@@ -42,7 +43,7 @@ def userGetByEmail(db, email):
 	usr = None
 	for relation in relations:
 		user = relation["n"]
-		usr = User(user.properties["name"], user.properties["email"], user.properties["avatarUrl"])
+		usr = User(user.properties["name"], user.properties["email"], user.properties["avatarUrl"], user.properties["creationDate"])
 	return usr
 
 

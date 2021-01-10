@@ -2,9 +2,10 @@
 
 #Twitter/Facebook
 class User:
-	def __init__(self,username,email,avatarUrl=""):
+	def __init__(self,username,email,avatarUrl="",creationDate=""):
 		self.username = username
 		self.email = email
+		self.creationDate=creationDate
 		if avatarUrl is None:
 			self.avatarUrl = ""
 		else:

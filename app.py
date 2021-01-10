@@ -119,6 +119,7 @@ def handleSession():
 			session["userName"] = user.username
 			session["userEmail"] = userEmail
 			session["userAvatar"] = user.avatarUrl
+			session["creationDate"] = user.creationDate
 	if "warning" in session:
 		session["warningMsg"] = session["warning"]
 		session["warning"] = warnings.noWarning()
@@ -217,7 +218,6 @@ def roulette():
 	# if the number of recommendations is zero, just recommend trending/popular movies
 	if len(recommendations) == 0:
 		recommendations = dbComms.movieGetRecentlyRated(db, 604800)
-	# return render_template("movieList.html", list=recommendations)
 	if len(recommendations) == 0:
 		return redirect("/")
 	return render_template("movieDiscover.html", list=recommendations)
