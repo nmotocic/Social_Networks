@@ -86,7 +86,7 @@ def addTestLikes(db):
 	for movie in favorites:
 		dbComms.userFavoritesMovie(db,user,movie)
 
-def addRandomVotes(db,limit=50,page=0):
+def addRandomVotes(db,limit=300,page=0):
 	#Today votes
 	movieList = dbComms.movieGetAll(db,limit=limit,page=page)
 	for movie in movieList:
@@ -131,7 +131,7 @@ def addAllPrefVotes(db):
 	addPrefVotes(db,"Action",minActionUserId,maxActionUserId)
 	addPrefVotes(db,"Thriller",minThrillerUserId,maxThrillerUserId)
 
-def addPrefVotes(db,userType,lowerLimit,upperLimit,limit=50,page=0):
+def addPrefVotes(db,userType,lowerLimit,upperLimit,limit=300,page=0):
 	#Today votes
 	movieList = dbComms.movieGetAll(db,limit=limit,page=page)
 	pref = userType

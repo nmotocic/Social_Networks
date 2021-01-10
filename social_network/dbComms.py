@@ -210,7 +210,7 @@ def userGetNegativeRatedMovies(db, email, lastSeconds=0):
 	return parseMovieRelations(relations)
 
 
-def movieGetRecentlyRated(db, lastSeconds=0):
+def movieGetRecentlyRated(db,limit=20, lastSeconds=0):
 	if lastSeconds != 0:
 		timeLimit = math.floor(time.time()) - lastSeconds
 	else:
@@ -223,6 +223,8 @@ def movieGetRecentlyRated(db, lastSeconds=0):
 	retList = []
 	for mov in sortedList:
 		retList.append(movieGetById(db, mov))
+		if(len(retList)>=limit):
+			break
 	return retList
 
 def movieGetUserRatings(db, movieId, lastSeconds=0):

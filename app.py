@@ -139,7 +139,7 @@ def inject_user():
 @app.route('/find')
 def find():
 	# only movies rated in the last week (604800 == seconds in a week)
-	lst = dbComms.movieGetRecentlyRated(db, 604800)
+	lst = dbComms.movieGetRecentlyRated(db, lastSeconds=604800)
 	return render_template("findMovies.html", list = lst, list_title="Trending Movies:")
 
 @app.route("/find/<srchString>")
