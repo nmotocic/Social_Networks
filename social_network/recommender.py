@@ -4,11 +4,6 @@ from social_network import dbComms
 from social_network.dbModels import Movie
 from social_network import predict
 
-defaultPercentage = 0.8
-defaultRoulleteSize = 8
-defaultRoulleteStep = 0.1
-defaultMinPercentage = 0.4
-
 def get_recommendations(db, current_user_id, startingPerc=0.8, stepSize=0.1, minPerc=0.2, roulleteSize=8, sampleSize=16):
 	#initialize list of recommendations
 	recommendations = []
